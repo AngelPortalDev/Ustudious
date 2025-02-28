@@ -1,0 +1,157 @@
+.pagination {
+    --tz-pagination-padding-x: 0.75rem;
+    --tz-pagination-padding-y: 0.375rem;
+    --tz-pagination-font-size: 0.875rem;
+    --tz-pagination-color: var(--tz-tertiary-color);
+    --tz-pagination-bg: var(--tz-secondary-bg);
+    --tz-pagination-border-width: var(--tz-border-width);
+    --tz-pagination-border-color: var(--tz-border-color);
+    --tz-pagination-border-radius: var(--tz-border-radius-sm);
+    --tz-pagination-hover-color: var(--tz-link-hover-color);
+    --tz-pagination-hover-bg: var(--tz-tertiary-bg);
+    --tz-pagination-hover-border-color: var(--tz-border-color);
+    --tz-pagination-focus-color: var(--tz-link-hover-color);
+    --tz-pagination-focus-bg: var(--tz-secondary-bg);
+    --tz-pagination-focus-box-shadow: none;
+    --tz-pagination-active-color: #fff;
+    --tz-pagination-active-bg: #c5c213;
+    --tz-pagination-active-border-color: #3bc0c3;
+    --tz-pagination-disabled-color: var(--tz-secondary-color);
+    --tz-pagination-disabled-bg: var(--tz-secondary-bg);
+    --tz-pagination-disabled-border-color: var(--tz-border-color);
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+}
+
+
+
+.main-button{
+    background-color: transparent;
+    color: #03A9F4;
+    border: 1px solid #03A9F4;
+    margin-right: 8px;
+    border-radius: 4px!important;
+}
+
+.main-button:hover{
+    background-color:#03A9F4;
+}
+
+.jobseeker-view-page .jobseeker-profile-photo{
+    height: 50px; 
+    width: 50px; 
+    object-fit: contain;
+}
+.jobseeker-view-page .jobseeker-profile-photo img{
+    width: 100%; 
+    border-radius: 4px;
+}
+.jobseeker-view-page .check-box-1{
+    vertical-align: middle;
+}
+
+.jobseeker-view-page table{
+    vertical-align: middle;
+}
+.jobseeker-view-page .jobsee-dropdown{
+    background-color: transparent;
+    color: #03A9F4!important;
+    border: 1px solid #03A9F4;
+    margin-right: 8px;
+    border-radius: 4px!important;
+}
+
+.jobseeker-view-page .jobseeker-header{
+    /* overflow-x: auto; */
+    /* text-wrap: nowrap; */
+}
+.jobseeker-view-page .jobsee-header-tabs{
+
+    flex-wrap: wrap;
+    grid-gap: 6px;
+}
+
+.leftside-menu{
+    background: #ffffff;
+}
+
+.side-nav .menuitem-active>a {
+    color: #03A9F4;
+
+}
+
+.side-nav .menuitem-active .menuitem-active .active {
+    color: #03A9F4;
+
+}
+.leftside-menu .logo-light .logo-lg img{
+    width: 100px;
+    height: auto;
+}
+
+.side-nav .side-nav-link:active, .side-nav .side-nav-link:focus, .side-nav .side-nav-link:hover {
+    color: #03A9F4;
+    text-decoration: none;
+}
+.side-nav .menuitem-active>a:active, .side-nav .menuitem-active>a:focus, .side-nav .menuitem-active>a:hover {
+    color: #03A9F4;
+}
+
+.card .header-title {
+
+    text-transform: uppercase;
+}
+
+.jobseeker-edit-page .card-header{
+    background-color: #d8f3ff;
+    color: #626262;
+
+}
+.jobseeker-edit-page .card-header h4{
+
+    margin-bottom: 0;
+}
+
+.imp-field-star {
+    color: red;
+}
+
+
+.edit-profile-photo .jobsee-ph-edit{
+position: absolute;
+top: 54px;
+left: 31px;
+padding: 2px;
+}
+
+.employer-pages .card-header{
+    background-color: #d8f3ff;
+    color: #626262;
+
+}
+.employer-pages .card-header h4{
+
+    margin-bottom: 0;
+}
+
+.invoice-sec p{
+    margin-bottom: 3px;
+}
+
+html[data-sidenav-size=condensed]:not([data-layout=topnav]) .wrapper .leftside-menu .logo {
+    z-index: 1;
+    background: #ffffff;
+}
+.show-password-eye{
+    margin-right: 5px;
+    top: 20px;
+    position: absolute;
+    z-index: 2;
+}
+
+.swal-button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
