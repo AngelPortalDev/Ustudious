@@ -7,7 +7,6 @@
   </style>
  @endsection
 @section('content')
-
     <!-- Begin page -->
     <div class="wrapper">
         <!-- ============================================================== -->
