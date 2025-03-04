@@ -26,6 +26,12 @@
     cursor: pointer;
     font-size:20px;
 }
+label.error{
+    color: red!important;
+}
+.form-group .error {
+    color: #4d5868;;
+}
     </style>
 @if(Session::get('institute_id'))
     <?php 
@@ -38,6 +44,8 @@
             $country = DB::table('country_master')->where('CountryID',$InstituteData->country)->distinct()->first(); 
             $countryName = $country->CountryName;
         }
+
+    
         ?>
 
 
@@ -568,26 +576,26 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label> Select Country  <span  style="color:red"> *</span> </label>
-                                                <?php $country = DB::table('country_master')->where('CountryID',$InstituteData->country)->first(); ?>
-                                                <input type="hidden" class="form-control institute_country" id="institute_country"  name="institute_country" value="<?= $InstituteData->country ?>">
+                                                <?php $countryData = DB::table('country_master')->get(); ?>
+                                                {{-- <input type="hidden" class="form-control institute_country" id="institute_country"  name="institute_country" value="<?= $InstituteData->country ?>"> --}}
 
                                                
-                                                 <input type="text" class="form-control institute_countries" id="institute_countries"  name="institute_countries" value="<?= $country->CountryName ?>" disabled>
-                                                {{-- <select class="form-control" name="institute_countries" id="institute_countries" disabled >
+                                                 {{-- <input type="text" class="form-control institute_countries" id="institute_countries"  name="institute_countries" value="<?= $country->CountryName ?>" disabled> --}}
+                                                <select class="form-control" name="institute_country" id="institute_country" >
                                                     <option value="">Select Country</option>
-                                                    @foreach ($country as $data)
+                                                    @foreach ($countryData as $data)
                                                         <option value="{{ $data->CountryID }}" @if($data->CountryID == $InstituteData->country) selected @endif>{{ $data->CountryName }}</option>
                                                     @endforeach
-                                                </select>   --}}
+                                                </select>  
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <div>
                                                     <label>Mobile Number</label>
                                                 </div>
                                                 <div style="display:flex;">
-                                                    <input type="hidden" class="form-control country_code" id="country_code" name="country_code" value="<?= $InstituteData->country_code ?>">
-                                                    <input type="text" class="form-control country_codes" id="country_codes" placeholder="Country Code" name="country_code" style="width: 23%;margin-right: 6PX;" value="<?= $InstituteData->country_code ?>" disabled>
-                                                   <input type="text" class="form-control" name="contact_mobile" value="<?= $InstituteData->contact_mobile ?>" placeholder="Contact Mobile">
+                                                   
+                                                    <input type="text" class="form-control country_code" id="country_code" placeholder="Country Code" name="country_code" style="width: 23%;margin-right: 6PX;" value="<?= $InstituteData->country_code ?>" readonly>
+                                                   <input type="number" class="form-control" name="contact_mobile" value="<?= $InstituteData->contact_mobile ?>" placeholder="Contact Mobile">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-6">

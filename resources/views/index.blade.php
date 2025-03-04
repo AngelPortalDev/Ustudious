@@ -261,7 +261,7 @@
             @php $CollegeList = DB::table('institute')
 			->select('institute.institute_id','institute.*','institute_contactinfo.campus','institute_contactinfo.total_courses','country_master.CountryName')
 			->leftjoin("institute_contactinfo","institute_contactinfo.institute_id","=","institute.institute_id")
-			->leftjoin("country_master","country_master.CountryID","=","institute_contactinfo.country")
+			->leftjoin("country_master","country_master.CountryID","=","institute.country_id")
 			->whereNull('institute.deleted_at')
 			->where('institute.institute_status','1')
 			->get(); @endphp
@@ -974,12 +974,6 @@
 
 
 
-
-
-
-
-
-
 		</div>
 
 
@@ -1015,6 +1009,7 @@
 
 			<!-- Single Article -->
 			<div class="col-lg-3 col-md-4 col-sm-12 d-flex">
+				{{-- <a href="{{route('browse-course', ['_token'=> csrf_token(),'course_coutry' => base64_encode('17')])}}"> --}}
 				<div class="articles_grid_style">
 					<div class="articles_grid_thumb">
 						<img src="{{$ASSET_PATH}}img/france-thumbnail.jpg" class="img-fluid"
@@ -1030,6 +1025,7 @@
 
 					</div>
 				</div>
+				{{-- </a> --}}
 			</div>
 			<div class="col-lg-3 col-md-4 col-sm-12 d-flex">
 				<div class="articles_grid_style">
@@ -1203,7 +1199,7 @@
 			
 			<!-- Cource Grid 1 -->
 			<div class="col-lg-4 col-md-4 col-sm-12">
-				<div class="_wrk_prc_wrap">
+				<div class="_wrk_prc_wrap" style="cursor: default;">
 					<div class="_wrk_prc_thumb">
 						<img src="{{$ASSET_PATH}}img/course-steps-icon-01.png" class="img-fluid" alt="" />
 					</div>
@@ -1216,7 +1212,7 @@
 			
 			<!-- Cource Grid 1 -->
 			<div class="col-lg-4 col-md-4 col-sm-12">
-				<div class="_wrk_prc_wrap active">
+				<div class="_wrk_prc_wrap" style="cursor: default;">
 					<div class="_wrk_prc_thumb">
 						<img src="{{$ASSET_PATH}}img/course-steps-icon-02.png" class="img-fluid" alt="" />
 					</div>
@@ -1229,7 +1225,7 @@
 			
 			<!-- Cource Grid 1 -->
 			<div class="col-lg-4 col-md-4 col-sm-12">
-				<div class="_wrk_prc_wrap">
+				<div class="_wrk_prc_wrap" style="cursor: default;">
 					<div class="_wrk_prc_thumb">
 						<img src="{{$ASSET_PATH}}img/course-steps-icon-03.png" class="img-fluid" alt="" />
 					</div>
@@ -1326,10 +1322,14 @@
 				<div class="text-center">
 					<h2>Join Thousand of Happy Students!</h2>
 					<p>Subscribe our newsletter & get latest news and updation!</p>
-					<form class="sup-form">
-						<input type="email" class="form-control sigmup-me" placeholder="Your Email Address"
+					<form class="sup-form newsLetter">
+						@csrf
+						<input type="email" class="form-control sigmup-me newsemail" name="email" placeholder="Your Email Address"
 							required="required">
-						<input type="submit" class="btn btn-theme" value="Get Started">
+						<input type="button" class="btn btn-theme" value="Get Started" id="newsletterSend">
+						<small class="newmail_error" style="color:white;display:none;">
+							<i>Please provide valid email </i>
+						</small>
 					</form>
 				</div>
 			</div>

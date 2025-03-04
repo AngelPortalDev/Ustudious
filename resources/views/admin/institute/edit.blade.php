@@ -223,7 +223,7 @@
                                                 <label>Landline Number</label>
                                                 <input type="text" class="form-control" name="landline_no"  value="<?= $InstituteData->landline_no ?>">
                                             </div>
-                                            <div class="col-md-3">
+                                            {{-- <div class="col-md-3">
                                                 <label for="institute_state" class="form-label">State</label>
                                                 <select class="form-select mb-2 select2" name="institute_state" id="institute_state">
                                                     @if($InstituteData->state || !empty($InstituteData->country))
@@ -247,8 +247,17 @@
                                                         @endforeach
                                                     @endif
                                                 </select>
+                                            </div> --}}
+                                            <div class="form-group col-md-3">
+                                                <label>State  </label>
+                                                <input type="text" class="form-control" name="institute_state"  value="<?= $InstituteData->state ?>" placeholder="State">
                                             </div>
-                                           
+
+
+                                            <div class="form-group col-md-3">
+                                                <label>City <span  style="color:red"> *</span> </label>
+                                                <input type="text" class="form-control" name="institute_city"  value="<?= $InstituteData->city ?>" placeholder="City">
+                                            </div>
                                           
                                             <div class="col-md-3">
                                                 <label for="institute_pincode" class="form-label">Postal Code</label>
@@ -456,40 +465,40 @@
                     console.log(result.countrycode[0]['CountryCode']);
                     $("#country_code").val('+'+result.countrycode[0]['CountryCode']);
                     $(".country_codes").val(result.countrycode[0]['CountryCode']);
-                    $('#institute_state').html('<option value="">-- Select State --</option>');
+                    // $('#institute_state').html('<option value="">-- Select State --</option>');
                     $.each(result.state, function (key, value) {
                         console.log(value.StateName);
-                        $("#institute_state").append('<option value="' + value
-                            .StateID + '">' + value.StateName + '</option>');
+                        // $("#institute_state").append('<option value="' + value
+                        //     .StateID + '">' + value.StateName + '</option>');
                     });
-                    $('#institute_city').html('<option value="">-- Select City --</option>');
+                    // $('#institute_city').html('<option value="">-- Select City --</option>');
                 }
             });
       
         });
-        $('#institute_state').on('change', function () {
-                var idState = this.value;
-                $("#institute_city").html('');
-                $.ajax({
-                    url: "{{url('institute/fetch-city')}}",
-                    type: "POST",
-                    data: {
-                        state_id: idState,
-                        _token: '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        $('#institute_city').html('<option value="">-- Select City --</option>');
-                        $.each(res.cities, function (key, value) {
-                            $("#institute_city").append('<option value="' + value
-                                .CityID + '">' + value.CityName + '</option>');
-                                // $('#cluster_id').append('<option value="'+data['cluster_id_primary']+'" '+ (area_id == data['cluster_id_primary'] ? ' selected ' : '') +'>'+data['cluster_name']+'</option>');
+        // $('#institute_state').on('change', function () {
+        //         var idState = this.value;
+        //         $("#institute_city").html('');
+        //         $.ajax({
+        //             url: "{{url('institute/fetch-city')}}",
+        //             type: "POST",
+        //             data: {
+        //                 state_id: idState,
+        //                 _token: '{{csrf_token()}}'
+        //             },
+        //             dataType: 'json',
+        //             success: function (res) {
+        //                 $('#institute_city').html('<option value="">-- Select City --</option>');
+        //                 $.each(res.cities, function (key, value) {
+        //                     $("#institute_city").append('<option value="' + value
+        //                         .CityID + '">' + value.CityName + '</option>');
+        //                         // $('#cluster_id').append('<option value="'+data['cluster_id_primary']+'" '+ (area_id == data['cluster_id_primary'] ? ' selected ' : '') +'>'+data['cluster_name']+'</option>');
 
 
-                        });
-                    }
-                });
-            });
+        //                 });
+        //             }
+        //         });
+        //     });
     });
    
  

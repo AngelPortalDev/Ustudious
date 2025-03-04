@@ -36,6 +36,49 @@
 							<input id="reg" class="checkbox-custom" name="reg" type="checkbox">
 							<label for="reg" class="checkbox-custom-label">Save Password</label>
 						</li> -->
+						<li style="text-align: right;"><a data-toggle="modal" data-target="#studentforget" data-dismiss="modal" class="theme-cl" >Forgot Password?</a></li>
+					</ul>
+				</div>
+
+				<div class="text-center">
+					<p class="mt-2">New to Ustudious? 
+						<!-- <button onclick="myFunction()"> -->
+						<a href="#"  data-toggle="modal" data-target="#studentsignup" class="mod-close" data-dismiss="modal" style="color: #2b3990;">Register here</a>
+					<!-- </button> -->
+				</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="studentforget" tabindex="-1" role="dialog" aria-labelledby="forgetmodal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+		<div class="modal-content" id="forgetmodal">
+			<span class="mod-close" data-dismiss="modal" aria-hidden="true"><i class="ti-close"></i></span>
+			<div class="modal-body">
+				<h4 class="modal-header-title"> Student Login</h4>
+				<div class="login-form">
+					<form class="resetPassData">
+
+						<div class="form-group">
+							<label>Email Address</label>
+							<input type="text" class="form-control" placeholder="Register Email Address" name="email" >
+						</div>
+						<input name="passtype" value="{{ base64_encode('student')}}" type="hidden" >
+
+						<div class="form-group">
+							<input type="submit" class="btn btn-md full-width pop-login" id="resetPass" value="Reset Password" fdprocessedid="jvftbh">
+						</div>
+
+					</form>
+				</div>
+
+				<div class="social-login mb-3">
+					<ul>
+						<!-- <li>
+							<input id="reg" class="checkbox-custom" name="reg" type="checkbox">
+							<label for="reg" class="checkbox-custom-label">Save Password</label>
+						</li> -->
 						<li style="text-align: right;"><a href="student-forget-password.php" class="theme-cl" >Forgot Password?</a></li>
 					</ul>
 				</div>
@@ -161,7 +204,7 @@
 							</p>
 							<!-- <p>503, 5th Floor, Chandak Chambers, Near Western Express Highway, Andheri East, Mumbai - 400069</p> -->
 							<!-- <p>+123 4567 890</p> -->
-							<p>info@ustudious.com</p>
+							<p><a href="mailto:info@ustudious.com">info@ustudious.com</a></p>
 						</div>
 
 					</div>
@@ -215,15 +258,18 @@
 			<div class="row align-items-center">
 
 				<div class="col-lg-6 col-md-6">
-					<p class="mb-0">© 2024 Ustudious.</p>
+					<p class="mb-0">© @php echo date("Y"); @endphp Ustudious.</p>
 				</div>
 
 				<div class="col-lg-6 col-md-6 text-right">
 					<ul class="footer-bottom-social">
-						<li><a href="#"><i class="ti-facebook"></i></a></li>
-						<li><a href="#"><i class="ti-twitter"></i></a></li>
-						<li><a href="#"><i class="ti-instagram"></i></a></li>
-						<li><a href="#"><i class="ti-linkedin"></i></a></li>
+						<li><a><i class="ti-facebook"></i></a></li>
+						<li><a>
+							{{-- <i class="ti-twitter-alt"></i> --}}
+							<i class="bi bi-twitter-x"></i>
+						</a></li>
+						<li><a><i class="ti-instagram"></i></a></li>
+						<li><a><i class="ti-linkedin"></i></a></li>
 					</ul>
 				</div>
 

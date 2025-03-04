@@ -23,5 +23,9 @@ class CourseCategory extends Model
     {
         return $this->hasMany(CourseMaster::class, 'course_category', 'id');
     }
-
+    
+    public function course()
+    {
+        return $this->hasMany(CourseMaster::class, 'CourseCategory', 'id');
+    }
 }

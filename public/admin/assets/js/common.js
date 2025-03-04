@@ -6462,7 +6462,7 @@ $("#EditStudent").on('click', function(e) {
                   text: "",
                   icon: "success",
               }).then(function () {
-                return  window.location.href = '/course';
+                return  window.location.href = '/admin/course';
               });
             } else {
               swal({
@@ -6470,7 +6470,7 @@ $("#EditStudent").on('click', function(e) {
                   text: "",
                   icon: "error",
               }).then(function () {
-                return  window.location.href = '/course';
+                return  window.location.href = '/admin/course';
               });
             }
 
@@ -7978,7 +7978,7 @@ $("#EditStudent").on('click', function(e) {
 
   $("#InstituteProfile").on('click', function(e) {
  
-
+   
       $.validator.addMethod('maxFilesAndSize', function(value, element, params) {
         // Check if the number of files exceeds the maximum
         if (element.files.length > params.maxFiles) {
@@ -8021,6 +8021,7 @@ $("#EditStudent").on('click', function(e) {
       
   
     $('#instituteprofile').validate({
+
       rules: {  
         // 'gallery_images[]': {
         //     required: true,
@@ -8126,7 +8127,7 @@ $("#EditStudent").on('click', function(e) {
         error.appendTo(element.parent()); // Display error message next to the file input
     },
     submitHandler: function (form) {
-
+      $("#loader").fadeIn();
         var formData = new FormData($("#instituteprofile")[0]);
         $.ajax({
           type: 'POST',
@@ -8138,7 +8139,11 @@ $("#EditStudent").on('click', function(e) {
               "X-CSRF-TOKEN": csrfToken,
           },
           success:function(data) {
-            if (data.code === 200) {
+            $("#loader").fadeOut();
+            console.log(data);
+            console.log('Code:', data.code);
+            console.log('Type of Code:', typeof data.code);
+            if (parseInt(data.code) === 200) {
               swal({
                   title: data.message,
                   text: "",
@@ -8148,7 +8153,7 @@ $("#EditStudent").on('click', function(e) {
               });
             } else {
                 swal({
-                    title: data.message,
+                    title: 'aosihd',
                     text: "Please Try Again",
                     icon: "error",
                 }).then(function () {
@@ -8268,6 +8273,7 @@ $("#EditStudent").on('click', function(e) {
         $(".modal-body #checkicon").html("");
         $(".modal-body #checkiconcross").html("");
         var formData = new FormData($("#instituteregister")[0]);
+        $("#loader").fadeIn();
         $.ajax({
             type: 'POST',
             url:  baseUrl + 'institutesignup',
@@ -8278,6 +8284,7 @@ $("#EditStudent").on('click', function(e) {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success:function(data) {
+              $("#loader").fadeOut();
               if(data.success){
                 swal({
                   title: data.success,
@@ -8327,6 +8334,7 @@ $("#EditStudent").on('click', function(e) {
         $(".modal-body #checkicon").html("");
         $(".modal-body #checkiconcross").html("");
         var formData = new FormData($("#institute_login")[0]);
+        $("#loader").fadeIn();
         $.ajax({
             type: 'POST',
             url:  baseUrl + 'institutelogin',
@@ -8337,6 +8345,7 @@ $("#EditStudent").on('click', function(e) {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success:function(data) {
+              $("#loader").fadeOut();
               if(data.success){
                 swal({
                   title: "Successfully Login.",
@@ -8363,6 +8372,7 @@ $("#EditStudent").on('click', function(e) {
 
 
   $("#StudentRegister").on('click', function(e) {
+   
     $("#passwordError").text("");
     $.validator.addMethod('mypassword', function(value, element) {
         return this.optional(element) || (value.match(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/));
@@ -8467,6 +8477,7 @@ $("#EditStudent").on('click', function(e) {
         $(".modal-body #checkiconcross").html("");
 
         var formData = new FormData($("#studentregister")[0]);
+        $("#loader").fadeIn();
         $.ajax({
             type: 'POST',
             url:  baseUrl + 'studentsignup',
@@ -8478,7 +8489,7 @@ $("#EditStudent").on('click', function(e) {
             },
             success:function(data) {
               $("#studentsignup").modal('hide');
-
+              $("#loader").fadeOut();
               if(data.success){
                 swal({
                   title: data.success,
@@ -8685,6 +8696,7 @@ $("#EditStudent").on('click', function(e) {
         },
         submitHandler: function (form) {
           var formData = new FormData($("#postcourse")[0]);
+          $('#loader').fadeIn();
               $.ajax({
                   type: 'POST',
                   url:  baseUrl + 'postcourse',
@@ -8695,6 +8707,7 @@ $("#EditStudent").on('click', function(e) {
                       "X-CSRF-TOKEN": csrfToken,
                   },
                   success:function(data) {
+                    $('#loader').fadeOut();
                     if(data.success){
                       swal({
                         title: data.success,
@@ -8939,6 +8952,7 @@ $("#EditStudent").on('click', function(e) {
         $(".modal-body #checkicon").html("");
         $(".modal-body #checkiconcross").html("");
         var formData = new FormData($("#student_login")[0]);
+        $("#loader").fadeIn();
         $.ajax({
             type: 'POST',
             url:  baseUrl + 'studentlogin',
@@ -8949,7 +8963,7 @@ $("#EditStudent").on('click', function(e) {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success:function(data) {
-              
+              $("#loader").fadeOut();
               $("#studentlogin").modal('hide');
 
               if(data.success){
@@ -8994,6 +9008,7 @@ $("#EditStudent").on('click', function(e) {
     var dashjs = $(this).data("dashjs");
     var action = $(this).data("action");
     if (action_txt != "" && (course !== null) & (course !== 0)) {
+      $("#loader").fadeIn();
         $.ajax({
             url: baseUrl + "students/course-action",
             type: "POST",
@@ -9009,6 +9024,7 @@ $("#EditStudent").on('click', function(e) {
             },
             context: $(".action"),
             success: function (res) {
+              $('#loader').fadeOut();
                 if (res.code === 200) {
                   swal({
                       title: res.message,
@@ -9054,11 +9070,11 @@ $("#EditStudent").on('click', function(e) {
     "input[type='checkbox'], input[type='radio']",
     function (e) {
     e.preventDefault();
-    var form = new FormData($(".left_filters_course")[0]);
-    if(form == ''){
+    if ($(window).width() <= 991) {
       var form = new FormData($(".left_filters_courses")[0]);
-    }
-
+    }else{
+    var form = new FormData($(".left_filters_course")[0]);
+     }
     loadCourseList(form);
 
    });
@@ -9081,6 +9097,7 @@ $("#EditStudent").on('click', function(e) {
             "X-CSRF-TOKEN": csrfToken,
         },
         success: function (response) {
+          $("#loader").fadeOut();
             if (response.code == 200) {
                 swal({
                     title: response.message,
@@ -9120,6 +9137,7 @@ $("#EditStudent").on('click', function(e) {
             "X-CSRF-TOKEN": csrfToken,
         },
         success: function (response) {
+          $("#loader").fadeOut();
             if (response.code == 200) {
                 swal({
                     title: response.message,
@@ -9146,42 +9164,90 @@ $("#EditStudent").on('click', function(e) {
     });
   });
 
+  // $(document).on('click', '#pagination-links .pagination a', function(e) {
+ 
+  //   e.preventDefault();
+  //   var page = $(this).attr('href').split('page=')[1];
+  
+  //   var form = false; // Initialize form as false
+  //   var student_filter = $("#student_filter").val();
+    
+  //   if ($(".left_filters_course").length != 0) {
+     
+  //     var form = new FormData($(".left_filters_course")[0]);  
+      
+  //   }
+  //   if ($(".left_filters_courses").length != 0) {
+  //     var form = new FormData($(".left_filters_courses")[0]);
+  //   }
+  //   if ($(".left_filters_student").length != 0) {
+  //     var form = new FormData($(".left_filters_student")[0]);
+  //   }
+  //   if ($(".left_filters_students").length != 0) {
+  //     var form = new FormData($(".left_filters_students")[0]);
+  //   }
+  //   form.append('page',page);
+    
+  //   if (student_filter == undefined) {
+     
+  //     loadCourseList(form);
+  //   }else{
+  //     loadStudentList(form);
+  //   }
+  // });
   $(document).on('click', '#pagination-links .pagination a', function(e) {
     e.preventDefault();
+    
     var page = $(this).attr('href').split('page=')[1];
-    var form = false; // Initialize form as false
+  
+    var form = null; 
     var student_filter = $("#student_filter").val();
+     
+    if ($(window).width() <= 991) {  
+        if ($(".left_filters_courses").length != 0) {
+            form = new FormData($(".left_filters_courses")[0]);
+        }
+    } else {  
+        if ($(".left_filters_course").length != 0) {
+            form = new FormData($(".left_filters_course")[0]);
+        }
+    }
+    if ($(window).width() <= 991) { 
+      if ($(".left_filters_students").length != 0) {
+        var form = new FormData($(".left_filters_students")[0]);
+      }
+  } else {  
+      if ($(".left_filters_student").length != 0) {
+        var form = new FormData($(".left_filters_student")[0]);
+      }
+  }
+   
+    if (form) {
+      form.append('page', page); 
+  }
 
-    if ($(".left_filters_course").length) {
-      var form = new FormData($(".left_filters_course")[0]);
-    }
-    if ($(".left_filters_courses").length) {
-      var form = new FormData($(".left_filters_courses")[0]);
-    }
-    if ($(".left_filters_student").length) {
-      var form = new FormData($(".left_filters_student")[0]);
-    }
-    if ($(".left_filters_students").length) {
-      var form = new FormData($(".left_filters_students")[0]);
-    }
-    form.append('page',page);
     if (student_filter == undefined) {
-      loadCourseList(form);
-    }else{
-      loadStudentList(form);
+        loadCourseList(form);  
+    } else {
+        loadStudentList(form); 
     }
-  });
+});
 
   $(".left_filters_student,.left_filters_students").on(
     "change",
     "input[type='checkbox'], input[type='radio']",
     function (e) {
     e.preventDefault();
-    var form = new FormData($(".left_filters_student")[0]);
-    if(form == ''){
+   
+    // if(form == ''){
+      
+    // }
+    if ($(window).width() <= 991) {
       var form = new FormData($(".left_filters_students")[0]);
-    }
-    console.log(form);
+    }else{
+      var form = new FormData($(".left_filters_student")[0]);
+     }
+    // console.log(form);
     loadStudentList(form);
 
    });
@@ -9226,7 +9292,7 @@ $("#EditStudent").on('click', function(e) {
               $('#durationContainer').append('<li><input id="aa-duration-'+item.DurationID+ '" class="checkbox-custom" name="duration[]" value='+item.DurationID+' type="checkbox" </li><label for="aa-duration-'+item.DurationID+'" class="checkbox-custom-label">'+item.Duration+'</label>');
           });
           $('#programtypeContainer').empty(); // Clear previous content
-          console.log(data.Programtype);
+          //console.log(data.Programtype);
           $.each(data.Programtype, function(index, item) {
               $('#programtypeContainer').append('<li><input id="aa-programtype-'+item.course_types_id+ '" class="checkbox-custom" name="programtype[]" value='+item.course_types_id+' type="checkbox"</li><label for="aa-programtype-'+item.course_types_id+'" class="checkbox-custom-label">'+item.course_types+'</label>');
           }); 
@@ -9299,7 +9365,7 @@ $("#EditStudent").on('click', function(e) {
           });
 
           $('.programtypeContainer').empty(); // Clear previous content
-          console.log(data.Programtype);
+         // console.log(data.Programtype);
           $.each(data.Programtype, function(index, item) {
               $('.programtypeContainer').append('<li><input id="aa-programtype-'+item.course_types_id+ '" class="checkbox-custom" name="programtype[]" value='+item.course_types_id+' type="checkbox"</li><label for="aa-programtype-'+item.course_types_id+'" class="checkbox-custom-label">'+item.course_types+'</label>');
           }); 
@@ -9406,57 +9472,81 @@ $("#EditStudent").on('click', function(e) {
     });
   });
 
-  $("#resetPass").on("click", function () {
-    debugger
-    var form = $(".resetPassData").serialize();
-    $.ajax({
-        url: "reset-password-link",
-        type: "POST",
-        data: form,
-        dataType: "json",
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-        },
-        success: function (res) {
-          console.log(res);
-            // $("#loader").fadeOut();
-            // alert(res.code);
-            // console.log(res.code);
-            // if (res.code === 200) {
-                 swal({
-                    title: res.message,
-                    text: "Please Check your mail Inbox",
-                    icon: "success",
-                  }).then(function () {
-                      return  window.location.href = '/institute-login';
-                  });
-                // $(".resetPassData")[0].reset();
-                // swal({
-                //     title: res.message,
-                //     text: "Please Check your mail Inbox",
-                //     icon: "success",
-                // });
-            // } else {
+//   $("#resetPass").on("click", function () {
+//     debugger
+//     var form = $(".resetPassData").serialize();
+//     $.ajax({
+//         url: "reset-password-link",
+//         type: "POST",
+//         data: form,
+//         dataType: "json",
+//         headers: {
+//             "X-CSRF-TOKEN": csrfToken,
+//         },
+//         success: function (res) {
+//             if (res.code === 200) {
+//               $(".resetPassData")[0].reset();    
+//                 swal({
+//                     title: res.message,
+//                     text: "Please Check your mail Inbox",
+//                     icon: "success",
+//                 });
+//             } else {
 
-                // swal({
-                //     title: res.message,
-                //     text: res.text,
-                //     icon: "error",
-                //  }).then(function () {
-                //       return  window.location.href = '/institute-login';
-                //   });
-            // }
-        },
-        // error: function (xhr, status, error) {
-        //     // Handle errors
-        //   debugger
+//                 swal({
+//                     title: res.message,
+//                     text: res.text,
+//                     icon: "error",
+//                  }).then(function () {
+//                       return  window.location.href = '/institute-login';
+//                   });
+//             }
+//         },
+       
+//     });
+// });
+$("#resetPass").on("click", function (e) {
+  e.preventDefault(); 
+  var form = $(".resetPassData").serialize();
+  $("#loader").fadeIn();
+  $.ajax({
+      url: "reset-password-link",
+      type: "POST",
+      data: form,
+      dataType: "json",
+      headers: {
+          "X-CSRF-TOKEN": csrfToken,
+      },
+      success: function (res) {
+        $("#loader").fadeOut();
+       
+          if (res.code === 200) {
 
-        //     console.error(error);
-        //     $("#result").html("An error occurred.");
-        // },
-    });
+              $(".resetPassData")[0].reset();    
+              swal({
+                  title: res.message,
+                  text: "Please Check your mail Inbox",
+                  icon: "success",
+              }).then(function () {
+
+                window.location.href = '/institute-login';
+            });
+          } else {
+              swal({
+                  title: res.message,
+                  text: res.text,
+                  icon: "error",
+              });
+          }
+      },
+      error: function(xhr, status, error) {
+          // Optionally handle AJAX errors here
+          console.error(error);
+      }
+  });
 });
-  $(".resetNewPassword").on("click", function () {
+
+$(".resetNewPassword").on("click", function () {
     $("#new_pass_error").hide();
     $("#new_pass_error2").hide();
     $("#conf_pass_error1").hide();
@@ -9495,6 +9585,7 @@ $("#EditStudent").on('click', function(e) {
             "X-CSRF-TOKEN": csrfToken,
         },
         success: function (res) {
+          console.log(res);
             $("#loader").fadeOut();
             if (res.code === 200) {
                 swal({
@@ -9502,7 +9593,13 @@ $("#EditStudent").on('click', function(e) {
                     text: "Click Ok to Login",
                     icon: "success",
                 }).then(function () {
-                    window.location = baseUrl + res.url;
+                   
+                    if (res.url == "institute-login") {
+                      window.location = baseUrl + res.url; 
+                  } else {
+                      
+                    $('#studentlogin').modal('show'); 
+                  }
                 });
             } else {
                 swal({
@@ -9551,7 +9648,7 @@ function downloadBrochure(pdfUrl)
 }
 function loadCourseList(form)
 {   
-  
+ 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
     $('#CourseFilterDisplayList').empty();
     $.ajax({
@@ -9563,31 +9660,58 @@ function loadCourseList(form)
         headers: {
             "X-CSRF-TOKEN": csrfToken,
         },
-        success: function(data) {
-          
-          console.log(data.html);
+        success: function(data) {         
+        
            $("#CourseFilterDisplayList").html(data.html);
         }
     });
 }
-function loadStudentList(form)
-{   
+// function loadStudentList(form)
+// {   
   
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");
-    $('#StudentFilterDisplayList').empty();
-    $.ajax({
-        type: 'POST',
-        url: 'student/searchdatastudent',
-        data: form,
-        contentType: false,
-        processData:false,
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-        },
-        success: function(data) {
+//     var csrfToken = $('meta[name="csrf-token"]').attr("content");
+//     $('#StudentFilterDisplayList').empty();
+//     $.ajax({
+//         type: 'POST',
+//         url: 'student/searchdatastudent',
+//         data: form,
+//         contentType: false,
+//         processData:false,
+//         headers: {
+//             "X-CSRF-TOKEN": csrfToken,
+//         },
+//         success: function(data) {
           
-          console.log(data.html);
-           $("#StudentFilterDisplayList").html(data.html);
-        }
-    });
+         
+//            $("#StudentFilterDisplayList").html(data.html);
+//         }
+//     });
+// }
+function loadStudentList(form) {   
+  var csrfToken = $('meta[name="csrf-token"]').attr("content");
+  $('#StudentFilterDisplayList').empty();
+
+  // Log the form to ensure data is correct
+  console.log("Sending Form Data: ", form);
+  
+  $.ajax({
+      type: 'POST',
+      url: 'student/searchdatastudent', // Ensure this URL is correct for student search
+      data: form,
+      contentType: false,
+      processData: false,
+      headers: {
+          "X-CSRF-TOKEN": csrfToken,
+      },
+      success: function(data) {
+          // Log the response to check what data we are getting back
+          console.log("Response Data: ", data);
+          
+          // Replace the HTML with the returned data
+          $("#StudentFilterDisplayList").html(data.html);
+      },
+      error: function(xhr, status, error) {
+          console.error("Error during AJAX request:", error);
+      }
+  });
 }

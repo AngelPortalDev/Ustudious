@@ -1,0 +1,1 @@
+ALTER TABLE `institute` ADD  `country_id` int(11) NOT NULL AFTER `institute_mobile`;

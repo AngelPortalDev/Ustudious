@@ -302,10 +302,11 @@
 <script>
     
     $(document).ready(function () {
-        loadCourseList(page=1);
-
-        function loadCourseList(page)
+        loadStudentList(page=1);
+		
+        function loadStudentList(page)
         {   
+			
             // var course_title_search = $("#course_title_search").val();
 
 
@@ -327,7 +328,7 @@
                 "X-CSRF-TOKEN": "<?php echo csrf_token() ?>",
             },
             success: function(data) {
-
+				
                 $('#StudentFilterDisplayList').empty();
                 $("#StudentFilterDisplayList").html(data.html);
             }
@@ -336,13 +337,13 @@
     });
 
     
-    $(document).on("click", ".stlogincheck", function () {
+    $(document).on("click", ".instlogincheck", function () {
         swal({
             title: "Please Login",
             text: "Click ok to Login",
             icon: "warning",
         }).then(function () {
-            $("#login").modal('show');
+            window.location.href='/institute-login'
         });
     });
 

@@ -58,7 +58,7 @@ class CourseController extends Controller
         $Colleges =  Institute::select('institute.*',"country_master.CountryName","institute_contactinfo.*")->where('institute.institute_id',$request->id)
         ->leftjoin("institute_contactinfo","institute_contactinfo.institute_id","=","institute.institute_id")
         ->leftjoin("intakemonth_master","intakemonth_master.IntakemonthID","=","institute_contactinfo.intakemonth")
-        ->leftjoin("country_master","country_master.CountryID","=","institute_contactinfo.country")
+        ->leftjoin("country_master","country_master.CountryID","=","institute.country_id")
         ->where('institute.institute_status','1')                 
         ->whereNull('institute.deleted_at')  
         ->first();
@@ -138,8 +138,7 @@ class CourseController extends Controller
                                                 </div>
                                                 <div class="c-d-2">
                                                     <label class="abcd">Fees:</label>
-                                                    <div class="cou-value">'.$list->Currency.''.$list->TotalCost.'<a class="fee-details" href="#"> Fee
-                                                            Details</a>
+                                                    <div class="cou-value">'.$list->Currency.''.$list->TotalCost.'
                                                     </div>
                                                 </div>
                                             </div>
@@ -279,36 +278,38 @@ class CourseController extends Controller
                     $lastCourseID = $data->CourseID;
                     $InstituteName = Institute::select(['full_name','institute_email'])->where('institute_id',$request->institute_id)->first();
 
-                    $id= '19';
-                    $templContain = DB::table('email_templates')->where('id',$id)->first();
+                    // $id= '19';
+                    // $templContain = DB::table('email_templates')->where('id',$id)->first();
                     
 
-                    $email_subject = $templContain->email_subject;
-                    $email_content = $templContain->email_content;
+                    // $email_subject = $templContain->email_subject;
+                    // $email_content = $templContain->email_content;
                     $dyc_id = base64_encode($lastCourseID);
+                    $link =  env('APP_URL') . "/course-details/" . $dyc_id ;                 
+                   
+                    $sendto = array_unique([trim(strtolower(session()->get('email'))), trim(strtolower('prince3@yopmail.com'))]);
+                    $sendcc = array_unique([trim(strtolower($InstituteName->institute_email))]);
+                    mail_send(19,['#Name#','#Link'], [$InstituteName->full_name, $link],$sendto,$sendcc);
+                    // $email_content = str_replace(['#Name#','#Link'], [$InstituteName->full_name, $link], $email_content);
 
-                    $link =  env('APP_URL') . "course-details/" . $dyc_id;
-                 
-                    $email_content = str_replace(['#Name#','#Link'], [$InstituteName->full_name, $link], $email_content);
-
-                    $email_subject = str_replace(['#Name#'], [$InstituteName->full_name], $email_subject);
+                    // $email_subject = str_replace(['#Name#'], [$InstituteName->full_name], $email_subject);
                   
                     
                                            
-                    $data = ['newContain' => $email_content];
-                    $email = $InstituteName->institute_email;
+                    // $data = ['newContain' => $email_content];
+                    // $email = $InstituteName->institute_email;
                    
-                    $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                        $message->from(env('MAIL_FROM_ADDRESS'));
-                        $message->to($email);
-                        $message->subject($email_subject);
-                    });
+                    // $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
+                    //     $message->from(env('MAIL_FROM_ADDRESS'));
+                    //     $message->to($email);
+                    //     $message->subject($email_subject);
+                    // });
                     return response()->json(['success' => "Course Posted Successfully."]);
 
                 
             } catch (\Exception $e) {
            
-                return response()->json(['error' => 'Something went wrong.']);
+                return response()->json(['error' => $e->getMessage()]);
             }
         }else{
 
@@ -427,6 +428,7 @@ class CourseController extends Controller
     }
 
     public function instituteprofile(Request $request){
+    
         $validate_rules = [
             'company_name' => 'required',
             'founded' => 'required',
@@ -443,6 +445,7 @@ class CourseController extends Controller
                 
              
                 $InstituteImage = Institute::where('institute_id',$request->institute_id)->first();
+              
                 $brochure_name = '';
                 if($request->hasFile('brochure')){
                     if($InstituteImage->institute_idproof != ''){
@@ -525,12 +528,14 @@ class CourseController extends Controller
                 }
 
                 $update = DB::table('users')->where('id', $request->userid)->limit(1)->update( [ 'name' => $request->contact_person_name]);
-
+                
+                mail_send(9,['#Name#'],[$InstituteImage->full_name],$InstituteImage->institute_email);
                 $InstituteData = Institute::latest()->paginate(10);
-                 echo json_encode(['code' => 200, 'message' => 'Institute Updated Successfully.', 'icon' => 'success']);
+                // echo json_encode(['code' => 200, 'message' => 'Institute Updated Successfully.', 'icon' => 'success']);
+                return response()->json(['code' => 200, 'message' => 'Institute Updated Successfully.', 'icon' => 'success']);
 
             } catch (\Exception $e) {
-                echo json_encode(['code' => 201, 'message' => 'Something Went Wrong.' , "icon" => "error"]);
+                echo json_encode(['code' => 201, 'message' =>'Something Went Wrong.' , "icon" => "error"]);
             }
         }else{
             echo json_encode(['code' => 201, 'message' => 'Something Went Wrong.' , "icon" => "error"]);
@@ -619,11 +624,11 @@ class CourseController extends Controller
         }
     }
     public function searchData(Request $request){
-
+        
         $html= '';
      
         $searchLocation = isset($request->searchLocation) ? $request->input('searchLocation') : '';
-
+        
         $searchDuration = $request->input('searchDuration');
         $searchCategory = $request->input('searchCategory');
         $searchProgramtype = $request->input('searchProgramtype');
@@ -669,13 +674,13 @@ class CourseController extends Controller
        
         if($searchLocation == '' &&  $searchDuration == '' && $searchCategory == '' &&  $searchProgramtype  == '' && $searchQualification == '' && $CourseTitle == ''){
 
-            $CourseList = DB::table('course')->select("course.CourseName","institute.company_name","duration_master.Duration","intakemonth_master.Intakemonth","intakeyear_master.Intakeyear","course.TotalCost","institute.institute_logo","institute_contactinfo.campus","institute_contactinfo.total_courses","course.CourseID","course.created_by","country_master.CountryName","course.Currency","institute.institute_id","institute_contactinfo.founded","course.Brochure")
+            $CourseList = DB::table('course')->select("course.CourseName","institute.company_name","institute.country_id","duration_master.Duration","intakemonth_master.Intakemonth","intakeyear_master.Intakeyear","course.TotalCost","institute.institute_logo","institute_contactinfo.campus","institute_contactinfo.total_courses","course.CourseID","course.created_by","country_master.CountryName","course.Currency","institute.institute_id","institute_contactinfo.founded","course.Brochure")
             ->leftjoin("institute","institute.institute_id","=","course.InstituteID")
             ->leftjoin("institute_contactinfo","institute_contactinfo.institute_id","=","course.InstituteID")
             ->leftjoin("duration_master","duration_master.DurationID","=","course.CourseDuration")
             ->leftjoin("intakemonth_master","intakemonth_master.IntakemonthID","=","course.IntakeMonth")
             ->leftjoin("intakeyear_master","intakeyear_master.IntakeyearID","=","course.IntakeYear")
-            ->leftjoin("country_master","country_master.CountryID","=","institute_contactinfo.country");
+            ->leftjoin("country_master","country_master.CountryID","=","institute.country_id");
 
             //  Main Filters Search Bar
             if (isset($request->modeofstudy) && is_array($request->modeofstudy)) {
@@ -738,7 +743,7 @@ class CourseController extends Controller
             $CourseList = $CourseList->paginate(5);
 
             $itemsPerPage = $CourseList->total();
-     
+            
             $count = 0;
      
                 $html.= '
@@ -763,6 +768,7 @@ class CourseController extends Controller
 
             if(count($CourseList) > 0){
                 foreach($CourseList as $list){
+                   
                 $html .= ' <div class="row" >
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                 <div class="education_block_list_layout style-2">
@@ -812,8 +818,10 @@ class CourseController extends Controller
                                         </div>
                                     ';
                                         if (session()->get('student_id')){
+                                           // $emailVerfiy = getData('student', ['StudentID', 'email_verified'], ['StudentID' => session()->get('student_id')]);
+                                        
                                             $exists = DB::table('students_viewed_courses')->where('course_id',$list->CourseID)->where('student_id',session()->get('student_id'))->where('is_saved','Yes')->count();  
-
+                                            // if($emailVerfiy[0]->email_verified === 'Yes'){
                                             if($exists != 0){
                                                 $html.='<div class="save-btn">
                                                         <a class="actions"  data-is_toggle="No" data-course_action="Saved" data-dashjs="0" data-course_id='.base64_encode($list->CourseID).' data-posted_by='.base64_encode($list->created_by).'><i class="fa-bookmark fa" style="color: #11a1f5;"></i></a></div>';
@@ -822,6 +830,9 @@ class CourseController extends Controller
                                                 $html .='<div class="save-btn"><a class="actions"  data-is_toggle="Yes" data-course_action="Unsaved" data-dashjs="0" data-course_id='.base64_encode($list->CourseID).' data-posted_by='.base64_encode($list->created_by).'><i class="far fa-bookmark" style="color: #11a1f5;"></i></a></div>';
                                                 } 
                                                 $html.='</label>';
+                                            // }else{
+                                            //     $html.="<div class='save-btn'><a class='not_verify'><i class='far fa-bookmark' aria-hidden='true' style='color: #11a1f5;'></i></a></div>";
+                                            // }
                                         }else{
                                             $html.="<div class='save-btn'><a class='stlogincheck'><i class='far fa-bookmark' aria-hidden='true' style='color: #11a1f5;'></i></a></div>";
                                             
@@ -852,8 +863,8 @@ class CourseController extends Controller
                                                     </div>
                                                     <div class="c-d-2">
                                                         <label class="abcd">Fees:</label>
-                                                        <div class="cou-value">'.$list->Currency.''.$list->TotalCost.'<a class="fee-details" href="#"> Fee
-                                                                Details</a>
+                                                        <div class="cou-value">'.$list->Currency.''.$list->TotalCost.'
+                                                       
                                                         </div>
                                                     </div>
                                                 </div>
@@ -864,6 +875,7 @@ class CourseController extends Controller
                                                 <div class="cou-buttons">';
 
                                                 if (session()->get('student_id')){
+                                                    
                                                  $exists = DB::table('student_applied_course')->where('course_id',$list->CourseID)->where('student_id',session()->get('student_id'))->where('is_applied','yes')->count();  
                 
                                                     if($exists != 0){
@@ -973,7 +985,7 @@ class CourseController extends Controller
     }
 
     public function searchDataFilter(Request $request){
-
+     
         $searchLocation = isset($request->searchLocation) ? $request->input('searchLocation') : '';
 
         $searchDuration = $request->input('searchDuration');
@@ -983,7 +995,7 @@ class CourseController extends Controller
         $searchCoursetitle = $request->input('searchCoursetitle');
         
         $Country = '';
-
+        
 
         if($searchLocation){
             $Country = Country::where('CountryName', 'like', '%'.$searchLocation.'%')->select('CountryID','CountryName')->whereNull('deleted_at')->distinct()->get();
@@ -1019,7 +1031,7 @@ class CourseController extends Controller
         if($searchCoursetitle){
             $CourseTitle =DB::table('course')->where('CourseName', 'like', '%'.$searchCoursetitle.'%')->select('CourseID','CourseName')->where('course.ApprovalStatus','Approved')->whereNull('deleted_at')->distinct()->get();
         }
-       
+    
         $data = [
             'Country' => $Country,
             'Duration' => $Duration,

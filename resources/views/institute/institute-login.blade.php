@@ -34,14 +34,16 @@
                                         <input type="email" class="form-control" placeholder="Email Address" name="email" required>
                                     </div>
                                     <div class="form-group" style="position: relative">
-                                        <label>Password <span  style="color:red"> *</span> <a href="{{route('institute-forgot-password')}}" class="elio_right">Forgot
-                                                Password?</a></label>
+                                        <label>Password <span  style="color:red"> *</span> </label>
                                         <input type="password" class="form-control" placeholder="*******" name="password" id="password"  required>
                                             <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password show-password-eye" style="top:50px;" ></span>
                                     </div>
 
                                     <div class="form-group">
+                                        
                                         <button type="submit" class="btn btn-md full-width pop-login" id="InstituteLogin">Login</button>
+                                        <a href="{{route('institute-forgot-password')}}" class="elio_right pt-1">Forgot
+                                            Password?</a>
                                     </div>
 
                                 </div>

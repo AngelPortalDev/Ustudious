@@ -115,37 +115,41 @@
 								</ul>
 							</div>
 
-
+							
 							@if( $Students->linkedin || $Students->instagram || $Students->facebook)
+
+							@php
+							$facebook_valid = filter_var($Students->facebook, FILTER_VALIDATE_URL) && preg_match('/facebook\.com/', $Students->facebook);							
+							$instagram_valid = filter_var($Students->instagram, FILTER_VALIDATE_URL) && preg_match('/instagram\.com/', $Students->instagram);
+							$linkedin_valid = filter_var($Students->linkedin, FILTER_VALIDATE_URL) && preg_match('/linkedin\.com/', $Students->linkedin);
+							@endphp
+							@if( $facebook_valid || $instagram_valid|| $linkedin_valid)
 							<div class="px-4 pt-4 pb-0 b-t">
 								<h5 class="mb-3">Follow Us</h5>
 							
 								<div class="inline_edu_wrap ">
 
 									<ul class="social_info">
-										@if($Students->facebook)
-										<li><a href="{{$Students->facebook}}" target="_blank"><i class="ti-facebook"></i></a></li>
+										
+
+										@if($facebook_valid)
+											<li><a href="{{ $Students->facebook }}" target="_blank"><i class="ti-facebook"></i></a></li>
 										@endif
-										{{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-											<a class="a2a_button_facebook"></a>
-											<a class="a2a_button_whatsapp"></a>
-											<a class="a2a_button_telegram"></a>
-											<a class="a2a_button_email"></a>
-										</div>
-										<script async src="https://static.addtoany.com/menu/page.js"></script> --}}
-											<!-- AddToAny END -->
-										@if($Students->instagram)
-                                        <li><a target="_blank" href="{{ $Students->instagram }}" ><i  class="ti-instagram"></i></a></li>
+
+										@if($instagram_valid)
+											<li><a href="{{ $Students->instagram }}" target="_blank"><i class="ti-instagram"></i></a></li>
 										@endif
-										@if($Students->linkedin)
-										<li><a href="{{$Students->linkedin}}" target="_blank"><i class="ti-linkedin"></i></a></li>
+
+										@if($linkedin_valid)
+											<li><a href="{{ $Students->linkedin }}" target="_blank"><i class="ti-linkedin"></i></a></li>
 										@endif
+
 										
 									</ul>
 								</div>
 							</div>
 							@endif
-
+							@endif
 
 
 						</div>

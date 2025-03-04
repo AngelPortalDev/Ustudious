@@ -101,7 +101,7 @@ $(document).ready(function () {
           submitHandler: function (form) {
               var formData = new FormData($("#studentprofile")[0]);
               var csrfToken = $("#csrf_token").val();
-    
+              $("#loader").fadeIn();
               $.ajax({
                 type: 'POST',
                 url:  baseUrl + 'student/studentprofile',
@@ -112,6 +112,7 @@ $(document).ready(function () {
                     "X-CSRF-TOKEN": csrfToken,
                 },
                 success:function(data) {
+                  $("#loader").fadeOut();
                   if(data.success){
                     swal({
                       title: data.success,
@@ -124,7 +125,7 @@ $(document).ready(function () {
                     swal({
                       title: data.error,
                       text: "",
-                      icon: "success",
+                      icon: "error",
                     }).then(function () {
                     window.location.href= '/student-profile';
     

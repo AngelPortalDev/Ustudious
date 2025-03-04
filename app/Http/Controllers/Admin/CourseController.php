@@ -103,7 +103,8 @@ class CourseController extends Controller
                     'CourseFees'=>$request->course_fees,
                     'AdministrativeCost'=>$request->administrative_cost,
                     'Currency'=>$request->currency_symbols,
-                    'Opportunities'=>$request->course_opportunities
+                    'Opportunities'=>$request->course_opportunities,
+                    'created_by'=> $request->institute_id,
                 ]);
 
                 echo json_encode(['code' => 200, 'message' => 'Course Created Successfully.', 'icon' => 'success']);
@@ -143,7 +144,8 @@ class CourseController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
+    {   
+        $id = base64_decode($id);
         $Courses =  Course::select("course.*")->where('course.CourseID',$id)->first();
         $data['countryData']=DB::table('country_master')->select('CountryName','CountryID','CountryCode','CurrencySymbol')->where('CurrencySymbol','!=','')->whereNull('deleted_at')->distinct()->get();
         $data['instituteData']=DB::table('institute')->select('company_name','institute_id')->whereNull('deleted_at')->distinct()->get();
@@ -151,6 +153,7 @@ class CourseController extends Controller
         $data['intakemonthData']=DB::table('intakemonth_master')->select('Intakemonth','IntakemonthID')->whereNull('deleted_at')->distinct()->get();
         $data['intakeyearData']=DB::table('intakeyear_master')->select('Intakeyear','IntakeyearID')->whereNull('deleted_at')->distinct()->get();
         $data['languageData']=DB::table('language_master')->select('Language','LanguageID')->whereNull('deleted_at')->distinct()->get();
+        
         return view('admin.course.edit',compact('Courses'),$data);
     }
 
@@ -238,12 +241,13 @@ class CourseController extends Controller
                     'CourseFees'=>$request->course_fees,
                     'AdministrativeCost'=>$request->administrative_cost,
                     'Currency'=>$request->currency_symbols,
-                    'Opportunities'=>$request->course_opportunities
+                    'Opportunities'=>$request->course_opportunities,
+                    'created_by'=> $request->institute_id,
                 ]);
                 echo json_encode(['code' => 200, 'message' => 'Course Updated Successfully.', 'icon' => 'success']);
 
             } catch (\Exception $e) {
-                echo json_encode(['code' => 201, 'message' => 'Something Went Wrong.' , "icon" => "error"]);
+                echo json_encode(['code' => 201, 'message' =>$e->getMessage() , "icon" => "error"]);
             }
         }else{
             echo json_encode(['code' => 201, 'message' => 'Something Went Wrong.' , "icon" => "error"]);
@@ -266,7 +270,7 @@ class CourseController extends Controller
     }
     public function approvedcourse(Request $request)  
     {  
-       $course_id = $request->course_id; 
+       $course_id = base64_decode($request->course_id) ;
        $data = Course::whereIN('CourseID',explode(",",$course_id))->update(['ApprovalStatus'=>'Approved']);  
        $CoursesList =  DB::table('course')->select("course.InstituteID")->whereIn('course.CourseID',explode(",",$course_id))->get();
        foreach($CoursesList as $course){

@@ -752,6 +752,7 @@
 	// 	// Change the URL using window.location
 	// 	window.location.href = 'https://www.ustudious.com/college-details/112';
 	// });
+	
 </script>
 @endsection
 

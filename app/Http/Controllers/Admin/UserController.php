@@ -41,6 +41,7 @@ class UserController extends Controller
       
        
        public function myaccount(){
+             
               $userid = auth()->user()->id;
               $user = User::select('users.name','designation.designation_name','user_otherinfo.address','user_otherinfo.phone','users.email','users.id','users.user_type')
               ->leftJoin('user_otherinfo', 'user_otherinfo.user_id', '=', 'users.id')

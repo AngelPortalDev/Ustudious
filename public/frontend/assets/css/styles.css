@@ -11579,6 +11579,7 @@ font-size: 13PX;
     position: absolute;
     z-index: 2;
 }
+.left_filters_courses .filter-top-heading,
 .left_filters_course .filter-top-heading{
     display: flex;
     align-items: center;

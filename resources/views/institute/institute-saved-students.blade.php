@@ -9,7 +9,7 @@ $ASSET_PATH = env('ASSET_URL').'/';
 	->leftjoin('country_master','country_master.CountryID','=','institute_contactinfo.country')
 	->where(['institute.institute_id'=> $LoginID])->first();  
 	
-	$StudentData = DB::table('institutes_viewed_student')->select('student.*','student_contactinfo.*','country_master.CountryName')
+	$StudentData = DB::table('institutes_viewed_student')->select('student.*', 'student.updated_at as last_active','student_contactinfo.*','country_master.CountryName')
 	->leftjoin('student','student.StudentID','=','institutes_viewed_student.student_id')
 	->leftjoin('student_contactinfo','student_contactinfo.student_id','=','student.StudentID')
 	->leftjoin('country_master','country_master.CountryID','=','student_contactinfo.contact_country')
@@ -147,7 +147,7 @@ $ASSET_PATH = env('ASSET_URL').'/';
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 						<div class="education_block_list_layout style-2">
 							
-
+							
 
 							<div class="list_layout_ecucation_caption">
 								<div class="cb-college-name-section">
@@ -173,7 +173,8 @@ $ASSET_PATH = env('ASSET_URL').'/';
 											}else{
 											   $institute_id = '0';
 											}
-											$dateTime = new DateTime($list->updated_at);
+										
+											$dateTime = new DateTime($list->last_active);
 											$now = new DateTime();
 											$diff = $now->diff($dateTime);
 											if ($diff->days == 0) {
@@ -204,7 +205,7 @@ $ASSET_PATH = env('ASSET_URL').'/';
 											<div class="_course_admin_ol12">
 												<span><i class="fas fa-graduation-cap mr-1"></i>{{$Qualification}} &nbsp;&nbsp; </span>
 												<span><i class="fas fa-map-marker-alt mr-1"></i>{{$list->CountryName}} &nbsp;&nbsp; </span>
-												<span><i class="ti-calendar mr-1"></i>Active: {{$diffDays}} &nbsp;&nbsp;</span>
+												<span><i class="ti-calendar mr-1"></i>Active: {{$diffDays}} {{	$list->updated_at}} &nbsp;&nbsp;</span>
 											</div>
 
 

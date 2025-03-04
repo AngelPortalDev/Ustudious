@@ -416,7 +416,15 @@ $(document).ready(function () {
       $("#student_view").css('display','block');
     });
    
-  
+    $(document).on("click", ".stlogincheck", function () {
+        swal({
+            title: "Please Login",
+            text: "Click ok to Login",
+            icon: "warning",
+        }).then(function () {
+            $("#studentlogin").modal('show');
+        });
+    });
 
     $(document).on("click", ".institute_actions", function () {
 
@@ -522,7 +530,7 @@ $(document).ready(function () {
     
         var form = $("#changePassword").serialize();
         if (old_pass != "" && confirm_pass != "") {
-            $("#loader").show();
+            $("#loader").fadeIn();
             $.ajax({
                 url: baseUrl + "pass-change",
                 type: "POST",
@@ -569,6 +577,12 @@ $(document).ready(function () {
                 message: {
                     required: true
                 },
+                country_code: {
+                    required: true
+                },
+                contact_mobile: {
+                    required: true
+                },
     
             },
             messages: {
@@ -584,10 +598,17 @@ $(document).ready(function () {
                 message: {
                     required: 'Message is required',
                 },
+                country_code: {
+                    required: 'country code is required',
+                },
+                contact_mobile: {
+                    required: 'mobile no. is required',
+                },
             },
             submitHandler: function (form) {
                 
                 var formData = new FormData($("#contactForm")[0]);
+                $('#loader').fadeIn();
                 $.ajax({
                     type:"POST",
                     url: baseUrl + "mailEnquiry",
@@ -598,6 +619,7 @@ $(document).ready(function () {
                         "X-CSRF-TOKEN": csrfToken,
                     },
                     success:function(data) {
+                        $('#loader').fadeOut();
                       if (data.success) {
                         swal({
                            title: data.success,
@@ -635,7 +657,62 @@ $(document).ready(function () {
         
       });
     
-    
+      $("#newsletterSend").on("click", function (e) {
+        e.preventDefault();
+ 
+        $(".newmail_error").hide();
+
+        var newsemail = $(".newsemail").val();
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (newsemail.trim() === "") {
+            $(".newmail_error").show();
+            return;
+        }
+        if (!emailRegex.test(newsemail)) {
+            $(".newmail_error").show();
+            return;
+        }
+        if (newsemail.trim() != "") {
+            $("#loader").fadeIn();
+            var form = $(".newsLetter").serialize();
+            $.ajax({
+                url: baseUrl + "newLetter",
+                type: "POST",
+                dataType: "json",
+                data: form,
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                success: function (res) {
+                    $("#loader").fadeOut();
+                    if (res.code == 200) {
+                        $(".newsemail").val("");
+                        // console.log(res.message);
+                        swal({
+                            title: res.message,
+                            text: "We will Send you our Newsletters Update.",
+                            icon: "success",
+                        });
+                    } else {
+                        swal({
+                            title: res.message,
+                            text: "Please Try Again with Valid Email !!!",
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(error);
+                    $("#result").html("An error occurred.");
+                },
+            });
+        } else {
+            $(".newmail_error").show();
+            return;
+        }
+    });
   
     
     

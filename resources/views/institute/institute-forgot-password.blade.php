@@ -31,7 +31,7 @@
 												<label>Email Address</label>
 												<input type="text" class="form-control" placeholder="Register Email Address" name="email" >
 											</div>
-											<input name="passtype" value="{{ base64_encode('institute')}}" type="text" >
+											<input name="passtype" value="{{ base64_encode('institute')}}" type="hidden" >
 											<div class="form-group">
 												{{-- <a href="index.php" class="btn btn_apply w-100">Reset Password</a>
 												<button class="btn btn_apply w-100"  id="resetPass">Reset Password</button> --}}

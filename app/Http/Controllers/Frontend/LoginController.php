@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Student;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Exception;
 
 class LoginController extends Controller
 {
@@ -50,6 +51,8 @@ class LoginController extends Controller
                     $Institute = Institute::create([
                         'full_name'=> $request->first_name,
                         'institute_email'=> $request->email_address,
+                        'country_id'=> $request->country_id,
+                        'rm_code' =>$request->country_code,
                         'institute_mobile'=> $request->mobile,
                         'institute_password'=>  Hash::make($request->password),
                         'company_name'=> $request->institute_name,
@@ -67,30 +70,15 @@ class LoginController extends Controller
 
                     $lastUserId = $createUser->id;
 
-                    Institute::where(['institute_id'=> $lastInstituteId ])->update(['user_id'=> $lastUserId,'created_by'=>$lastInstituteId]);
-                    
-                    $id= '1';
-                    $templContain = DB::table('email_templates')->where('id',$id)->first();
-
-                    $email_subject = $templContain->email_subject;
-                    $email_content = $templContain->email_content;
-
+                    Institute::where(['institute_id'=> $lastInstituteId ])->update(['user_id'=> $lastUserId,'created_by'=>$lastInstituteId]);               
+                
                     $dyc_id = Crypt::encrypt($lastInstituteId);
                     
-                    $link =  env('APP_URL') . "verfiy-mail/institute/" . $dyc_id;
-             
-                    $email_content = str_replace(['#Name#', '#Email#','#Link'], [$request->first_name, $request->email_address,$link], $email_content);
-                       
-                    $email_subject = str_replace(['#Name#'], [$request->first_name], $email_subject);
-                   
-                    $data = ['newContain' => $email_content];
+                    $link =  env('APP_URL') . "/verfiy-mail/institute/" . $dyc_id;
+                    
                     $email = $request->email_address;
-
-                    $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                        $message->from(env('MAIL_FROM_ADDRESS'));
-                        $message->to($email);
-                        $message->subject($email_subject);
-                    });
+                    mail_send(1,['#Name#', '#Email#','#Link#'], [$request->first_name, $request->email_address,$link],$email);
+                   
 
                     return response()->json(['success' => "Successfully Signup"]);
                     
@@ -199,32 +187,14 @@ class LoginController extends Controller
             
                     $data = Student::where(['StudentID'=> $lastStudentId])->update(['UserID'=> $lastUserId]);
 
-                    $id= '6';
-                    $templContain = DB::table('email_templates')->where('id',$id)->first();
-                
-
-                    $email_subject = $templContain->email_subject;
-                    $email_content = $templContain->email_content;
-                    $dyc_id = Crypt::encrypt($lastStudentId);
-                    
-                    $link =  env('APP_URL') . "verfiy-mail/student/" . $dyc_id;
-                
-                    $email_content = str_replace(['#Name#', '#Email#','#Link'], [$request->first_name, $request->email,$link], $email_content);
-                        
-                    $email_subject = str_replace(['#Name#'], [$request->first_name], $email_subject);
                    
-                    $data = ['newContain' => $email_content];
+                    $dyc_id = Crypt::encrypt($lastStudentId);                    
+                    $link =  env('APP_URL') . "/verfiy-mail/student/" . $dyc_id;               
+                   
                     $email = $request->email;
-                        
-                    $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                        $message->from(env('MAIL_FROM_ADDRESS'));
-                        $message->to($email);
-                        $message->subject($email_subject);
-                    });
-       
+                    mail_send(6, ['#Name#', '#Email#','#Link'], [$request->first_name, $request->email,$link], $email);
 
-                    return response()->json(['success' => "Successfully Signup"]);
-                    
+                    return response()->json(['success' => "Successfully Signup"]);                    
                 }catch (\Exception $e) {
                     return $e;
                     return response()->json(['error' => 'Credentials Invalid Or Already Exist']);
@@ -257,15 +227,18 @@ class LoginController extends Controller
                 try {
                     $auth = Student::where(['Email'=> $email])->whereNull('deleted_at')->where('ApprovalStatus','Approved')->count();
                     $authCheck = Student::where(['Email'=> $email])->whereNull('deleted_at')->first();
-
+                  
           
                     if ($auth ===  1) {
+                        if ($authCheck['email_verified'] != 'Yes') {
+                            return response()->json(['error' => 'Please verify your email before logging in.']);
+                        }
                         $auth = Student::where('Email', $email)->get();
                         $dbpassword = $auth[0]['Password'];
                         $name = $auth[0]['FirstName'];
                         $student_id = $auth[0]['StudentID'];     
                         $usertype = "Student";           
-       
+                      
                         if (Hash::check($password, $dbpassword)) {
                            
                             Session::put('student_email', $email);
@@ -278,8 +251,7 @@ class LoginController extends Controller
                             
                         } else {
                             
-                                return response()->json(['error' => 'Incorrect email or Password.']);
-                            
+                                return response()->json(['error' => 'Incorrect email or Password.']);                            
                         }
                     } else {
                         if($authCheck['ApprovalStatus'] == 'Rejected'){
@@ -309,14 +281,14 @@ class LoginController extends Controller
                 $column_email = 'institute_email';
                 $column_password = 'institute_password';
                 $select_value = ['full_name', 'institute_password'];
-                $id= '7';
+                $temid= '17';
             } elseif (session()->has('student_id')) {
                 $email = session()->get('student_email');
                 $table = 'student';
                 $column_email = 'Email';
                 $column_password = 'Password';
                 $select_value = ['FirstName', 'Password'];
-                $id= '8';
+                $temid= '16';
             } else {
                 echo json_encode(['code' => 404, 'message' => 'Somting Went Wrong']);
                 return;
@@ -354,20 +326,20 @@ class LoginController extends Controller
 
                                 DB::table($table)->where($column_email, $email)->update([$column_password => Hash::make($confirm_pass)]);
                              
-                                $templContain = DB::table('email_templates')->where('id',$id)->first();
+                                // $templContain = DB::table('email_templates')->where('id',$id)->first();
             
-                                
+                                mail_send($temid,['#Name#'],[$name],$email);
 
-                                $email_subject = $templContain->email_subject;
-                                $email_content = $templContain->email_content;
+                                // $email_subject = $templContain->email_subject;
+                                // $email_content = $templContain->email_content;
                         
-                                $data = ['newContain' => $email_content];
+                                // $data = ['newContain' => $email_content];
                                 
-                                $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                                    $message->from(env('MAIL_FROM_ADDRESS'));
-                                    $message->to($email);
-                                    $message->subject($email_subject);
-                                });
+                                // $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
+                                //     $message->from(env('MAIL_FROM_ADDRESS'));
+                                //     $message->to($email);
+                                //     $message->subject($email_subject);
+                                // });
                                
                                 echo json_encode(['code' => 200, 'message' => 'Password Has been Changed']);
                             } else {
@@ -453,14 +425,14 @@ class LoginController extends Controller
 
     public function resetPassLinkSend(Request $req)
     {
-
+        
 
         if ($req->isMethod('POST') && !session()->get('institute_id') || !session()->get('student_id')) {
 
-
+         
             $email = isset($req->email) ? htmlspecialchars($req->input('email')) : '';
             $cat = isset($req->passtype) ? base64_decode($req->input('passtype')) : '';
-          
+       
             if ($cat === 'institute') {
                 $tempt_id = 7;
                 $table = 'institute';
@@ -484,7 +456,7 @@ class LoginController extends Controller
 
             $validate = Validator::make($req->all(), $validate_rules);
           
-
+            
             if (!$validate->fails() && !empty($email) && !empty($cat) && isset($email) && isset($cat) && isset($token) && !empty($token)) {
                
                 if ($cat === 'institute') {
@@ -499,38 +471,29 @@ class LoginController extends Controller
                 //     $id =   Student::select('StudentID')->where($where)->get();
                 // }
                 // return $is_exist;
-                if ($is_exist > 0) {
-                    DB::beginTransaction();
-                    try {
-                        // return $where;
-                        // DB::table($table)->where($where)->update(['reset_token' => $token]);
-                       Institute::where(['institute_email' => $email])->update(['reset_token' => $token]);
-
-                        $email_enc = base64_encode($email);
-                        $cat_enc = base64_encode($cat);
-                        $link =  env('APP_URL') . "reset-password-form/".$cat_enc.'/'.$email_enc."/".$token;
-
-
-                        $templContain = DB::table('email_templates')->where('id',$tempt_id)->first();
-        
-                        $email_subject = $templContain->email_subject;
-                        $email_content = $templContain->email_content;
                 
-                        $data = ['newContain' => $email_content];
-                        // return $data;
-                        // $email_content = str_replace(['#Link#'], [$link], $email_content);
-                        $email_content = str_replace(['#Link#'], [$link], $email_content);
-                        $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                            $message->from(env('MAIL_FROM_ADDRESS'));
-                            $message->to($email);
-                            $message->subject($email_subject);
-                        });
-                        DB::commit();
+              
+                if ($is_exist > 0) {
+                   DB::beginTransaction();
+                    try {
+                       
+                        if ($cat === 'institute') {
+                        Institute::where(['institute_email' => $email])->update(['reset_token' => $token]);
+                        }else{
+                            Student::where(['Email' => $email])->update(['reset_token' => $token]);
+                        }
+              
+                        $email_enc = base64_encode($email);
+                        $cat_enc = base64_encode($cat);                      
+                        $link =  env('APP_URL') . "/reset-password-form/$cat_enc/$email_enc/" . $token;
+                          mail_send($tempt_id, ['#Link#'], [$link], $email);                       
+                       DB::commit();
                         echo json_encode(['code' => 200, 'message' => 'Reset Link Sent Successfully']);
-                        // return $token;
+                       
                     } catch (Exception $e) {
                         DB::rollback();
-                        echo json_encode(['code' => 404, 'message' => 'Somthing Went Wrong', 'text' => 'Unble to Send Mail.']);
+                       
+                        echo json_encode(['code' => 404, 'message' => $e->getMessage(), 'text' => 'Unble to Send Mail.']);
                     }
                 } else {
                     echo json_encode(['code' => 404, 'message' => 'Email ID Not Registered', 'text' => 'No Account Associate With This Email.']);
@@ -543,12 +506,12 @@ class LoginController extends Controller
 
     public function resetpasswordForm($enc_cat, $enc_email, $token)
     {
-
+        
         if (isset($enc_cat) && !empty($enc_cat) && isset($enc_email) && !empty($enc_email) && isset($token) && !empty($token)) {
-
+            
             $cat = base64_decode($enc_cat);
             $email = base64_decode($enc_email);
-
+      
             if ($cat === 'institute') {
                 $tempt_id = 7;
                 $table = 'institute';
@@ -562,6 +525,7 @@ class LoginController extends Controller
                 return;
             }
             try {
+               
                 $exists = DB::table($table)->where($where)->count();
                 // return $exists;
                 if ($exists === 1) {
@@ -619,8 +583,8 @@ class LoginController extends Controller
                     $select = 'full_name';
                     $update = 'institute_password';
             
-                } elseif ($cat === 'emp') {
-                    $url = 'institute-login';
+                } elseif ($cat === 'student') {
+                    $url = 'student';
                     $table = 'student';
                     $cat_name = 'student';
                     $where = ['Email' => $email];
@@ -640,31 +604,32 @@ class LoginController extends Controller
                     DB::beginTransaction();
                     try {
                         $updatedData = DB::table($table)->select($select)->where($where)->first();
+                       
                         DB::table($table)->where($where)->update([$update => Hash::make($newpasscon), 'reset_token' => $datetime]);
                         if ($cat === 'institute') {
                             $name = $updatedData->full_name;
                         }else{
                             $name = $updatedData->FirstName;
                         }
-
-                        $templContain = DB::table('email_templates')->where('id','17')->first();
+                        mail_send(17,['#Name#', '#Email#'], [ $name, $email],$email);
+                        // $templContain = DB::table('email_templates')->where('id','17')->first();
         
-                        $email_subject = $templContain->email_subject;
-                        $email_content = $templContain->email_content;
+                        // $email_subject = $templContain->email_subject;
+                        // $email_content = $templContain->email_content;
                 
-                        // mail_send(17, ['#Name#', '#Cat#'], [ucfirst($name), ucfirst($cat_name)], $email);
-                        $email_content = str_replace(['#Name#', '#Email#'], ["Ankita", $email], $email_content);
+                        // // mail_send(17, ['#Name#', '#Cat#'], [ucfirst($name), ucfirst($cat_name)], $email);
+                        // $email_content = str_replace(['#Name#', '#Email#'], [ $updatedData, $email], $email_content);
                        
-                        $email_subject = str_replace(['#Name#'], ["Ankita"], $email_subject);
+                        // $email_subject = str_replace(['#Name#'], ["Ankita"], $email_subject);
                        
-                        $data = ['newContain' => $email_content];
-                        $email = $email;
+                        // $data = ['newContain' => $email_content];
+                        // $email = $email;
 
-                        $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                            $message->from(env('MAIL_FROM_ADDRESS'));
-                            $message->to($email);
-                            $message->subject($email_subject);
-                        });
+                        // $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
+                        //     $message->from(env('MAIL_FROM_ADDRESS'));
+                        //     $message->to($email);
+                        //     $message->subject($email_subject);
+                        // });
                         echo json_encode(['code' => 200, 'message' => 'New Password Reset Successfully', 'url' => $url]);
                         DB::commit();
                     } catch (Exception $e) {
@@ -685,36 +650,41 @@ class LoginController extends Controller
     public function mailEnquiry(Request $request)
     {
         if ($request->isMethod('POST')) {
-         
+        
             try {
 
                 $name = isset($request->name) ? $request->input('name') : '';
                 $email = isset($request->email) ? $request->input('email') : '';
                 $subject = isset($request->subject) ? $request->input('subject') : '';
-                $message  = isset($request->message) ? $request->input('message') : '';
+                $meg  = isset($request->message) ? $request->input('message') : '';
+                $country_code  = isset($request->country_code) ? $request->input('country_code') : '';
+                $contact_mobile  = isset($request->contact_mobile) ? $request->input('contact_mobile') : '';
                     
                 $ContactForm = DB::table('contact_form')->insert([
                     'name' => $name,
                     'email' => $email,
-                    'message' => $message,
+                    'message' => $meg,
+                    'country_code'=> $country_code,
+                    'mob_no'=> $contact_mobile,
                     'subject'=> $subject,
                     'created_at'=> $this->time
                 ]);
     
-                $templContain = DB::table('email_templates')->where('id',2)->first();
-                
-                $email_subject = $templContain->email_subject;
-                $email_content = $templContain->email_content;
-        
-                $email_content = str_replace(['#Name#', '#Email#','#Subject#','#Message#'], [$name, $email,$subject,$message], $email_content);
-                        
-                $data = ['newContain' => $email_content];
-                
-                $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
+                $Monbile_no =$country_code . ' '.$contact_mobile;
+                $data = [
+                    'name' => htmlspecialchars($name),            
+                    'email' => htmlspecialchars($email),
+                    'subject' => htmlspecialchars($subject),             
+                    'meg' => htmlspecialchars($meg),      
+                    'contactmob' => htmlspecialchars($Monbile_no) 
+                ];
+             
+                $user['to'] = 'prince@angel-portal.com';
+                $send = Mail::send('mails.contactmail', $data, function ($message) use ($user, $email, $name) {
                     $message->from(env('MAIL_FROM_ADDRESS'));
-                    $message->to(env('MAIL_FROM_ADDRESS'));
-                    $message->subject('Enquiry Receieve from Ustudious.com');
-                    $message->subject($email_subject);
+                    $message->to($user['to']);
+                    $message->subject('Enquiry Received from ustudious.com');
+                    $message->replyTo($email, $name);
                 });
                 if($send){
                     return response()->json(['success' => "Successfully Submitted."]);
@@ -723,7 +693,7 @@ class LoginController extends Controller
                     return response()->json(['error' => $error]);
                 }
             } catch (Exception $e) {
-                $error = 'Something Went Wrong.';
+                $error = $e->getMessage();
                 return response()->json(['error' => $error]);
             }
         }else{
@@ -735,5 +705,27 @@ class LoginController extends Controller
     {
         session()->flush();
         return redirect('/');
+    }
+
+    public function newLetter(Request $req)
+    {
+       
+        if ($req->isMethod('POST') && $req->ajax()) {
+            $email = isset($req->email) ? $req->email : 'Invalid';
+            $exists = DB::table('newsletter')->where('mail', $email)->count();
+
+
+            if ($exists === 0) {
+                try {
+                    $mail = DB::table('newsletter')->insert(['mail' => $email]);
+                    echo json_encode(['code' => 200, 'message' => 'Successfully Subscribed',  "icon" => "success"]);
+                } catch (\Exception $e) {
+                    echo json_encode(['code' => 205, 'message' => 'Unable to Subscribe', 'text' => "", "icon" => "error"]);
+                }
+            } else {
+
+                echo json_encode(['code' => 205, 'message' => 'Invalid OR Duplicate Email', 'text' => "", "icon" => "error"]);
+            }
+        }
     }
 }
