@@ -99,7 +99,7 @@
                                             <input type="date" class="form-control" name="dateofbirth" value="{{$StudentData->Dateofbirth}}">
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="country_id" class="form-label">Preferred Country</label>
+                                            <label for="country_id" class="form-label">Country</label>
                                             <select class="form-select  mb-2 select2" name="country_id" id="country_id" required>
                                                 <option value="">Select Country</option>
                                                 @foreach ($countryData as $data)
@@ -222,20 +222,20 @@
                                     <div class="row g-2">
                                         <div class="col-md-3">
                                             <label>Email Address</label>
-                                            <input type="text" class="form-control" name="contact_email"  value="{{$StudentData->contact_email}}" >
+                                            <input type="text" class="form-control" name="contact_email"  value="{{$StudentData->Email}}" >
                                         </div>
 
                                         <div class="col-md-3">
-                                            <label> Select Country</label>
+                                            <label> Preferred Select Country</label>
                                             <select class="form-control contact_countries" name="contact_countries" id="contact_countries">
                                                 <option value="">Select Country</option>
                                                 @foreach ($countryData as $data)
-                                                <option value="{{ $data->CountryID }}" @if($data->CountryID == $StudentData->CountryID) selected @endif >{{ $data->CountryName }}</option>
+                                                <option value="{{ $data->CountryID }}" @if($data->CountryID == $StudentData->contact_country) selected @endif >{{ $data->CountryName }}</option>
                                              @endforeach
                                             </select>
                                         </div>
                                         
-                                        <div class="form-group col-md-3">
+                                        {{-- <div class="form-group col-md-3">
                                             <div>
                                                 <label>Mobile Number</label>
                                             </div>
@@ -244,8 +244,8 @@
                                                 <input type="text" class="form-control contact_country_code" placeholder="Country Code" name="contact_country_code" style="width: 23%;margin-right: 6PX;" value="<?= $StudentData->contact_country_code ?>" disabled>
                                                <input type="text" class="form-control" name="contact_mobile" value="<?= $StudentData->contact_mobile_no ?>">
                                             </div>
-                                        </div>
-                                        <div class="form-group col-md-3">
+                                        </div> --}}
+                                        {{-- <div class="form-group col-md-3">
                                             <label> Select State</label>
                                             <select class="form-control" name="contact_state" id="contact_state">
                                                 <option value="">Select State</option>
@@ -254,20 +254,27 @@
                                                 @endforeach
                                             
                                             </select>
-                                        </div>
-                                    </div>
-                                    <bR>
-                                    <div class="row g-2">
+                                        </div> --}}
                                         <div class="form-group col-md-3">
                                             <label>City</label>
-                                            <select class="form-control" name="contact_city"  id="contact_city" >
+                                           
+                                            <input type="text" class="form-control" name="contact_city"  value="{{$StudentData->city}}" >
+                                            {{-- <select class="form-control" name="contact_city"  id="contact_city" >
                                                 <option value="">Select City</option>
                                                 @foreach ($cities as $data)
                                                     <option value="{{ $data->CityID }}" @if($data->CityID ==$StudentData->city) selected @endif>{{ $data->CityName }}</option>
                                                 @endforeach
                                             
-                                            </select>
+                                            </select> --}}
                                         </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Zip Code</label>
+                                            <input type="text" class="form-control" name="zipcode" value="{{$StudentData->zip_code}}" >
+                                        </div>
+                                    </div>
+                                    <bR>
+                                    <div class="row g-2">
+                                        
 
                                         <div class="form-group col-md-3">
                                             <label>Zip Code</label>

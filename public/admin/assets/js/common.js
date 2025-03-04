@@ -9507,7 +9507,8 @@ $("#EditStudent").on('click', function(e) {
 // });
 $("#resetPass").on("click", function (e) {
   e.preventDefault(); 
-  var form = $(".resetPassData").serialize();
+  var formData  = $(this).closest(".resetPassData");
+  var form = formData.serialize();;
   $("#loader").fadeIn();
   $.ajax({
       url: "reset-password-link",

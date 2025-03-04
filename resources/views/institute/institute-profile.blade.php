@@ -41,7 +41,7 @@ label.error{
         ->leftjoin('institute_contactinfo','institute_contactinfo.institute_id','=','institute.institute_id')->first(); 
         $countryName = '';
         if($InstituteData->country){
-            $country = DB::table('country_master')->where('CountryID',$InstituteData->country)->distinct()->first(); 
+            $country = DB::table('country_master')->where('CountryID',$InstituteData->country_id)->distinct()->first(); 
             $countryName = $country->CountryName;
         }
 

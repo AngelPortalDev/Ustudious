@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{Course,CourseMaster,ProgramType};
+use App\Models\{Course,CourseMaster, Institute, ProgramType};
 use App\Exports\CourseExport;
 use App\Imports\CourseImport;
+use App\Jobs\SendbulkEmails;
 use App\Models\InstituteContactInfo;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\{Hash, Validator, Session, DB, Crypt, Storage};
+use Illuminate\Support\Facades\{Hash, Validator, Session, DB, Crypt, Log, Storage};
 use Exception;
 class CourseController extends Controller
 {
@@ -124,6 +125,7 @@ class CourseController extends Controller
      */
     public function show($id)
     {
+        $courseid=base64_decode($id);
         $Courses =  Course::select("course.*","institute.company_name","duration_master.Duration","intakemonth_master.Intakemonth","intakeyear_master.Intakeyear","language_master.Language",
         "country_master.CountryName","qualification_master.Qualification","course_category.course_category","course_types.course_types")
         ->leftjoin("institute","institute.institute_id","=","course.InstituteID")
@@ -135,7 +137,7 @@ class CourseController extends Controller
         ->leftjoin("qualification_master","qualification_master.QualificationID","=","course.Qualification")
         ->leftjoin("course_category","course_category.id","=","course.CourseCategory")
         ->leftjoin("course_types","course_types.course_types_id","=","course.CourseType")
-        ->where('CourseID',$id)
+        ->where('CourseID',$courseid)
         ->first();
         return view('admin.course.show',compact('Courses'));
     }
@@ -272,11 +274,34 @@ class CourseController extends Controller
     {  
        $course_id = base64_decode($request->course_id) ;
        $data = Course::whereIN('CourseID',explode(",",$course_id))->update(['ApprovalStatus'=>'Approved']);  
-       $CoursesList =  DB::table('course')->select("course.InstituteID")->whereIn('course.CourseID',explode(",",$course_id))->get();
+       $CoursesList =  DB::table('course')->select("course.InstituteID","ApprovalStatus","CourseName","Specialization","CourseID")->whereIn('course.CourseID',explode(",",$course_id))->get();
        foreach($CoursesList as $course){
         $total_courses = Course::where('InstituteID',$course->InstituteID)->where('ApprovalStatus','Approved')->where('CourseStatus','Active')->whereNull('deleted_at')->count();
         InstituteContactInfo::where('institute_id',$course->InstituteID)->update(['total_courses'=>$total_courses]);
-       }
+        if ($course->ApprovalStatus == 'Approved') {
+           $instituteData=Institute::select('institute_id','company_name')->where('institute_id',$course->InstituteID)->first();
+           $studentEmail = DB::table('student_applied_course')
+           ->select('student.StudentID','student.FirstName','student.Email',DB::raw('MAX(student_applied_course.id) as id'), DB::raw('MAX(student_applied_course.course_id) as course_id'))
+           ->leftJoin('student', 'student.StudentID', '=', 'student_applied_course.student_id')
+           ->where('student_applied_course.institute_id', $course->InstituteID)
+           ->groupBy('student.StudentID', 'student.FirstName', 'student.Email')
+           ->get();
+            
+           //print_r($studentEmail);
+            if (isset($studentEmail) && !empty($studentEmail)) {
+                foreach ($studentEmail as $studentData) {                   
+                    $sendTo = $studentData->Email;
+                    $name = $studentData->FirstName;       
+                    $id=base64_encode($course->CourseID);
+                     
+                    $link =  env('APP_URL') . "/course-details/" .  $id;
+                    // Log::info("url",['url'=>$link]);   
+                    SendbulkEmails::dispatch($sendTo, $name,$course->CourseName,$course->Specialization, $instituteData->company_name, $link);
+                }
+            }
+        }
+    }
+       
     }  
     public function rejectcourse(Request $request)  
     {  

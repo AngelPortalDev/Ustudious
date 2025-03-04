@@ -124,7 +124,7 @@
                                                 <label for="contact_email" class="form-label" >Contact Email :  </label>{{$InstituteData->contact_email}}
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="contact_mobile" class="form-label" >Contact Mobile Number :  </label>{{$InstituteData->contact_mobile}}
+                                                <label for="contact_mobile" class="form-label" >Contact Mobile Number :  </label>{{$InstituteData->country_code}} {{$InstituteData->contact_mobile}}
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="landline_no" class="form-label">Landline Number :   </label>{{$InstituteData->landline_no}}

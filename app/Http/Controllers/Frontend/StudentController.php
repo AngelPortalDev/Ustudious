@@ -38,15 +38,15 @@ class StudentController extends Controller
         if (session()->has('email')) {
 
 
-            $request->id  = base64_decode($request->id);
-            $request->institute_id  = base64_decode($request->institute_id);
+            $student_id  = base64_decode($request->id);
+            $institute_id  = base64_decode($request->institute_id);
 
 
             $Students = DB::table('student')->select('student.*', 'student_contactinfo.*', 'country_master.CountryName', 'course_types.course_types')
                 ->leftjoin('student_contactinfo', 'student_contactinfo.student_id', "=", "student.StudentID")
                 ->leftjoin('country_master', 'country_master.CountryID', "=", "student_contactinfo.contact_country")
                 ->leftjoin('course_types', 'course_types.course_types_id', "=", "student_contactinfo.program_type")
-                ->where(['student.StudentID' => $request->id])
+                ->where(['student.StudentID' => $student_id])
                 ->first();
 
 
@@ -57,14 +57,14 @@ class StudentController extends Controller
                 ->leftjoin("duration_master", "duration_master.DurationID", "=", "course.CourseDuration")
                 ->leftjoin("intakemonth_master", "intakemonth_master.IntakemonthID", "=", "course.IntakeMonth")
                 ->leftjoin("intakeyear_master", "intakeyear_master.IntakeyearID", "=", "course.IntakeYear")
-                ->where('student_applied_course.institute_id', $request->institute_id)
-                ->where(['student_id' => $request->id])->get();
+                ->where('student_applied_course.institute_id', $institute_id)
+                ->where(['student_id' => $student_id])->get();
 
             $data['StudentQualification'] = DB::table('student_qualifications')
                 ->select("student_qualifications.PercentageGrade", "qualification_master.Qualification", "student_qualifications.PassingYear", "student_qualifications.QualificationTypes")
                 ->leftjoin("qualification_master", "qualification_master.QualificationID", "=", "student_qualifications.Qualification")
                 ->leftjoin("country_master", "country_master.CountryID", "=", "student_qualifications.Country")
-                ->where(['StudentID' => $request->id])
+                ->where(['StudentID' => $student_id])
                 ->whereNull('student_qualifications.deleted_at')
                 ->orderBy('student_qualifications.StudentQualificationID', 'ASC')
                 ->get();
@@ -126,7 +126,8 @@ class StudentController extends Controller
                     }
                     $courseData=getData('course',['CourseID','InstituteID','CourseName'],['CourseID' =>$course_id]);                   
                     $institutecontact=getData('institute_contactinfo',['institute_id','contact_person_name','contact_email'],['institute_id' =>$courseData[0]->InstituteID]);
-                    mail_send(14,['#aplliedname#','#coursename#','#personname#'],[session()->get('student_name'), $courseData[0]->CourseName,$institutecontact[0]->contact_person_name],$institutecontact[0]->contact_email);
+                    $instituteData=getData('institute',['institute_id','institute_email'],['institute_id' =>$courseData[0]->InstituteID]);
+                    mail_send(14,['#aplliedname#','#Emails#','#coursename#','#personname#','#date#'],[session()->get('student_name'),session()->get('student_email'), $courseData[0]->CourseName,$institutecontact[0]->contact_person_name,$this->date],$institutecontact[0]->contact_email,$instituteData[0]->institute_email);
                     echo json_encode(array('code' => 200, 'message' => 'Successfully ' . $remark, 'icon' => 'success', 'lable' => $remark, 'newAction' => $remark));
                 }
             } catch (\Exception $e) {
@@ -203,7 +204,7 @@ class StudentController extends Controller
                     'Gender' => $request->gender,
                     'updated_by' => session()->get('student_id'),
                     'Photo' => $student_photo_name,
-                    'CountryID' => $request->student_country,
+                    // 'CountryID' => $request->student_country,
                     'Resume' => $student_resume_name,
                     'updated_at' => $this->time
                 ]);
@@ -215,7 +216,7 @@ class StudentController extends Controller
                     DB::table('student_contactinfo')->where('student_id', $request->student_id)->update([
                         // 'contact_email' => $request->contact_email,
                         // 'contact_mobile_no' => $request->contact_mobile,
-                        'contact_country' => $request->contact_country,
+                        'contact_country' => $request->student_country,
                         // 'contact_country_code' => $request->contact_country_code,
                         'address' => $request->address,
                         'city' => $request->contact_city,
@@ -325,9 +326,9 @@ class StudentController extends Controller
         if ($searchLocation == ''  &&  $searchProgramtype  == '' && $searchQualification == '') {
 
 
-            $StudentList = DB::table('student')->select('country_master.CountryName', 'student.FirstName', 'student.LastName', 'student.StudentID', 'student.Photo', 'student.created_by', 'student.CountryCode', 'student.Mobile', 'student.Email', 'student.Resume', 'student.updated_at')
+            $StudentList = DB::table('student')->select('country_master.CountryName', 'student.FirstName', 'student.LastName', 'student.StudentID', 'student.Photo', 'student.created_by', 'student.CountryCode', 'student.Mobile', 'student.Email', 'student.Resume','student.CountryID', 'student.updated_at')
                 ->leftjoin("student_contactinfo", "student_contactinfo.student_id", "=", "student.studentID")
-                ->leftjoin("country_master", "country_master.CountryID", "=", "student_contactinfo.contact_country");
+                ->leftjoin("country_master", "country_master.CountryID", "=", "student.CountryID");
 
             if (isset($request->qualification) && is_array($request->qualification)) {
                 $StudentList->leftjoin("student_qualifications", "student.StudentID", "=", "student_qualifications.studentID");

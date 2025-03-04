@@ -83,7 +83,7 @@ class LoginController extends Controller
                     return response()->json(['success' => "Successfully Signup"]);
                     
                 }catch (\Exception $e) {
-                    return response()->json(['error' => 'Credentials Invalid Or Already Exist']);
+                    return response()->json(['error' => $e->getMessage()]);
                 }
             } else {
                 return response()->json(['error' => 'Mandatory Fields are Missing']);
@@ -170,8 +170,8 @@ class LoginController extends Controller
                         'Email'=> $request->email,
                         'Mobile'=> $request->mobile,
                         'Password'=>  Hash::make($request->password),
-                        'CountryCode'=>$request->student_country_code
-                        // 'CountryID'=>$request->student_country_id
+                        'CountryCode'=>$request->student_country_code,
+                        'CountryID'=>$request->student_country_id
             
                     ]);
             
@@ -432,7 +432,7 @@ class LoginController extends Controller
          
             $email = isset($req->email) ? htmlspecialchars($req->input('email')) : '';
             $cat = isset($req->passtype) ? base64_decode($req->input('passtype')) : '';
-       
+           
             if ($cat === 'institute') {
                 $tempt_id = 7;
                 $table = 'institute';

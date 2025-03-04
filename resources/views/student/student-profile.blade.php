@@ -13,7 +13,7 @@
     $StudentData = DB::table('student')
         ->select('student.*', 'student_contactinfo.*', 'country_master.CountryName')
         ->leftjoin('student_contactinfo', 'student_contactinfo.student_id', '=', 'student.StudentID')
-        ->leftjoin('country_master', 'country_master.CountryID', '=', 'student_contactinfo.contact_country')
+        ->leftjoin('country_master', 'country_master.CountryID', '=', 'student.CountryID')
         ->where(['student.StudentID' => $LoginID])
         ->first();
     $country = DB::table('country_master')->orderBy('CountryName', 'ASC')->get();
@@ -176,9 +176,9 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Preferred Country</label>
-                                                @if ($StudentData->CountryID)
+                                                @if ($StudentData->contact_country)
                                                     <?php $countryDatas = DB::table('country_master')
-                                                        ->where('CountryID', $StudentData->CountryID)
+                                                        ->where('CountryID', $StudentData->contact_country)
                                                         ->first(); ?>
                                                     <div type="text" class="form-control boxshadow"
                                                         name="student_country"> <?= $countryDatas->CountryName ?></div>
@@ -348,9 +348,9 @@
 
                                             <div class="form-group col-md-6">
                                                 <label> Select Country</label>
-                                                @if ($StudentData->contact_country)
+                                                @if ($StudentData->CountryID)
                                                     <?php $countryContact = DB::table('country_master')
-                                                        ->where('CountryID', $StudentData->contact_country)
+                                                        ->where('CountryID', $StudentData->CountryID)
                                                         ->first(); ?>
                                                     <div type="text" class="form-control boxshadow"
                                                         name="contact_country"> <?= $countryContact->CountryName ?></div>
@@ -546,7 +546,7 @@
                                                         <option value="">Select Country</option>
                                                         @foreach ($country as $data)
                                                             <option value="{{ $data->CountryID }}"
-                                                                @if ($data->CountryID == $StudentData->CountryID) selected @endif>
+                                                                @if ($data->CountryID == $StudentData->contact_country) selected @endif>
                                                                 {{ $data->CountryName }}</option>
                                                         @endforeach
                                                     </select>
@@ -843,7 +843,7 @@
                                                     <?php if (empty($StudentData)) {
                                                         $contact_country = 'Not Disclosed';
                                                     } else {
-                                                        $contact_country = $StudentData->contact_country;
+                                                        $contact_country = $StudentData->CountryID;
                                                     }
                                                     ?>
                                                     <input type="hidden" class="form-control" name="contact_country"

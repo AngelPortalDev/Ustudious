@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendbulkEmails;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Student;
@@ -294,34 +295,17 @@ class CourseController extends Controller
 
                 ]);
                 $lastCourseID = $data->CourseID;
+                $courseName =$data->CourseName;
                 $InstituteName = Institute::select(['full_name', 'institute_email'])->where('institute_id', $request->institute_id)->first();
 
-                // $id= '19';
-                // $templContain = DB::table('email_templates')->where('id',$id)->first();
-
-
-                // $email_subject = $templContain->email_subject;
-                // $email_content = $templContain->email_content;
+               
                 $dyc_id = base64_encode($lastCourseID);
                 $link =  env('APP_URL') . "/course-details/" . $dyc_id;
 
                 $sendto = array_unique([trim(strtolower(session()->get('email'))), trim(strtolower('prince3@yopmail.com'))]);
                 $sendcc = array_unique([trim(strtolower($InstituteName->institute_email))]);
-                mail_send(19, ['#Name#', '#Link'], [$InstituteName->full_name, $link], $sendto, $sendcc);
-                // $email_content = str_replace(['#Name#','#Link'], [$InstituteName->full_name, $link], $email_content);
-
-                // $email_subject = str_replace(['#Name#'], [$InstituteName->full_name], $email_subject);
-
-
-
-                // $data = ['newContain' => $email_content];
-                // $email = $InstituteName->institute_email;
-
-                // $send = Mail::send('mail', $data, function ($message) use ( $email,$email_subject ) {
-                //     $message->from(env('MAIL_FROM_ADDRESS'));
-                //     $message->to($email);
-                //     $message->subject($email_subject);
-                // });
+                mail_send(19, ['#Name#', '#Link','#CourseName#'], [$InstituteName->full_name, $link,$courseName], $sendto, $sendcc);
+               
                 return response()->json(['success' => "Course Posted Successfully."]);
             } catch (\Exception $e) {
 
