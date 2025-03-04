@@ -132,7 +132,7 @@
                                     <div class="list_layout_ecucation_caption">
                                         <div class="cb-college-name-section">
                                             <div class="education_block_thumb n-shadow">
-                                                <a href="{{route('college-details',$list->institute_id)}}">
+                                                <a href="{{route('college-details',base64_encode($list->institute_id))}}">
                                                     <?php 
                                                     if($list->institute_logo){ 
                                                         $filePath =  Storage::url('institute/logo/'.$list->institute_logo); 
@@ -149,7 +149,7 @@
                                             <div class="list_layout_ecucation_caption">
 
                                                 <div class="education_block_body">
-                                                    <h4 class="bl-title college-name"><a href="{{route('college-details',$list->institute_id)}}">{{$list->company_name}}</a></h4>
+                                                    <h4 class="bl-title college-name"><a href="{{route('college-details',base64_encode($list->institute_id))}}">{{$list->company_name}}</a></h4>
                                                     <div class="_course_admin_ol12">
                                                         <span><i
                                                                 class="fas fa-map-marker-alt mr-1"></i>

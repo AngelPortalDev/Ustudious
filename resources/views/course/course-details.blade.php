@@ -40,7 +40,7 @@
 
 
                     <div class="college-name mb-3">at&nbsp;
-                        <a class="" href="{{route('college-details',$Courses->InstituteID)}}"> <?= $Courses->company_name  ?>
+                        <a class="" href="{{route('college-details',base64_encode($Courses->InstituteID))}}"> <?= $Courses->company_name  ?>
                         </a>
                     </div>
 

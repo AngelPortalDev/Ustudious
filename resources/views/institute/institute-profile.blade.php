@@ -115,7 +115,7 @@ label.error{
                      
 
                         
-                        <h4><a href="{{route('college-details',$InstituteData->institute_id)}}"><?= $InstituteData->company_name  ?></a></h4>
+                        <h4><a href="{{route('college-details',base64_encode($InstituteData->institute_id))}}"><?= $InstituteData->company_name  ?></a></h4>
                        
                         <span>{{$countryName}}</span>
                     </div>

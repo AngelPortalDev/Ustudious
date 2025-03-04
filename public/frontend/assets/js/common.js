@@ -434,8 +434,9 @@ $(document).ready(function () {
         var posted_by = $(this).data("posted_by");
         var dashjs = $(this).data("dashjs");
         var action = $(this).data("action");
-    
+        
         if (action_txt != "" && (student !== null) & (student !== 0)) {
+            $('#loader').fadeIn();
             $.ajax({
                 url: baseUrl + "institute/student-action",
                 type: "POST",
@@ -451,7 +452,7 @@ $(document).ready(function () {
                 },
                 context: $(".action"),
                 success: function (res) {
-                    
+                    $('#loader').fadeOut();
                     if (res.code === 200) {
                         swal({
                             title: res.message,

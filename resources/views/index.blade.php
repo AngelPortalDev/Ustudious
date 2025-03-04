@@ -273,7 +273,7 @@
 
 					<div class="education_block_thumb n-shadow">
 
-						<a href="{{route('college-details',$list->institute_id)}}">
+						<a href="{{route('college-details',base64_encode($list->institute_id))}}">
 							@if($list->institute_logo)
 							<img src="{{Storage::url('institute/logo/'.$list->institute_logo)}}" class="img-fluid" alt=""></a>
 							@else
@@ -284,7 +284,7 @@
 					<div class="list_layout_ecucation_caption">
 
 						<div class="education_block_body">
-							<h4 class="bl-title"><a href="{{route('college-details',$list->institute_id)}}">{{ $list->company_name }}</a></h4>
+							<h4 class="bl-title"><a href="{{route('college-details',base64_encode($list->institute_id))}}">{{ $list->company_name }}</a></h4>
 							<div class="_course_admin_ol12"><i class="ti-location-pin mr-1"></i>{{$list->CountryName}}</div>
 
 							<div class="_course_less_infor">
@@ -298,7 +298,7 @@
 
 						<div class="education_block_footer">
 							<div class="cources_info_style3">
-								<a href="{{route('college-details',$list->institute_id)}}" class="_cr_detail_arrow"><i
+								<a href="{{route('college-details',base64_encode($list->institute_id))}}" class="_cr_detail_arrow"><i
 										class="fa fa-arrow-right"></i></a>
 							</div>
 						</div>
@@ -540,7 +540,7 @@
 								</a></h4>
 							<div class="_course_admin_ol12">
 								<i class="fa fa-university"></i>
-								<a href="{{route('college-details',$list->institute_id)}}" target="_blank">{{$list->company_name}}</a>
+								<a href="{{route('college-details',base64_encode($list->institute_id))}}" target="_blank">{{$list->company_name}}</a>
 							</div>
 
 

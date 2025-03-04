@@ -147,7 +147,7 @@
                                             @foreach($SavedCourseData as $List)
                                             <tr>
                                                 <td>{{$i}}</td>
-                                                <td class="course-name-saved-course-table"><a href="{{route('college-details',$List->institute_id)}}">{{$List->company_name}}</a></td>
+                                                <td class="course-name-saved-course-table"><a href="{{route('college-details',base64_encode($List->institute_id))}}">{{$List->company_name}}</a></td>
                                                 <td class="course-name-saved-course-table"><a href="{{route('course-details',base64_encode($List->CourseID))}}">{{$List->CourseName}}</a></td>
                                                 <td class="course-name-saved-course-table">{{$List->Currency.' '.$List->TotalCost}}</td>
                                                 <td class="save-btn">
