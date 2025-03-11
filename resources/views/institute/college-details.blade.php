@@ -143,7 +143,8 @@
 
 									<ul class="social_info">
 										@if($Colleges->facebook)
-										<li><a href="{{$Colleges->facebook}}" target="_blank"><i class="ti-facebook"></i></a></li>
+										<li><a href="
+											{{ isset($Colleges->facebook) ? (strpos($Colleges->facebook, 'http') === 0 ? $Colleges->facebook : 'http://' .  $Colleges->facebook) : '#' }}" target="_blank"><i class="ti-facebook"></i></a></li>
 										@endif
 										{{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 											<a class="a2a_button_facebook"></a>
@@ -154,16 +155,16 @@
 										<script async src="https://static.addtoany.com/menu/page.js"></script> --}}
 											<!-- AddToAny END -->
 										@if($Colleges->twitter)
-										<li><a href="{{$Colleges->twitter}}" target="_blank"><i class="ti-twitter"></i></a></li>
+										<li><a href="{{ isset($Colleges->twitter) ? (strpos($Colleges->twitter, 'http') === 0 ? $Colleges->twitter : 'http://' .  $Colleges->twitter) : '#' }}" target="_blank"><i class="bi bi-twitter-x"></i></a></li>
 										@endif
 										@if($Colleges->linkedin)
-										<li><a href="{{$Colleges->linkedin}}" target="_blank"><i class="ti-linkedin"></i></a></li>
+										<li><a href="{{ isset($Colleges->linkedin) ? (strpos($Colleges->linkedin, 'http') === 0 ? $Colleges->linkedin : 'http://' .  $Colleges->linkedin) : '#' }}" target="_blank"><i class="ti-linkedin"></i></a></li>
 										@endif
 										@if($Colleges->instagram)
-										<li><a href="{{$Colleges->instagram}}" target="_blank"><i class="ti-instagram"></i></a></li>
+										<li><a href="{{ isset($Colleges->instagram) ? (strpos($Colleges->instagram, 'http') === 0 ? $Colleges->instagram : 'http://' .  $Colleges->instagram) : '#' }}" target="_blank"><i class="ti-instagram"></i></a></li>
 										@endif
 										@if($Colleges->youtube)
-										<li><a href="{{$Colleges->youtube}}" target="_blank"><i class="ti-youtube"></i></a></li>
+										<li><a href="{{ isset($Colleges->youtube) ? (strpos($Colleges->youtube, 'http') === 0 ? $Colleges->youtube : 'http://' .  $Colleges->youtube) : '#' }}" target="_blank"><i class="ti-youtube"></i></a></li>
 										@endif
 									</ul>
 								</div>
@@ -221,8 +222,20 @@
 										<h4 class="edu_title">Institution Details</h4>
 										<ul>
 											<li><strong>Contact Person:</strong>{{ !empty($Colleges->contact_person_name) ? $Colleges->contact_person_name : 'Not Disclosed' }}</li>
-											<li><strong>Email:</strong>{{ !empty($Colleges->contact_email) ? $Colleges->contact_email : 'Not Disclosed' }} </li>
-											<li><strong>Mobile:</strong>{{ !empty($Colleges->contact_mobile) ? $Colleges->country_code.' '.$Colleges->contact_mobile : 'Not Disclosed' }}  </li>
+											<li><strong>Email:</strong>
+												@if(!empty($Colleges->contact_email))
+													<a href="mailto:{{$Colleges->contact_email}}" target="_blank">{{  $Colleges->contact_email }} </a>
+												@else
+												Not Disclosed
+												@endif
+											</li>
+											<li><strong>Mobile:</strong>
+												@if (!empty($Colleges->contact_mobile))
+												<a href="tel:{{$Colleges->country_code.''.$Colleges->contact_mobile}}">{{$Colleges->country_code.' '.$Colleges->contact_mobile}}</a>
+												@else
+												Not Disclosed
+												@endif
+											</li>
 											<li><strong>Address:</strong> {{ !empty($Colleges->city) ? $Colleges->address.' '.$Colleges->city.' '.$Colleges->state.' '. $Colleges->pincode : 'Not Disclosed' }}</li>
 
 										</ul>

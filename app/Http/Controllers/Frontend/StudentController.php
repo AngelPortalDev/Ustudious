@@ -44,12 +44,12 @@ class StudentController extends Controller
 
             $Students = DB::table('student')->select('student.*', 'student_contactinfo.*', 'country_master.CountryName', 'course_types.course_types')
                 ->leftjoin('student_contactinfo', 'student_contactinfo.student_id', "=", "student.StudentID")
-                ->leftjoin('country_master', 'country_master.CountryID', "=", "student_contactinfo.contact_country")
+                ->leftjoin('country_master', 'country_master.CountryID', "=", "student.CountryID")
                 ->leftjoin('course_types', 'course_types.course_types_id', "=", "student_contactinfo.program_type")
                 ->where(['student.StudentID' => $student_id])
                 ->first();
 
-
+            
             $data['EnrolledCourseData'] = DB::table('student_applied_course')->select("course.CourseName", "institute.full_name", "duration_master.Duration", "intakemonth_master.Intakemonth", "intakeyear_master.Intakeyear", "course.TotalCost", "institute.institute_idproof", "course.CourseID", "course.created_by", "country_master.CountryName", "course.Currency", "institute.institute_id", "institute.institute_logo", "student_applied_course.*")
                 ->leftjoin('course', 'course.CourseID', '=', 'student_applied_course.course_id')
                 ->leftjoin("country_master", "country_master.CountryID", "=", "course.CountryID")

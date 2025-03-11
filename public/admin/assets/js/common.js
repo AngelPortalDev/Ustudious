@@ -6198,9 +6198,9 @@ $("#EditStudent").on('click', function(e) {
   });
 
   $("#EditCourse").on('click', function (e) {
-
+ 
     $('#UpdateCourse').validate({
-
+      
       highlight: function (element, errorClass, validClass) {
 
         $(element).parents('.select2').removeClass('has-success').addClass('has-error');
@@ -6300,24 +6300,21 @@ $("#EditStudent").on('click', function(e) {
         },
         course_overview: {
           required: function() {
-            CKEDITOR.instances.course_overview.updateElement();
-            var editorContent = $('#course_overview').val();
-            return editorContent.length === 0 || editorContent.trim() === '';
-          }
+            var quillContent = quill3.root.innerHTML.trim();
+            return quillContent === "<p><br></p>" || quillContent === "";
+        }
         },
         course_curriculum: {
           required: function() {
-            CKEDITOR.instances.course_curriculum.updateElement();
-            var editorContent = $('#course_curriculum').val();
-            return editorContent.length === 0 || editorContent.trim() === '';
-          }
+            var quillContent = quill4.root.innerHTML.trim();
+            return quillContent === "<p><br></p>" || quillContent === "";
+        }
         },
         course_requirements: {
           required: function() {
-            CKEDITOR.instances.course_requirements.updateElement();
-            var editorContent = $('#course_requirements').val();
-            return editorContent.length === 0 || editorContent.trim() === '';
-          }
+            var quillContent = quill4.root.innerHTML.trim();
+            return quillContent === "<p><br></p>" || quillContent === "";
+        }
         },
         mode_of_study : {
           required : true
@@ -8533,7 +8530,7 @@ $("#EditStudent").on('click', function(e) {
   });
 
     $("#PostCourse").on('click', function(e) {
-   
+     
       $.validator.addMethod('maxFileSize', function(value, element) {
       var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
       if (element.files.length > 0) {
@@ -8561,6 +8558,25 @@ $("#EditStudent").on('click', function(e) {
 
 
       $('#postcourse').validate({
+        course_overview: {
+          required: function() {
+            var quillContent = quill3.root.innerHTML.trim();
+            return quillContent === "<p><br></p>" || quillContent === "";
+        }
+        },
+        course_curriculum: {
+          required: function() {
+            var quillContent = quill4.root.innerHTML.trim();
+            return quillContent === "<p><br></p>" || quillContent === "";
+        }
+        },
+        course_requirements: {
+          required: function() {
+            var quillContent = quill5.root.innerHTML.trim();
+            return quillContent === "<p><br></p>" || quillContent === "";
+        }
+
+      },
         rules: {
           course_title:{
             required: true,
@@ -9031,7 +9047,7 @@ $("#EditStudent").on('click', function(e) {
                       text: "",
                       icon: "success",
                   }).then(function () {
-                    return  window.location.href = '/browse-course';
+                    return  window.location.reload();
                   });
                 } else {
                     swal({
@@ -9039,7 +9055,7 @@ $("#EditStudent").on('click', function(e) {
                         text: "Please Try Again",
                         icon: "error",
                     }).then(function () {
-                      return  window.location.href = '/browse-course';
+                      return  window.location.reload();
                     });
                 }
             }.bind(this),

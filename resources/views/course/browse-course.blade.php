@@ -295,7 +295,7 @@
                             </div>
 
                         </div>
-                        <div class="collapse" id="content_modeofstudy">
+                        <div class="collapse show" id="content_modeofstudy">
                             <ul class="no-ul-list mb-3">
                                 <li>
                                     <input id="aa-41" class="checkbox-custom" name="modeofstudy[]"  type="checkbox" value="part_time">
@@ -327,7 +327,7 @@
                             </div>
 
                         </div>
-                        <div class="collapse" id="content_location">
+                        <div class="collapse show" id="content_location">
                             <div class="form-inline addons mb-2 course-filter-search-bar" >
                                 <input class="form-control se-input" type="search" placeholder="Search Location"  aria-label="Search" id="searchLocation">
                                 <button><i class="ti-search"></i></button>
@@ -344,6 +344,7 @@
                                 
 
                             </ul>
+                            
                         </div>
 
                         <hr>

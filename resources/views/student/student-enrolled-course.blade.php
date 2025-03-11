@@ -31,7 +31,7 @@
 	$LoginID = Session::get('student_id');
 	$StudentData = DB::table('student')->select('student.*','student_contactinfo.*','country_master.CountryName')
 	->leftjoin('student_contactinfo','student_contactinfo.student_id',"=","student.StudentID")
-	->leftjoin('country_master','country_master.CountryID',"=","student_contactinfo.contact_country")    
+	->leftjoin('country_master','country_master.CountryID',"=","student.CountryID")    
     ->where(['student.StudentID'=> $LoginID])
 	->first(); 
 	$country = DB::table('country_master')->whereNull('deleted_at')->distinct()->get(); ?>
@@ -110,14 +110,13 @@
                     
                     @php $CourseList = DB::table('student_applied_course')->select("course.CourseName","institute.company_name",
                     "duration_master.Duration","intakemonth_master.Intakemonth","intakeyear_master.Intakeyear","course.TotalCost",
-                    "course.Brochure","course.CourseID","course.created_by","country_master.CountryName","course.Currency",
+                    "course.Brochure","course.CourseID","course.created_by","country_master.CountryName","course.Currency","course.ApprovalStatus",
                     "institute.institute_id","institute.institute_logo","institute_contactinfo.founded","institute_contactinfo.total_courses","student_applied_course.*")
                     
                                 ->leftjoin('course','course.CourseID','=','student_applied_course.course_id')
                                 ->leftjoin('institute','institute.institute_id','=','course.InstituteID')
                                 ->leftjoin("institute_contactinfo","institute_contactinfo.institute_id","=","course.InstituteID")
                                 ->leftjoin("country_master","country_master.CountryID","=","institute_contactinfo.country")  
-
                                 ->leftjoin("duration_master","duration_master.DurationID","=","course.CourseDuration")
                                 ->leftjoin("intakemonth_master","intakemonth_master.IntakemonthID","=","course.IntakeMonth")
                                 ->leftjoin("intakeyear_master","intakeyear_master.IntakeyearID","=","course.IntakeYear")
@@ -173,8 +172,13 @@
 
 
                                         <div class="education_block_body">
-                                            <h4 class="bl-title course-name pt-2"><a href="{{route('course-details',base64_encode($list->CourseID))}}">{{$list->CourseName}}
-                                                </a></h4>
+                                            <h4 class="bl-title course-name pt-2">
+                                                @if($list->ApprovalStatus == 'Approved')
+                                                <a href="{{route('course-details',base64_encode($list->CourseID))}}">{{$list->CourseName}}</a>
+                                                @else
+                                                {{$list->CourseName}}
+                                                @endif
+                                            </h4>
 
                                         </div>
                                     

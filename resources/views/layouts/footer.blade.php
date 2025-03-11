@@ -224,7 +224,8 @@
 				<div class="col-lg-3 col-md-3">
 					<div class="footer-widget">
 						<h4 class="widget-title">New Categories</h4>
-						<?php $InstitutewiseCourse = DB::table('course')->select('course.*')->select('CourseName','CourseID')->whereNull('course.deleted_at')->orderby('CourseID','Desc')->take(5)->get(); ?>
+						<?php $InstitutewiseCourse = DB::table('course')->select('course.*')->select('CourseName','CourseID')->whereNull('course.deleted_at')->where('CourseStatus', 'Active')->where('course.ApprovalStatus', 'Approved')->whereNull('course.deleted_at')
+                			->orderby('CourseID','Desc')->take(5)->get(); ?>
 						<ul class="footer-menu">
 							@foreach($InstitutewiseCourse as $List)
 							<li><a href="{{route('course-details',base64_encode($List->CourseID))}}">{{$List->CourseName}}</a></li>
@@ -309,7 +310,7 @@
 <script src="{{asset('js/jquery.validate.min.js')}}"></script>
 <script src="{{asset('js/toastr.min.js')}}"></script>
 <script src="{{asset('js/student.js')}}"></script>
-<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+{{-- <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script> --}}
 
 <!-- ============================================================== -->
 <!-- This page plugins -->

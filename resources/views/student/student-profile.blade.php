@@ -157,6 +157,7 @@
 											</div> --}}
                                             <div class="form-group col-md-6">
                                                 <label>Date of Birth</label>
+                                                
                                                 <div class="form-control boxshadow" name="dateofbirth">
                                                     {{ $StudentData->Dateofbirth }}</div>
                                             </div>
@@ -522,7 +523,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label>Date of Birth <span style="color:red"> *</span> </label>
                                                     <input type="date" class="form-control"
-                                                        value="{{ $StudentData->Dateofbirth }}" name="dateofbirth">
+                                                        value="{{ $StudentData->Dateofbirth }}" name="dateofbirth" max="{{date('Y-m-d')}}">
                                                 </div>
 
                                                 <div class="form-group col-md-6">
@@ -761,6 +762,7 @@
                                                         <label>Country of Institution </label>
                                                         <select class="form-control st-country-code"
                                                             name="college_country[]">
+                                                            <option value="" disabled selected>Select country</option>
                                                             @foreach ($country as $data)
                                                                 <option value="{{ $data->CountryID }}">
                                                                     {{ $data->CountryName }}</option>
@@ -1234,8 +1236,6 @@
                                     title: " Education Deleted Successfully.",
                                     text: "",
                                     icon: "success",
-                                }).then(function() {
-                                    return window.location.href = '/student-profile';
                                 });
                             }
                         });

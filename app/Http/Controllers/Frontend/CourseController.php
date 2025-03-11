@@ -319,7 +319,7 @@ class CourseController extends Controller
 
     public function edit_postcourse(Request $request)
     {
-
+        
         $validate_rules = [
             'course_title' => 'required',
             'specialization' => 'required',

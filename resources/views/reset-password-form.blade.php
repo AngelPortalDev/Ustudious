@@ -1,17 +1,26 @@
 @extends('layouts.main')
 @section('content')
-
+<style>
+	footer.dark-footer.skin-dark-footer{
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+   
+    color: white;
+    text-align: center;
+	}
+	</style>
 <!-- Content -->
 <div class="page-content bg-white">
 
         <!-- contact area -->
-        <div class="section-full content-inner browse-job bg-white shop-account">
+        <div class="section-full content-inner browse-job bg-white shop-account p-4">
             <!-- Product -->
             <div class="container">
                 <div class="row">
 					<div class="col-md-12 m-b30">
 						<div class="card max-w500 radius-sm m-auto">
-							<div class="tab-content">
+							<div class="tab-content p-5">
 								<form class="tab-pane active ChangePasswordData">
 									<h4 class="font-weight-700 m-b5">RESET YOUR PASSWORD  </h4>
 									<p class="font-weight-600"></p>
@@ -59,7 +68,16 @@
 		</div>
 		<!-- contact area  END -->
 
-
+</div>
 
 <!-- Import footer  -->
 @endsection()
+@section('js')
+
+<script>
+$(document).ready(function(){
+   
+	$('.select2').select2();
+});
+</script>
+@endsection

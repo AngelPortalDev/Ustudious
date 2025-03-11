@@ -3377,7 +3377,7 @@ nav a:hover {
   content: "";
   width:22px;
   height:22px;
-  left:27px;
+  left:200px;
   top:-12px;
   position: absolute;
   -webkit-transform: rotate(45deg);
@@ -11575,9 +11575,12 @@ width: 200px;
 .saved-students-page-main .dashboard_single_course_progress_2 {
 font-size: 13PX;
 }
-.form-group .error{
+/* .form-group .error{
     color:red;
-}
+} */
+ label.error{
+    color:red;
+ }
 .show-password-eye{
     margin-right: 5px;
     top: 20px;

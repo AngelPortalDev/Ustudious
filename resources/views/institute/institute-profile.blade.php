@@ -181,7 +181,7 @@ label.error{
 
                                         <div class="form-group col-md-6">
                                             <label> Institution Mobile</label>
-                                            <div class="form-control  boxshadow" name="company_type"><?= $InstituteData->country_code .' '.$InstituteData->institute_mobile ?></div>
+                                            <div class="form-control  boxshadow" name="company_type"><?= $InstituteData->rm_code .' '.$InstituteData->institute_mobile ?></div>
                                         </div> 
 
                                         <div class="form-group col-md-6">
@@ -600,7 +600,7 @@ label.error{
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label>Landline Number</label>
-                                                <input type="text" class="form-control" name="landline_no"  value="<?= $InstituteData->landline_no ?>" placeholder="Contact Landline Number">
+                                                <input type="number" class="form-control" name="landline_no"  value="<?= $InstituteData->landline_no ?>" placeholder="Contact Landline Number">
                                             </div>
 
                                             <div class="form-group col-md-6">

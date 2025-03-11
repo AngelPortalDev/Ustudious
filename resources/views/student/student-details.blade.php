@@ -102,7 +102,7 @@
 									<li><i class="ti-mobile mr-1"></i>Contact MobileNo. :<strong> {{ !empty($Students->contact_mobile_no) ? $Students->contact_country_code.' '.$Students->contact_mobile_no: 'Not Disclosed' }}</strong></li> --}}
 									<li><i class="ti-location-pin"></i>Address :<strong>{{ !empty($address) ?  $address.' , ' : '' }} {{ !empty($city) ? $city.' , ' : ''}}{{!empty($country) ? $country : '' }} {{!empty($zipcode) ? ' , '.$zipcode : '' }}</strong></li>
 									@if($Students->CountryID) 
-									<?php $PreferredCountry = DB::table('country_master')->where('CountryID',$Students->CountryID)->first(); ?>
+									<?php $PreferredCountry = DB::table('country_master')->where('CountryID',$Students->contact_country)->first(); ?>
 									<li><i class="ti-location-pin"></i>Preferred Country :<strong>{{ $PreferredCountry->CountryName }}</strong></li>
 									@else
 									<li><i class="ti-location-pin"></i>Preferred Country :<strong>Not Disclosed</strong></li>

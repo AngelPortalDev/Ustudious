@@ -31,7 +31,7 @@
 	$LoginID = Session::get('student_id');
 	$StudentData = DB::table('student')->select('student.*','student_contactinfo.*','country_master.CountryName')
     ->leftjoin('student_contactinfo','student_contactinfo.student_id',"=","student.StudentID")
-	->leftjoin('country_master','country_master.CountryID',"=","student_contactinfo.contact_country")
+	->leftjoin('country_master','country_master.CountryID',"=","student.CountryID")
     ->where(['student.StudentID'=> $LoginID])
 	->first(); 
 	$country = DB::table('country_master')->whereNull('deleted_at')->distinct()->get(); ?>

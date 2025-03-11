@@ -18,7 +18,7 @@ $(document).ready(function () {
         $("#student_profile_edit").css('display','block');
         $("#student_view").css('display','block');
       });
-
+    
       $(".StudentProfile").on('click', function(e) {
   
 
@@ -65,34 +65,34 @@ $(document).ready(function () {
           messages:
           {
             first_name: {
-              required:'Please enter First Name',
+              required:'Please enter first name',
             },
             last_name: {
-              required: 'Please enter Last Name.',
+              required: 'Please enter last name.',
             },
             student_country:{
-              required:  'Please select Country.',
+              required:  'Please select country.',
             },
             dateofbirth :{
-              required:  'Please enter Date of Birth.',
+              required:  'Please enter date of birth.',
             },
             program_type:{
-              required:'Please select Program Type.',
+              required:'Please select program type.',
             },
             'qualification_id[]':{
-              required:  'Please select Education.',
+              required:  'Please select education.',
             },
             // 'qualification_types_id[]':{
             //   required: 'Please enter Specialization.',
             // },
             'medium[]':{
-              required: 'Please enter Study Medium.',
+              required: 'Please enter study medium.',
             },
             'year[]':{
-              required : 'Please enter Passing Year.',
+              required : 'Please enter passing year.',
             },
             contact_city:{
-              required : 'Please enter City.',
+              required : 'Please enter city.',
             },
             // student_resume: {
             //   required: 'Please select an pdf file.'
