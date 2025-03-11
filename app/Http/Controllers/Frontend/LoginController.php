@@ -224,7 +224,7 @@ class LoginController extends Controller
                         $message->from(env('MAIL_FROM_ADDRESS'))
                                 ->to($user['to'])
                                 ->subject('New Student Registration: ' . $request->first_name) 
-                                ->replyTo($request->email_address, $request->first_name);
+                                ->replyTo($request->email, $request->first_name);
                     });
                     return response()->json(['success' => "Successfully Signup"]);                    
                 }catch (\Exception $e) {
