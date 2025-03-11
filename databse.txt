@@ -1,1 +1,3 @@
 ALTER TABLE `institute` ADD  `country_id` int(11) NOT NULL AFTER `institute_mobile`;
+
+ALTER TABLE `course` ADD  `accommodation_certificate_cost` varchar(255) DEFAULT NULL AFTER `AdministrativeCost`;

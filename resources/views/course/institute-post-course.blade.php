@@ -167,7 +167,11 @@
                                                 <label>Course Price <span  style="color:red"> *</span> </label>
                                                 <input type="number" class="form-control" name="course_price" placeholder="Course Price" >
                                             </div>
-
+                                           
+                                            <div class="form-group col-md-6">
+                                                <label> Accommodation certificate cost </label>
+                                                <input type="number" class="form-control" name="accommodation_certificate_cost" placeholder="Accommodation certificate cost" >
+                                            </div>
                                             <div class="form-group col-md-6">
                                                 <label>Administrative Price <span  style="color:red"> *</span>  </label>
                                                 <input type="number" class="form-control" name="administrative_price"  placeholder="Administrative Price"> 
@@ -274,7 +278,7 @@
                                                 <label> Features</label>
                                                 {{-- <textarea class="form-control" name="course_features"  placeholder="Features"></textarea> --}}
                                                 <div id="course_features" style="height:200px;"></div>
-                                                <input type="hidden" name="course_features" id="hidden_course_curriculum">
+                                                <input type="hidden" name="course_features" id="hidden_course_features">
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label>Opportunities</label>
@@ -380,7 +384,9 @@
                                         <div class="form-row">	
                                             <div class="form-group col-md-12">
                                                 <label>Curriculum <span  style="color:red"> *</span> </label>
-                                                <textarea class="form-control" name="course_curriculum" placeholder="Curriculum"></textarea>
+                                                {{-- <textarea class="form-control" name="course_curriculum" placeholder="Curriculum"></textarea> --}}
+                                                <div id="course_curriculum" style="height:200px;"></div>
+                                                <input type="hidden" name="course_curriculum" id="hidden_course_curriculum">
                                                 <label class="course_curriculum-error" for="course_curriculum" style="display:none;color:red;">Please enter Curriculum.</label>
 
                                             </div>
@@ -412,7 +418,9 @@
                                         <div class="form-row">	
                                             <div class="form-group col-md-12">
                                                 <label>Application Procedure <span  style="color:red"> *</span> </label>
-                                                <textarea class="form-control" name="application_procedure" placeholder="Application Procedure"></textarea>
+                                                {{-- <textarea class="form-control" name="application_procedure" placeholder="Application Procedure"></textarea> --}}
+                                                <div id="application_procedure" style="height:200px;"></div>
+                                                <input type="hidden" name="application_procedure" id="hidden_application_procedure">
                                                 <label class="application_procedure-error" for="application_procedure" style="display:none;color:red">Please enter Application Procedure.</label>
 
                                             </div>
@@ -503,9 +511,26 @@
 }
 $("#postcourse").on("submit", function() {
     $("#hidden_course_overview").val(quill3.root.innerHTML);
-    $("#hidden_course_curriculum").val(quill4.root.innerHTML);
+    $("#hidden_course_features").val(quill4.root.innerHTML);
     $("#hidden_course_requirements").val(quill5.root.innerHTML);
+    $("#hidden_course_curriculum").val(quill1.root.innerHTML);
+    $("#hidden_application_procedure").val(quill2.root.innerHTML);
 });
+
+var quill1, editorElement1 = document.querySelector("#course_curriculum");
+  editorElement1 && (quill1 = new Quill(editorElement1, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Description..."
+  }));
+
+  // Course Features
+  var quill2, editorElement2 = document.querySelector("#application_procedure");
+  editorElement2 && (quill2 = new Quill(editorElement2, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Features..."
+  }));
 
 
 var quill3, editorElement3 = document.querySelector("#course_description");

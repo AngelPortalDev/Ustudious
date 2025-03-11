@@ -181,13 +181,61 @@
 			</div>
 			<br><br>
 			<div class="text-end"  style="margin-left:80%">
-			 <button type="button" class="btn btn-primary"  id="CloseModal" style="width:65px;margin-right:30%">Ok</button>
+			 <button type="button" class="btn btn-primary" class="mod-close" data-dismiss="modal" id="CloseModal" style="width:65px;margin-right:30%">Ok</button>
 			</div>
 			<br><br>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div id="fess_details" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" style="top:20%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="topModalLabel">Fee Details</h4>
+                <span class="mod-close" data-dismiss="modal" aria-hidden="true"><i class="ti-close"></i></span>
+            </div>
+
+            <div class="modal-body">
+                <input class="form-control" type="hidden" id="course_id" name="course_id" placeholder="course_id" required>
+                
+				<table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fee Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Course Fees</td>
+                            <td id="CourseFees"></td> 
+                        </tr>
+						<tr>
+                            <td>Administrative Cost</td>
+                            <td id="AdministrativeCost"></td> 
+                        </tr>
+                        <tr>
+                            <td>Accommodation Certificate Cost</td>
+                            <td id="accommodation_certificate_cost"></td> 
+                        </tr>
+                        <tr>
+                            <td>Total Cost</td>
+                            <td id="TotalCost"></td> 
+                        </tr>
+						
+						
+                    </tbody>
+                </table>
+				{{-- <div class="text-end" style="margin-left:80%">
+					<button type="button" class="btn btn-primary mod-close" data-dismiss="modal" style="width:65px;margin-right:30%">Ok</button>
+				</div> --}}
+            </div>
+
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 
 <!-- ============================ Footer Start ================================== -->
 <footer class="dark-footer skin-dark-footer">

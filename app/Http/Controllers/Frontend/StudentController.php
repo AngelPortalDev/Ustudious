@@ -249,9 +249,7 @@ class StudentController extends Controller
 
                     ]);
                 }
-                mail_send(24,['#Name#'],[$StudentImage->FirstName],$StudentImage->Email);
-
-
+               
                 if ($request->student_qualification_id) {
                     foreach ($request->student_qualification_id as $key => $studentqualificationId) {
 
@@ -286,11 +284,11 @@ class StudentController extends Controller
                         }
                     }
                 }
-
+                mail_send(24,['#Name#'],[$StudentImage->FirstName],$StudentImage->Email);
                    
                 return response()->json(['success' => "Profile Updated."]);
             } catch (\Exception $e) {
-                return response()->json(['error' => "Something Went Wrong."]);
+                return response()->json(['error' => $e->getMessage()]);
             }
         } else {
             return response()->json(['error' => "Something Went Wrong."]);

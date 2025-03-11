@@ -25,6 +25,7 @@ class Course extends Model
         'Requirements',
         'CourseFees',
         'AdministrativeCost',
+        'accommodation_certificate_cost',
         'ApplicationForm',
         'Brochure',
         'CountryID',

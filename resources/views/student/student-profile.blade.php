@@ -164,7 +164,7 @@
 
 
                                             <div class="form-group col-md-6">
-                                                <label> Gender</label>
+                                                <label> Gender </label>
                                                 @php $Gender = '' @endphp
                                                 @if ($StudentData->Gender == 'male')
                                                     @php $Gender = "Male" @endphp
@@ -527,9 +527,9 @@
                                                 </div>
 
                                                 <div class="form-group col-md-6">
-                                                    <label> Gender</label>
+                                                    <label> Gender <span style="color:red"> *</span></label>
                                                     <select class="form-control st-country-code" name="gender">
-                                                        <option value="">Please select Gender </option>
+                                                        <option value="" disabled selected>Please select Gender </option>
                                                         <option value="male"
                                                             @if ('male' == $StudentData->Gender) selected @endif>Male</option>
                                                         <option value="female"
@@ -544,7 +544,7 @@
 
                                                     <select class="form-control boxshadow" name="student_country"
                                                         id="student_country">
-                                                        <option value="">Select Country</option>
+                                                        <option value="" disabled selected>Select Country</option>
                                                         @foreach ($country as $data)
                                                             <option value="{{ $data->CountryID }}"
                                                                 @if ($data->CountryID == $StudentData->contact_country) selected @endif>
@@ -559,7 +559,7 @@
                                                     </label>
                                                     @php $courseTypeData =DB::table('course_types')->select('course_types_id','course_types')->whereNull('deleted_at')->distinct()->get(); @endphp
                                                     <select class="form-control" name="program_type" id="program_type">
-                                                        <option value="">Select Program Type </option>
+                                                        <option value="" disabled selected>Select Program Type </option>
                                                         @foreach ($courseTypeData as $data)
                                                             <option value="{{ $data->course_types_id }}"
                                                                 @if ($data->course_types_id == $StudentData->program_type) selected @endif>
@@ -572,7 +572,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label> Mode of Study <span style="color:red"> *</span> </label>
                                                     <select class="form-control mode_of_study" name="mode_of_study">
-                                                        <option value="">Select Mode of Study</option>
+                                                        <option value="" disabled selected>Select Mode of Study</option>
                                                         <option value="part_time"
                                                             @if ($StudentData->mode_of_study == 'part_time') selected @endif>Part Time
                                                         </option>
@@ -633,7 +633,7 @@
                                                             <select class="form-control qualification"
                                                                 name="qualification_id[]"
                                                                 id="qualification_id_{{ $key }}" required>
-                                                                <option value="">Select Education</option>
+                                                                <option value="" disabled selected>Select Education</option>
                                                                 @foreach ($qualification_data as $data)
                                                                     <option value="{{ $data->QualificationID }}"
                                                                         @if ($data->QualificationID == $educData->Qualification) selected @endif>
@@ -669,7 +669,9 @@
                                                             <label>Country of Institution </label>
                                                             <select class="form-control st-country-code"
                                                                 name="college_country[]">
+                                                                <option value="" disabled selected>Select country</option>
                                                                 @foreach ($country as $data)
+                                                                
                                                                     <option value="{{ $data->CountryID }}"
                                                                         @if ($data->CountryID == $educData->Country) selected @endif>
                                                                         {{ $data->CountryName }}</option>

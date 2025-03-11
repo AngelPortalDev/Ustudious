@@ -129,7 +129,7 @@
 				<div class="container">
 					<nav id="navigation" class="navigation navigation-landscape">
 						<div class="nav-header">
-							<a class="nav-brand" href="{{url('/')}}">
+							<a class="nav-brand">
 								<img src="{{$ASSET_PATH}}img/ustudious-logo.png" class="logo" alt="" />
 							</a>
 							<div class="nav-toggle"></div>

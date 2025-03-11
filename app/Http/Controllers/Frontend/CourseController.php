@@ -79,6 +79,9 @@ class CourseController extends Controller
                 ->where('institute.institute_status', '1')
                 ->whereNull('institute.deleted_at')
                 ->first();
+           
+            if($Colleges != null){
+
             $data['html'] = '';
             $page = $request->input('page');
             $CoursesList =  Course::select("course.*", "institute.full_name", "duration_master.Duration", "intakemonth_master.Intakemonth", "intakeyear_master.Intakeyear", "language_master.Language", "country_master.CountryName", "course_types.course_types", "institute_contactinfo.campus", "institute.company_name", "institute_contactinfo.founded")
@@ -155,6 +158,8 @@ class CourseController extends Controller
                                                 <div class="c-d-2">
                                                     <label class="abcd">Fees:</label>
                                                     <div class="cou-value">' . $list->Currency . '' . $list->TotalCost . '
+                                                     <a href="#" class="fees_details" data-toggle="modal" data-target="#fess_details" data-id='. base64_encode($list->CourseID) .'>Fee Details </a>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,6 +241,9 @@ class CourseController extends Controller
             } else {
                 return view('institute.college-details', compact('Colleges'), $data);
             }
+        }else {
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
         } else {
             return redirect()->back()->with('msg', 'Something Went Wrong');
         }
@@ -259,7 +267,7 @@ class CourseController extends Controller
                     $brochure_name = rand() . '.' . $brochure->getClientOriginalExtension();
                     $request->file('brochure')->storeAs("storage/course/brochure", $brochure_name, 'public');
                 }
-
+               
                 $data = Course::create([
                     'InstituteID' => $request->institute_id,
                     'CourseName' => $request->course_title,
@@ -284,9 +292,10 @@ class CourseController extends Controller
                     'AgeLimit' => $request->age_limit,
                     'CourseTag' => $request->course_tag,
                     'CourseCategory' => $request->course_category,
-                    'TotalCost' => $request->course_price + $request->administrative_price,
+                    'TotalCost' => $request->course_price + $request->administrative_price + $request->accommodation_certificate_cost,
                     'CourseFees' => $request->course_price,
                     'AdministrativeCost' => $request->administrative_price,
+                    'accommodation_certificate_cost' =>$request->accommodation_certificate_cost,
                     'Currency' => $request->currency_symbols,
                     'Opportunities' => $request->course_opportunities,
                     'created_by' => $request->institute_id,
@@ -319,7 +328,7 @@ class CourseController extends Controller
 
     public function edit_postcourse(Request $request)
     {
-        
+        //dd($request->all());
         $validate_rules = [
             'course_title' => 'required',
             'specialization' => 'required',
@@ -398,9 +407,10 @@ class CourseController extends Controller
                     'AgeLimit' => $request->age_limit,
                     'CourseTag' => $request->course_tag,
                     'CourseCategory' => $request->course_category,
-                    'TotalCost' => $request->course_price + $request->administrative_price,
+                    'TotalCost' => $request->course_price + $request->administrative_price + $request->accommodation_certificate_cost,
                     'CourseFees' => $request->course_price,
                     'AdministrativeCost' => $request->administrative_price,
+                    'accommodation_certificate_cost' =>$request->accommodation_certificate_cost,
                     'Currency' => $request->currency_symbols,
                     'Opportunities' => $request->course_opportunities,
                     'updated_by' => $request->institute_id,
@@ -430,7 +440,7 @@ class CourseController extends Controller
             'institute_campus' => 'required',
         ];
 
-
+        // dd($request->all());
         $validate = Validator::make($request->all(), $validate_rules);
 
 
@@ -686,7 +696,7 @@ class CourseController extends Controller
             }
             if (isset($request->location) && is_array($request->location)) {
 
-                $CourseList->whereIn('institute_contactinfo.country', $request->location);
+                $CourseList->whereIn('institute.country_id', $request->location);
             }
             if (isset($request->duration) && is_array($request->duration)) {
 
@@ -845,7 +855,7 @@ class CourseController extends Controller
                                                     <div class="c-d-2">
                                                         <label class="abcd">Fees:</label>
                                                         <div class="cou-value">' . $list->Currency . '' . $list->TotalCost . '
-                                                       
+                                                        <a href="#" class="fees_details" data-toggle="modal" data-target="#fess_details" data-id='. base64_encode($list->CourseID) .'>Fee Details </a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1166,4 +1176,12 @@ class CourseController extends Controller
             }
         }
     }
+
+
+    public function fees_details($id){
+        $course_id=base64_decode($id);
+        $courseData=Course::select('CourseID','CourseFees','AdministrativeCost','accommodation_certificate_cost','Currency','TotalCost')->where('CourseID',$course_id)->first();
+        return json_decode($courseData);
+    }
+
 }

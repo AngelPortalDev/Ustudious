@@ -213,7 +213,8 @@
 									<!-- About Institution -->
 									<div class="edu_wraper">
 										<h4 class="edu_title">About Institution</h4>
-										<p>{{ !empty($Colleges->about_institute) ? $Colleges->about_institute : 'Not Disclosed' }}</p>
+										<p>    {!! !empty($Colleges->about_institute) ? $Colleges->about_institute : 'Not Disclosed' !!}
+										</p>
 										
 									</div>
 
@@ -246,14 +247,14 @@
 									<div class="ed_view_features ">
 										<h4 class="edu_title">Institution Features</h4>
 
-										<ul>{{ !empty($Colleges->features) ? $Colleges->features : 'Not Disclosed' }}
+										 {!! !empty($Colleges->about_institute) ? $Colleges->about_institute : 'Not Disclosed' !!}
 											
 											{{-- <li><i class="ti-angle-right"></i>Fully Programming</li>
 											<li><i class="ti-angle-right"></i>Help Code to Code</li>
 											<li><i class="ti-angle-right"></i>Free Trial 7 Days</li>
 											<li><i class="ti-angle-right"></i>Unlimited Videos</li>
 											<li><i class="ti-angle-right"></i>24x7 Support</li> --}}
-										</ul>
+										
 									</div>
 								</div>
 

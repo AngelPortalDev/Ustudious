@@ -108,9 +108,9 @@
                         </div>
                     </div>
                     
-                    @php $CourseList = DB::table('student_applied_course')->select("course.CourseName","institute.company_name",
+                    @php $CourseList = DB::table('student_applied_course')->select("course.CourseName","institute.company_name","institute.company_name","institute.institute_status",
                     "duration_master.Duration","intakemonth_master.Intakemonth","intakeyear_master.Intakeyear","course.TotalCost",
-                    "course.Brochure","course.CourseID","course.created_by","country_master.CountryName","course.Currency","course.ApprovalStatus",
+                    "course.Brochure","course.CourseID","course.created_by","country_master.CountryName","course.Currency","course.ApprovalStatus","course.CourseStatus",
                     "institute.institute_id","institute.institute_logo","institute_contactinfo.founded","institute_contactinfo.total_courses","student_applied_course.*")
                     
                                 ->leftjoin('course','course.CourseID','=','student_applied_course.course_id')
@@ -121,6 +121,7 @@
                                 ->leftjoin("intakemonth_master","intakemonth_master.IntakemonthID","=","course.IntakeMonth")
                                 ->leftjoin("intakeyear_master","intakeyear_master.IntakeyearID","=","course.IntakeYear")
                                 ->where(['student_applied_course.student_id'=> session()->get('student_id')])->get(); 
+
                     @endphp
                     
                     
@@ -148,7 +149,13 @@
                                             <div class="list_layout_ecucation_caption">
 
                                                 <div class="education_block_body">
-                                                    <h4 class="bl-title college-name"><a href="{{route('college-details',base64_encode($list->institute_id))}}">{{$list->company_name}}</a></h4>
+                                                    <h4 class="bl-title college-name">
+                                                        @if($list->institute_status != 0)
+                                                        <a href="{{route('college-details',base64_encode($list->institute_id))}}">{{$list->company_name}}</a>
+                                                        @else
+                                                        {{$list->company_name}}
+                                                        @endif
+                                                    </h4>
                                                     <div class="_course_admin_ol12">
                                                         <span><i
                                                                 class="fas fa-map-marker-alt mr-1"></i>
@@ -173,7 +180,7 @@
 
                                         <div class="education_block_body">
                                             <h4 class="bl-title course-name pt-2">
-                                                @if($list->ApprovalStatus == 'Approved')
+                                                @if($list->ApprovalStatus == 'Approved' && $list->CourseStatus == 'Active')
                                                 <a href="{{route('course-details',base64_encode($list->CourseID))}}">{{$list->CourseName}}</a>
                                                 @else
                                                 {{$list->CourseName}}

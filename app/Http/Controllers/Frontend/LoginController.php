@@ -679,7 +679,7 @@ class LoginController extends Controller
                     'contactmob' => htmlspecialchars($Monbile_no) 
                 ];
              
-                $user['to'] = 'prince@angel-portal.com';
+                $user['to'] = env('MAIL_TO');            
                 $send = Mail::send('mails.contactmail', $data, function ($message) use ($user, $email, $name) {
                     $message->from(env('MAIL_FROM_ADDRESS'));
                     $message->to($user['to']);

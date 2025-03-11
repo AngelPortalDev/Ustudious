@@ -21,9 +21,7 @@ use App\Http\Controllers\Admin\{
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', function () {    return view('index'); });
 
 Route::view('about', 'about')->name('about');
 Route::view('student-player', 'student-player')->name('student-player');
@@ -44,7 +42,7 @@ Route::get('college-details/{id}', [App\Http\Controllers\Frontend\CourseControll
 Route::get('course-details/{id}', [App\Http\Controllers\Frontend\CourseController::class, 'course_details'])->name('course-details');
 Route::post('postcourse', [App\Http\Controllers\Frontend\CourseController::class, 'postcourse']);
 Route::post('edit_postcourse', [App\Http\Controllers\Frontend\CourseController::class, 'edit_postcourse']);
-
+Route::get('fees-details/{course_id}', [App\Http\Controllers\Frontend\CourseController::class, 'fees_details']);
 Route::post('instituteprofile', [App\Http\Controllers\Frontend\CourseController::class, 'instituteprofile']);
 Route::post('institutesignup', [App\Http\Controllers\Frontend\LoginController::class, 'institutesignup']);
 Route::post('institutelogin', [App\Http\Controllers\Frontend\LoginController::class, 'institutelogin']);
@@ -159,7 +157,7 @@ Route::get('state/exportstate', [App\Http\Controllers\Admin\StateController::cla
 Route::post('state/importstate', [App\Http\Controllers\Admin\StateController::class, 'importstate']);
 
 
-Route::get('student', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student');
+Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student');
 Route::post('student/store', [App\Http\Controllers\Admin\StudentController::class, 'store']);
 Route::get('student/edit/{student_id}', [App\Http\Controllers\Admin\StudentController::class, 'edit'])->name('student.edit');
 Route::post('student/update', [App\Http\Controllers\Admin\StudentController::class, 'update']);

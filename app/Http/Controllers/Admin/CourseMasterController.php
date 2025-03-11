@@ -25,7 +25,7 @@ class CourseMasterController extends Controller
     
     public function index1()
     {
-        $courses = Course::with(['programType', 'coursecategory'])->distinct()->get();
+        $courses = Course::with(['programType', 'coursecategory'])->distinct()->orderBy('CourseID','DESC')->get();
       
         return view('admin.course.index', compact('courses'));
     }

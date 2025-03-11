@@ -244,12 +244,20 @@ label.error{
 
                                         <div class="form-group col-md-12">
                                             <label>About Institution</label>
-                                            <textarea class="form-control boxshadow" name="about_institute"  readonly  ><?= $InstituteData->about_institute ?></textarea>
+                                           
+                                            <div class="border p-4">
+                                            {!! $InstituteData->about_institute !!}
+                                            </div>
+                                            {{-- <textarea class="form-control boxshadow" name="about_institute" readonly>{{$aboutInstitute}}</textarea> --}}
                                         </div>
 
                                         <div class="form-group col-md-12">
+                                            
                                             <label>Institution Features</label>
-                                            <textarea class="form-control boxshadow" name="features" readonly> <?= $InstituteData->features ?></textarea>
+                                            {{-- <textarea class="form-control boxshadow" name="features" readonly> <?= $InstituteData->features ?></textarea> --}}
+                                            <div class="border p-4">
+                                                {!! $InstituteData->features !!}
+                                                </div>
                                         </div>
 
 
@@ -308,7 +316,11 @@ label.error{
                                                     <option value="{{ $data->CountryID }}" @if($data->CountryID == $InstituteData->country) selected @endif>{{ $data->CountryName }}</option>
                                                 @endforeach
                                             </select>   --}}
-                                            <div type="text" class="form-control boxshadow" name="institute_country"> <?= $countryName ?></div>
+                                            @php
+                                                $country_name=getData('country_master',['CountryName','CountryID'],['CountryID'=>$InstituteData->country]);
+                                               
+                                            @endphp
+                                            <div type="text" class="form-control boxshadow" name="institute_country"> {{$country_name[0]->CountryName}}</div>
                                           
                                         </div>
 
@@ -528,12 +540,16 @@ label.error{
 
                                             <div class="form-group col-md-12">
                                                 <label>About Institution  <span  style="color:red"> *</span></label>
-                                                <textarea class="form-control" name="about_institute"  placeholder="About Institute"><?= $InstituteData->about_institute ?></textarea>
+                                                {{-- <textarea class="form-control" name="about_institute"  placeholder="About Institute"><?= $InstituteData->about_institute ?></textarea> --}}
+                                                <div id="about_institute" style="height:200px;"></div>
+                                                <input type="hidden" name="about_institute" id="hidden_about_institute" value="{{$InstituteData->about_institute}}">
                                             </div>
 
                                             <div class="form-group col-md-12">
                                                 <label>Institution Features</label>
-                                                <textarea class="form-control" name="features"  placeholder="Institution Features"><?= $InstituteData->features ?></textarea>
+                                                {{-- <textarea class="form-control" name="features"  placeholder="Institution Features"><?= $InstituteData->features ?></textarea> --}}
+                                                <div id="features" style="height:200px;"></div>
+                                                <input type="hidden" name="features" id="hidden_features" value="{{$InstituteData->features}}">
                                             </div>
 
 
@@ -766,9 +782,11 @@ label.error{
                                                
                                                 {{-- <input type="file" id="images" name="images[]" multiple> --}}
 
-                                                @php $Images = DB::table('institute_images')->where('institute_id',$InstituteData->institute_id)->get(); @endphp 
-                                                @if(count($Images)  < 8)
-                                                  <input type="file" id="gallery_images" name="gallery_images[]" class="form-control" multiple>
+                                                @php $Images = DB::table('institute_images')->where('institute_id',$InstituteData->institute_id)->get(); 
+                                                $currentImageCount = count($Images);
+                                                @endphp 
+                                                @if(count($Images)  < 6)
+                                                  <input type="file" id="gallery_images" name="gallery_images[]" class="form-control" data-max-files="{{ 6 - $currentImageCount }}" multiple >
                                                 @else
                                                    <input type="file" id="gallery_images" name="gallery_images[]" class="form-control" multiple disabled>
                                                 @endif
@@ -818,7 +836,61 @@ label.error{
 @endsection
 <!-- ============================ Dashboard: My Order Start End ================================== -->
 @section('js')
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
 <script>
+    $(document).ready(function () {  
+  let about_institute = $("#hidden_about_institute").val();
+  let features = $("#hidden_features").val();  
+  if (about_institute) {
+      quill1.root.innerHTML = about_institute;
+  }
+  if (features) {
+      quill2.root.innerHTML = features;
+  }
+  
+});
+var quill1, editorElement1 = document.querySelector("#about_institute");
+  editorElement1 && (quill1 = new Quill(editorElement1, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Description..."
+  }));
+
+  // Course Features
+  var quill2, editorElement2 = document.querySelector("#features");
+  editorElement2 && (quill2 = new Quill(editorElement2, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Features..."
+  }));
+
+  $("#instituteprofile").on("submit", function() {
+    $("#hidden_about_institute").val(quill1.root.innerHTML);
+    $("#hidden_features").val(quill2.root.innerHTML);
+});
+
+
+</script>
+
+
+
+<script>
+document.getElementById('gallery_images').addEventListener('change', function(e) {
+    var maxFiles = e.target.getAttribute('data-max-files'); 
+    var files = e.target.files.length;
+    if (files > maxFiles) {       
+        swal({
+                  title: 'You can only upload ' + maxFiles + ' more files.',
+                  text: "",
+                  icon: "error",
+              });
+        e.target.value = ''; 
+    }
+});
+
+
 $(document).ready(function(){
     
     $("#pencilIcon").click(function () {
@@ -877,3 +949,5 @@ $(document).ready(function(){
 </script>
 @endsection
 <!-- Footer file include -->
+
+

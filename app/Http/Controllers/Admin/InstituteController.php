@@ -479,6 +479,7 @@ class InstituteController extends Controller
     {  
         $institute_ids = $request->institute_ids;  
         DB::table("institute")->whereIn('institute_id',explode(",",$institute_ids))->update(['institute_status'=>'0']);  
+        DB::table('course')->whereIn('InstituteID',explode(",",$institute_ids))->update(['ApprovalStatus'=>'Pending']);
     }  
     public function importinstitute(Request $request){
         Excel::import(new InstituteImport,request()->file('customfile'));

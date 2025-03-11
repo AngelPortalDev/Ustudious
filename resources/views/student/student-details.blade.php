@@ -28,8 +28,8 @@
 								<span class="viewer_location"><i class="ti-location-pin mr-1"></i>{{$Students->CountryName}}</span>
 
 								<ul class="mt-2">
-									<li><i class="ti-email mr-1"></i>{{$Students->Email}}</li>
-									<li><i class="ti-mobile mr-1"></i>{{$Students->CountryCode.' '.$Students->Mobile}}</li>
+									<li><a href="mailto:{{$Students->Email}}"><i class="ti-email mr-1"></i>{{$Students->Email}}</a></li>
+									<li><a href="tel:{{$Students->CountryCode.''.$Students->Mobile}}"><i class="ti-mobile mr-1"></i>{{$Students->CountryCode.' '.$Students->Mobile}}</a></li>
 								</ul>
 
 							</div>

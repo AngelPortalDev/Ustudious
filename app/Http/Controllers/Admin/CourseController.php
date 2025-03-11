@@ -305,7 +305,8 @@ class CourseController extends Controller
     }  
     public function rejectcourse(Request $request)  
     {  
-       $course_id = $request->course_id; 
+       $course_id = base64_decode($request->course_id); 
+      
        $data = Course::whereIN('CourseID',explode(",",$course_id))->update(['ApprovalStatus'=>'Rejected']);  
        $CoursesList =  DB::table('course')->select("course.InstituteID")->whereIn('course.CourseID',explode(",",$course_id))->get();
        foreach($CoursesList as $course){

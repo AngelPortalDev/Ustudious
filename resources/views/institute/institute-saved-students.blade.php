@@ -4,15 +4,15 @@
 <?php 
 $ASSET_PATH = env('ASSET_URL').'/';
   $LoginID = Session::get('institute_id');
-  $InstituteData = DB::table('institute')->select('institute.institute_banner','institute.institute_logo','institute.company_name','country_master.CountryName','institute.institute_id')
+  $InstituteData = DB::table('institute')->select('institute.institute_banner','institute.country_id','institute.institute_logo','institute.company_name','country_master.CountryName','institute.institute_id')
 	->leftjoin('institute_contactinfo','institute_contactinfo.institute_id','=','institute.institute_id')
-	->leftjoin('country_master','country_master.CountryID','=','institute_contactinfo.country')
+	->leftjoin('country_master','country_master.CountryID','=','institute.country_id')
 	->where(['institute.institute_id'=> $LoginID])->first();  
 	
 	$StudentData = DB::table('institutes_viewed_student')->select('student.*', 'student.updated_at as last_active','student_contactinfo.*','country_master.CountryName')
 	->leftjoin('student','student.StudentID','=','institutes_viewed_student.student_id')
 	->leftjoin('student_contactinfo','student_contactinfo.student_id','=','student.StudentID')
-	->leftjoin('country_master','country_master.CountryID','=','student_contactinfo.contact_country')
+	->leftjoin('country_master','country_master.CountryID','=','student.CountryID')
 	->where('student.ApprovalStatus','Approved')    
 	->where('is_saved','Yes')      
 	->whereNull('student.deleted_at')       

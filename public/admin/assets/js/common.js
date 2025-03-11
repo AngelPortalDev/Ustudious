@@ -2247,9 +2247,37 @@ $(document).ready(function () {
 
     });
 
-
-
   });
+
+
+  $(document).on("click", ".fees_details", function () {
+    var course_id = $(this).data('id');    
+    $(".modal-body #course_id").val(course_id);
+
+    $.ajax({
+        url: baseUrl + "fees-details/" + course_id,
+        type: 'GET',
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (data) {              
+            $(".modal-body #CourseFees").html(data.CourseFees);  
+           // $(".modal-body #accommodation_certificate_cost").html(data.accommodation_certificate_cost);  
+            $(".modal-body #AdministrativeCost").html(data.AdministrativeCost);  
+            if (data.accommodation_certificate_cost) {
+              $(".modal-body #accommodation_certificate_cost").html(data.accommodation_certificate_cost);
+              $(".modal-body #accommodation_certificate_cost").closest('tr').show();  // Show the row
+          } else {
+              $(".modal-body #accommodation_certificate_cost").closest('tr').hide();  // Hide the row if no data
+          }
+            $(".modal-body #TotalCost").html(data.Currency + " " +  data.TotalCost);  
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching fee details:", error);
+        }
+    }); 
+    $('#fess_details').modal('show');
+});
 
   $("#editStateSubmit").on('click', function (e) {
 
@@ -7976,26 +8004,23 @@ $("#EditStudent").on('click', function(e) {
   $("#InstituteProfile").on('click', function(e) {
  
    
-      $.validator.addMethod('maxFilesAndSize', function(value, element, params) {
-        // Check if the number of files exceeds the maximum
-        if (element.files.length > params.maxFiles) {
-            return false;
-        }
-        // Check each file size
-        for (var i = 0; i < element.files.length; i++) {
-            var fileSize = element.files[i].size; // Size in bytes
-            var maxSize = 1 * 1024 * 1024; // 1MB in bytes
+    $.validator.addMethod('maxFilesAndSize', function(value, element, params) {
     
-            // Check if file size exceeds the maximum size
-            if (fileSize > maxSize) {
-                return false;
-            }
-        }
-        return true;
-        
-      } , function(params, element) {
-        return 'You can only upload up to 6 files, each file must be less than 1MB.';
-      });
+      if (element.files.length > params.maxFiles) {
+          return false;
+      }         
+      for (var i = 0; i < element.files.length; i++) {
+          var fileSize = element.files[i].size;
+          var maxSize = 1 * 1024 * 1024;        
+          if (fileSize > maxSize) {
+              return false;
+          }
+      }
+      return true;
+  }, function(params, element) {
+      return 'You can only upload up to 6 files, and each file must be less than 1MB in size.';
+  });
+  
   
       $.validator.addMethod('fileExtension', function(value, element, param) {
         param = typeof param === 'string' ? param.replace(/,/g, '|') : 'png|jpe?g';
@@ -8532,24 +8557,24 @@ $("#EditStudent").on('click', function(e) {
     $("#PostCourse").on('click', function(e) {
      
       $.validator.addMethod('maxFileSize', function(value, element) {
-      var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+      var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
       return true; // No file selected, so consider it valid
-      }, 'File size must be less than 2 MB.');
+      }, 'File size must be less than 3 MB.');
       $.validator.addMethod('fileExtension', function(value, element, param) {
         param = typeof param === 'string' ? param.replace(/,/g, '|') : 'pdf';
         return this.optional(element) || value.match(new RegExp('.(' + param + ')$', 'i'));    
       }, 'Please choose a file pdf with a valid extension.');
 
       $.validator.addMethod('maxFileSizeApp', function(valueApp, elementApp) {
-        var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+        var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
         if (elementApp.files.length > 0) {
             return elementApp.files[0].size <= maxSize;
         }
         return true; // No file selected, so consider it valid
-        }, 'File size must be less than 3 MB.');
+        }, 'File size must be less than 2 MB.');
         $.validator.addMethod('fileExtensionApp', function(valueApp, elementApp, paramApp) {
           paramApp = typeof paramApp === 'string' ? paramApp.replace(/,/g, '|') : 'png|jpe?|pdf';
           
