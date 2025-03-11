@@ -189,10 +189,12 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        $StudentData =  Student::select("student.*","country_master.CountryName")
+        $StudentData =  Student::select("student.*","country_master.CountryName",'student_contactinfo.*')
         ->leftjoin("country_master","country_master.CountryID","=","student.CountryID")
+        ->leftjoin("student_contactinfo","student_contactinfo.student_id","=","student.StudentID")
         ->where('StudentID',$id)
         ->first();
+     
         $data['StudentQualification']=DB::table('student_qualifications')->select("student_qualifications.*","qualification_master.Qualification","qualification_types_master.QualificationTypes")->leftjoin("qualification_master","qualification_master.QualificationID","=","student_qualifications.Qualification")->leftjoin("qualification_types_master","qualification_types_master.QualificationTypesID","=","student_qualifications.QualificationTypes")->where('StudentID',$id)->whereNull('student_qualifications.deleted_at')->get();
         return view('admin.student.show',compact('StudentData'),$data);
     }
@@ -202,13 +204,16 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        $StudentData = Student::where('StudentID',$id)->first();
+        // $StudentData = Student::where('StudentID',$id)->first();
+        $StudentData = DB::table('student')->leftJoin('student_contactinfo', 'student.StudentID', '=', 'student_contactinfo.student_id')->where('student.StudentID', $id)->distinct()->select('student.*', 'student_contactinfo.*')->first();
         $data['countryData']=DB::table('country_master')->select('CountryName','CountryID')->where('ApprovalStatus','Approved')->whereNull('deleted_at')->distinct()->get();
         $data['qualification_data']=DB::table('qualification_master')->select('Qualification','QualificationID')->where('ApprovalStatus','Approved')->whereNull('deleted_at')->distinct()->get();
         $data['qualification_types_data']=DB::table('qualification_types_master')->select('QualificationTypes','QualificationTypesID','QualificationID')->where('ApprovalStatus','Approved')->whereNull('deleted_at')->distinct()->get();
         $data['StudentQualification']=DB::table('student_qualifications')->where('StudentID',$id)->whereNull('deleted_at')->get();
         $data['stateData'] = DB::table('state_master')->where('ApprovalStatus','Approved')->whereNull('deleted_at')->distinct()->get(); 
         $data['cities'] = DB::table('city_master')->where('ApprovalStatus','Approved')->whereNull('deleted_at')->distinct()->get();
+       
+       
         return view('admin.student.edit',compact('StudentData'),$data);
     }
 

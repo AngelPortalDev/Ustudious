@@ -25,6 +25,7 @@ class Course extends Model
         'Requirements',
         'CourseFees',
         'AdministrativeCost',
+        'accommodation_certificate_cost',
         'ApplicationForm',
         'Brochure',
         'CountryID',
@@ -47,5 +48,13 @@ class Course extends Model
         'created_by'
     ];
 
-
+    public function programType()
+    {
+        return $this->belongsTo(ProgramType::class, 'CourseType', 'course_types_id');
+    }
+    public function coursecategory()
+    {
+        return $this->belongsTo(CourseCategory::class, 'CourseCategory', 'id');
+    }
+  
 }

@@ -101,3 +101,38 @@ if (!function_exists('UploadFiles')) {
         }
     }
 }
+if (!function_exists('mail_send')) {
+    function mail_send($tmpl_id, $repl_contain, $repl_value, $sendto,$sendcc=[])
+    {
+       
+        
+        $templContain = getData('email_templates', ['email_subject', 'email_content'], ['is_deleted' => 'No', 'id' => $tmpl_id]);
+       
+        $email_subject = $templContain[0]->email_subject;
+        $email_content = $templContain[0]->email_content;
+        $data['newSubject'] = str_replace($repl_contain, $repl_value, $email_subject);
+        $data['newContain'] = str_replace($repl_contain, $repl_value, $email_content);
+       
+        $tes = send(
+            $data['newSubject'],
+            $data['newContain'],
+            $sendto,
+            $sendcc,
+         
+        );
+       
+
+    }
+}
+if (!function_exists('send')) {
+    function send($subject, $sendingData, $sendto,$sendcc = [],)
+    {
+        
+        try {
+            Queue::push(new SendActionMails($subject, $sendingData, $sendto,$sendcc));
+            return TRUE;
+        } catch (\Exception $error) {
+            return FALSE;
+        }
+    }
+}

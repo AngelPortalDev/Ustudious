@@ -19,7 +19,7 @@ class InstituteController extends Controller
     
     public function index(){
       
-    
+
         // $InstituteData = Institute::get();
         $InstituteData = Institute::select("institute.*","institute_contactinfo.country_code")
         ->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")->orderBy('institute_id','desc')->get();
@@ -446,13 +446,14 @@ class InstituteController extends Controller
     //     return  redirect()->back()->with('success','Edit Data Successfully');
     // }
     public function show(Request $request,$institute_id){
-        $InstituteData = Institute::select("institute.*","country_master.CountryName","institute_contactinfo.*","state_master.StateName","city_master.CityName")
+        $InstituteData = Institute::select("institute.*","country_master.CountryName","institute_contactinfo.*")
         ->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")
         ->leftjoin("country_master","country_master.CountryID","=","institute_contactinfo.country")
-        ->leftjoin("state_master","state_master.StateID","=","institute_contactinfo.state")
-        ->leftjoin("city_master","city_master.CityID","=","institute_contactinfo.city")
+        // ->leftjoin("state_master","state_master.StateID","=","institute_contactinfo.state")
+        // ->leftjoin("city_master","city_master.CityID","=","institute_contactinfo.city")
         ->where('institute.institute_id',$institute_id)
         ->first();
+    
         $data['Images'] = DB::table('institute_images')->where('institute_id',$institute_id)->get();
         return view('admin.institute.show',compact('InstituteData'),$data);
     }
@@ -478,6 +479,7 @@ class InstituteController extends Controller
     {  
         $institute_ids = $request->institute_ids;  
         DB::table("institute")->whereIn('institute_id',explode(",",$institute_ids))->update(['institute_status'=>'0']);  
+        DB::table('course')->whereIn('InstituteID',explode(",",$institute_ids))->update(['ApprovalStatus'=>'Pending']);
     }  
     public function importinstitute(Request $request){
         Excel::import(new InstituteImport,request()->file('customfile'));

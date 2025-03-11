@@ -32,9 +32,10 @@
     $LoginID = Session::get('institute_id');
         $InstituteData = DB::table('institute')->select('institute_contactinfo.*','institute.*')->where(['institute.institute_id'=> $LoginID])
         ->leftjoin('institute_contactinfo','institute_contactinfo.institute_id','=','institute.institute_id')->first(); 
+        
         $countryName = '';
-        if($InstituteData->country){
-            $country = DB::table('country_master')->where('CountryID',$InstituteData->country)->distinct()->first(); 
+        if($InstituteData->country_id){
+            $country = DB::table('country_master')->where('CountryID',$InstituteData->country_id)->distinct()->first(); 
             $countryName = $country->CountryName;
         }
         ?>
@@ -104,7 +105,7 @@
                      
 
                         
-						<h4><a href="{{route('college-details',$InstituteData->institute_id)}}"><?= $InstituteData->company_name  ?></a></h4>
+						<h4><a href="{{route('college-details',base64_encode($InstituteData->institute_id))}}"><?= $InstituteData->company_name  ?></a></h4>
                        
                         <span>{{$countryName}}</span>
                     </div>

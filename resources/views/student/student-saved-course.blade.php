@@ -31,7 +31,7 @@
 	$LoginID = Session::get('student_id');
 	$StudentData = DB::table('student')->select('student.*','student_contactinfo.*','country_master.CountryName')
     ->leftjoin('student_contactinfo','student_contactinfo.student_id',"=","student.StudentID")
-	->leftjoin('country_master','country_master.CountryID',"=","student_contactinfo.contact_country")
+	->leftjoin('country_master','country_master.CountryID',"=","student.CountryID")
     ->where(['student.StudentID'=> $LoginID])
 	->first(); 
 	$country = DB::table('country_master')->whereNull('deleted_at')->distinct()->get(); ?>
@@ -111,12 +111,13 @@
             </div>	
             <div class="col-lg-9 col-md-9 col-sm-12">
                 @php
-                    $SavedCourseData = DB::table('students_viewed_courses')->select('course.CourseID','course.CourseName','students_viewed_courses.is_saved','institute.company_name','course.TotalCost','course.created_by','institute.institute_id','course.Currency')
+                    $SavedCourseData = DB::table('students_viewed_courses')->select('course.CourseID','course.CourseName','students_viewed_courses.is_saved','institute.company_name','institute.institute_status','course.TotalCost','course.created_by','institute.institute_id','course.Currency','course.ApprovalStatus','course.CourseStatus')
                             ->leftjoin('course','course.CourseID','=','students_viewed_courses.course_id')
                             ->leftjoin('institute','institute.institute_id','=','course.InstituteID')
                             ->where(['students_viewed_courses.student_id'=> session()->get('student_id')])
                             ->where(['is_saved'=>'Yes'])
                             ->get(); 
+                            
                 @endphp
     
                 <!-- Row -->
@@ -147,8 +148,20 @@
                                             @foreach($SavedCourseData as $List)
                                             <tr>
                                                 <td>{{$i}}</td>
-                                                <td class="course-name-saved-course-table"><a href="{{route('college-details',$List->institute_id)}}">{{$List->company_name}}</a></td>
-                                                <td class="course-name-saved-course-table"><a href="{{route('course-details',base64_encode($List->CourseID))}}">{{$List->CourseName}}</a></td>
+                                                <td class="course-name-saved-course-table">
+                                                    @if($List->institute_status != 0)
+                                                    <a href="{{route('college-details',base64_encode($List->institute_id))}}">{{$List->company_name}}</a>
+                                                    @else
+                                                    {{$List->company_name}}
+                                                    @endif
+                                                </td>
+                                                <td class="course-name-saved-course-table">
+                                                    @if($List->ApprovalStatus == 'Approved' && $List->CourseStatus == 'Active')
+                                                    <a href="{{route('course-details',base64_encode($List->CourseID))}}">{{$List->CourseName}}</a>
+                                                    @else
+                                                    {{$List->CourseName}}
+                                                    @endif
+                                                </td>
                                                 <td class="course-name-saved-course-table">{{$List->Currency.' '.$List->TotalCost}}</td>
                                                 <td class="save-btn">
 

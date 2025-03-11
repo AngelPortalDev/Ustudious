@@ -295,7 +295,7 @@
                             </div>
 
                         </div>
-                        <div class="collapse" id="content_modeofstudy">
+                        <div class="collapse show" id="content_modeofstudy">
                             <ul class="no-ul-list mb-3">
                                 <li>
                                     <input id="aa-41" class="checkbox-custom" name="modeofstudy[]"  type="checkbox" value="part_time">
@@ -327,7 +327,7 @@
                             </div>
 
                         </div>
-                        <div class="collapse" id="content_location">
+                        <div class="collapse show" id="content_location">
                             <div class="form-inline addons mb-2 course-filter-search-bar" >
                                 <input class="form-control se-input" type="search" placeholder="Search Location"  aria-label="Search" id="searchLocation">
                                 <button><i class="ti-search"></i></button>
@@ -344,6 +344,7 @@
                                 
 
                             </ul>
+                            
                         </div>
 
                         <hr>
@@ -499,12 +500,17 @@
                     }else{
                         $course_category = '';
                     }
+                    if(!empty($_GET['course_coutry'])){
+                        $course_coutry = $_GET['course_coutry'];
+                    }else{
+                        $course_coutry = '';
+                    }
 
                     ?>
                     <input type='hidden' name="course_title_search" value="<?= $course_title ?>" id="course_title_search">
                     <input type='hidden' name="specialization" value="<?= $specialization ?>" id="specialization">
                     <input type='hidden' name="course_category" value="<?= $course_category ?>" id="course_category">
-
+                    <input type='hidden' name="course_coutry" value="<?= $course_coutry ?>" id="course_coutry">
                 </div>
             </div>
 
@@ -520,16 +526,16 @@
     
     $(document).ready(function () {
         loadCourseList(page=1);
-
+       
         function loadCourseList(page)
         {   
             var course_title_search = $("#course_title_search").val();
-
+            
 
             var specialization =  $("#specialization").val();
 
             var course_category = $("#course_category").val();
-
+           
 
             $.ajax({
             type: 'POST',
@@ -538,13 +544,14 @@
                 page:page,
                 course_title_search:course_title_search,
                 course_category:course_category,
-                specialization:specialization
+                specialization:specialization,
+                
             },
             headers: {
                 "X-CSRF-TOKEN": "<?php echo csrf_token() ?>",
             },
             success: function(data) {
-
+               
                 $('#CourseFilterDisplayList').empty();
                 $("#CourseFilterDisplayList").html(data.html);
             }
@@ -553,15 +560,15 @@
     });
 
     
-    $(document).on("click", ".stlogincheck", function () {
-        swal({
-            title: "Please Login",
-            text: "Click ok to Login",
-            icon: "warning",
-        }).then(function () {
-            $("#login").modal('show');
-        });
-    });
+    // $(document).on("click", ".stlogincheck", function () {
+    //     swal({
+    //         title: "Please Login",
+    //         text: "Click ok to Login",
+    //         icon: "warning",
+    //     }).then(function () {
+    //         $("#login").modal('show');
+    //     });
+    // });
 
 </script>
 @endsection

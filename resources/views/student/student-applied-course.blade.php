@@ -4,13 +4,14 @@
 <?php 
 $ASSET_PATH = env('ASSET_URL').'/';
   $LoginID = Session::get('institute_id');
-  $InstituteData = DB::table('institute')->select('institute.institute_banner','institute.institute_logo','institute.company_name','country_master.CountryName','institute.institute_id')
+  $InstituteData = DB::table('institute')->select('institute.institute_banner','institute.country_id','institute.institute_logo','institute.company_name','country_master.CountryName','institute.institute_id')
 	->leftjoin('institute_contactinfo','institute_contactinfo.institute_id','=','institute.institute_id')
-	->leftjoin('country_master','country_master.CountryID','=','institute_contactinfo.country')
+	->leftjoin('country_master','country_master.CountryID','=','institute.country_id')
 	->where(['institute.institute_id'=> $LoginID])->first();  
 	
-	$StudentData = DB::table('student_applied_course')->select('student.updated_at','student.StudentID','student.Photo','student.Email','student.Mobile','student.FirstName','student.LastName','student.Resume','country_master.CountryName','student.CountryCode')
+	$StudentData = DB::table('student_applied_course')->select('student_applied_course.*','student.updated_at','student.StudentID','student.Photo','student.Email','student.Mobile','student.FirstName','student.LastName','student.Resume','country_master.CountryName','student.CountryCode','course.CourseID','course.InstituteID','course.CourseName','course.ModeofStudy')
 	->leftjoin('student','student.StudentID','=','student_applied_course.student_id')
+	->leftjoin('course','course.CourseID','=','student_applied_course.course_id')
 	->leftjoin('student_contactinfo','student_contactinfo.student_id','=','student.StudentID')
 	->leftjoin('country_master','country_master.CountryID','=','student_contactinfo.contact_country')
 	->where('student.ApprovalStatus','Approved')          
@@ -18,7 +19,7 @@ $ASSET_PATH = env('ASSET_URL').'/';
 	->where(['student_applied_course.institute_id'=> $LoginID])
 	->orderBy('applied_on','DESC')
 	->get();  
-
+// print_r($StudentData);
 	?>
 <div class="college-heading-top-section lg">
 	<div class="container">
@@ -98,7 +99,7 @@ $ASSET_PATH = env('ASSET_URL').'/';
 							</label>
 						</div>
 
-						<h4><a href="{{route('college-details',$InstituteData->institute_id)}}"><?= $InstituteData->company_name  ?></a></h4>
+						<h4><a href="{{route('college-details',base64_encode($InstituteData->institute_id))}}"><?= $InstituteData->company_name  ?></a></h4>
                        
                         <span>{{$InstituteData->CountryName}}</span>
 					</div>
@@ -176,7 +177,7 @@ $ASSET_PATH = env('ASSET_URL').'/';
 
 									<div class="list_layout_ecucation_caption">
 
-										<div class="education_block_body">
+										<div class="education_block_body" style="width:400px;">
 											@php
 											 if(session()->get('institute_id')){
 												$institute_id = session()->get('institute_id');
@@ -229,13 +230,13 @@ $ASSET_PATH = env('ASSET_URL').'/';
 
 
 										</div>
-
+										
 
 									</div>
 								</div>
 
 								<div class="row py-2">
-									<div class="col-md-12 col-lg-8 course-details-h-2">
+									<div class="col-md-12 col-lg-12 course-details-h-2">
 
 										<div class="course-details-1">
 											<div class="c-d-2">
@@ -245,6 +246,14 @@ $ASSET_PATH = env('ASSET_URL').'/';
 											<div class="c-d-2">
 												<label class="abcd">Email:</label>
 												<div class="cou-value">{{$list->Email}}</div>
+											</div>
+											<div class="c-d-2">
+												<label class="abcd">Applied for</label>
+												<div class="cou-value"><a target="_blank" href="{{route('course-details',base64_encode($list->CourseID))}}">{{$list->CourseName}}</a></div>
+											</div>
+											<div class="c-d-2">
+												<label class="abcd"> Applied Date</label>
+												<div class="cou-value">{{$list->applied_on}}</div>
 											</div>
 										</div>
 

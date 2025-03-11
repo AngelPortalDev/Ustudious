@@ -59,9 +59,22 @@
                                             <div class="col-md-2">
                                                 <label for="institute_email" class="form-label">Email Address:   </label>  {{$InstituteData->institute_email}}
                                             </div>
-                                            <div class="col-md-2 ">
-                                                <label for="institute_mobile" class="form-label">Mobile :    </label> {{$InstituteData->country_code.' '.$InstituteData->institute_mobile}}
+                                            
+                                            <div class="col-md-2">
+                                                @php
+                                                    $countrydata=getData('country_master',['CountryID','CountryName'],['CountryID'=>$InstituteData->country_id]);
+                                                    // print_r($countrydata);
+                                                @endphp
+                                                <label for="institute_email" class="form-label">Country:   </label>  {{$countrydata[0]->CountryName}}
                                             </div>
+                                            <div class="col-md-2 ">
+                                                <label for="institute_mobile" class="form-label">Mobile :    </label> {{$InstituteData->rm_code.' '.$InstituteData->institute_mobile}}
+                                            </div>
+                                           
+                                        </div>
+                                       
+                                        <bR>
+                                        <div class="row">
                                             <div class="col-md-2">
                                                 @php $Ownership = "" @endphp
                                                 @if($InstituteData->ownership === 'private')
@@ -73,11 +86,6 @@
                                                 @endif
                                                 <label for="institute_email" class="form-label">Ownership:   </label>  {{$Ownership}}
                                             </div>
-                                        </div>
-                                       
-                                        <bR>
-                                        <div class="row">
-                                                
                                                 <div class="col-md-2">
                                                     <label for="institute_email" class="form-label">Founded In:   </label>  {{$InstituteData->founded}}
                                                 </div>
@@ -91,6 +99,7 @@
                                                 <div class="col-md-2">
                                                     <label for="institute_email" class="form-label">Total Students:   </label>  {{$InstituteData->total_students}}
                                                 </div>
+                                               
                                         </div>
                                    
                                         <bR>
@@ -115,7 +124,7 @@
                                                 <label for="contact_email" class="form-label" >Contact Email :  </label>{{$InstituteData->contact_email}}
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="contact_mobile" class="form-label" >Contact Mobile Number :  </label>{{$InstituteData->contact_mobile}}
+                                                <label for="contact_mobile" class="form-label" >Contact Mobile Number :  </label>{{$InstituteData->country_code}} {{$InstituteData->contact_mobile}}
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="landline_no" class="form-label">Landline Number :   </label>{{$InstituteData->landline_no}}
@@ -132,12 +141,12 @@
                                             </div>
                                            
                                             <div class="col-md-2">
-                                                <label for="institute_state" class="form-label">State  :   </label>  {{ $InstituteData->StateName }}
+                                                <label for="institute_state" class="form-label">State  :   </label>  {{ $InstituteData->state }}
                                             </div>
                                        
                                        
                                             <div class="col-md-2">
-                                                <label for="institute_city" class="form-label">City  :  </label>  {{$InstituteData->CityName}}
+                                                <label for="institute_city" class="form-label">City  :  </label>  {{$InstituteData->state}}
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="institute_pincode" class="form-label">Postal Code  :  </label>{{$InstituteData->pincode}} 

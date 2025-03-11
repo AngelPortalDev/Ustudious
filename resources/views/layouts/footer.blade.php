@@ -36,6 +36,49 @@
 							<input id="reg" class="checkbox-custom" name="reg" type="checkbox">
 							<label for="reg" class="checkbox-custom-label">Save Password</label>
 						</li> -->
+						<li style="text-align: right;"><a data-toggle="modal" data-target="#studentforget" data-dismiss="modal" class="theme-cl" >Forgot Password?</a></li>
+					</ul>
+				</div>
+
+				<div class="text-center">
+					<p class="mt-2">New to Ustudious? 
+						<!-- <button onclick="myFunction()"> -->
+						<a href="#"  data-toggle="modal" data-target="#studentsignup" class="mod-close" data-dismiss="modal" style="color: #2b3990;">Register here</a>
+					<!-- </button> -->
+				</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="studentforget" tabindex="-1" role="dialog" aria-labelledby="forgetmodal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+		<div class="modal-content" id="forgetmodal">
+			<span class="mod-close" data-dismiss="modal" aria-hidden="true"><i class="ti-close"></i></span>
+			<div class="modal-body">
+				<h4 class="modal-header-title"> Student Login</h4>
+				<div class="login-form">
+					<form class="resetPassData">
+
+						<div class="form-group">
+							<label>Email Address</label>
+							<input type="text" class="form-control" placeholder="Register Email Address" name="email" >
+						</div>
+						<input name="passtype" value="{{ base64_encode('student')}}" type="hidden" >
+
+						<div class="form-group">
+							<input type="submit" class="btn btn-md full-width pop-login" id="resetPass" value="Reset Password" fdprocessedid="jvftbh">
+						</div>
+
+					</form>
+				</div>
+
+				<div class="social-login mb-3">
+					<ul>
+						<!-- <li>
+							<input id="reg" class="checkbox-custom" name="reg" type="checkbox">
+							<label for="reg" class="checkbox-custom-label">Save Password</label>
+						</li> -->
 						<li style="text-align: right;"><a href="student-forget-password.php" class="theme-cl" >Forgot Password?</a></li>
 					</ul>
 				</div>
@@ -138,13 +181,61 @@
 			</div>
 			<br><br>
 			<div class="text-end"  style="margin-left:80%">
-			 <button type="button" class="btn btn-primary"  id="CloseModal" style="width:65px;margin-right:30%">Ok</button>
+			 <button type="button" class="btn btn-primary" class="mod-close" data-dismiss="modal" id="CloseModal" style="width:65px;margin-right:30%">Ok</button>
 			</div>
 			<br><br>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div id="fess_details" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" style="top:20%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="topModalLabel">Fee Details</h4>
+                <span class="mod-close" data-dismiss="modal" aria-hidden="true"><i class="ti-close"></i></span>
+            </div>
+
+            <div class="modal-body">
+                <input class="form-control" type="hidden" id="course_id" name="course_id" placeholder="course_id" required>
+                
+				<table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fee Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Course Fees</td>
+                            <td id="CourseFees"></td> 
+                        </tr>
+						<tr>
+                            <td>Administrative Cost</td>
+                            <td id="AdministrativeCost"></td> 
+                        </tr>
+                        <tr>
+                            <td>Accommodation Certificate Cost</td>
+                            <td id="accommodation_certificate_cost"></td> 
+                        </tr>
+                        <tr>
+                            <td>Total Cost</td>
+                            <td id="TotalCost"></td> 
+                        </tr>
+						
+						
+                    </tbody>
+                </table>
+				{{-- <div class="text-end" style="margin-left:80%">
+					<button type="button" class="btn btn-primary mod-close" data-dismiss="modal" style="width:65px;margin-right:30%">Ok</button>
+				</div> --}}
+            </div>
+
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 
 <!-- ============================ Footer Start ================================== -->
 <footer class="dark-footer skin-dark-footer">
@@ -161,7 +252,7 @@
 							</p>
 							<!-- <p>503, 5th Floor, Chandak Chambers, Near Western Express Highway, Andheri East, Mumbai - 400069</p> -->
 							<!-- <p>+123 4567 890</p> -->
-							<p>info@ustudious.com</p>
+							<p><a href="mailto:info@ustudious.com">info@ustudious.com</a></p>
 						</div>
 
 					</div>
@@ -181,7 +272,8 @@
 				<div class="col-lg-3 col-md-3">
 					<div class="footer-widget">
 						<h4 class="widget-title">New Categories</h4>
-						<?php $InstitutewiseCourse = DB::table('course')->select('course.*')->select('CourseName','CourseID')->whereNull('course.deleted_at')->orderby('CourseID','Desc')->take(5)->get(); ?>
+						<?php $InstitutewiseCourse = DB::table('course')->select('course.*')->select('CourseName','CourseID')->whereNull('course.deleted_at')->where('CourseStatus', 'Active')->where('course.ApprovalStatus', 'Approved')->whereNull('course.deleted_at')
+                			->orderby('CourseID','Desc')->take(5)->get(); ?>
 						<ul class="footer-menu">
 							@foreach($InstitutewiseCourse as $List)
 							<li><a href="{{route('course-details',base64_encode($List->CourseID))}}">{{$List->CourseName}}</a></li>
@@ -215,15 +307,18 @@
 			<div class="row align-items-center">
 
 				<div class="col-lg-6 col-md-6">
-					<p class="mb-0">© 2024 Ustudious.</p>
+					<p class="mb-0">© @php echo date("Y"); @endphp Ustudious.</p>
 				</div>
 
 				<div class="col-lg-6 col-md-6 text-right">
 					<ul class="footer-bottom-social">
-						<li><a href="#"><i class="ti-facebook"></i></a></li>
-						<li><a href="#"><i class="ti-twitter"></i></a></li>
-						<li><a href="#"><i class="ti-instagram"></i></a></li>
-						<li><a href="#"><i class="ti-linkedin"></i></a></li>
+						<li><a><i class="ti-facebook"></i></a></li>
+						<li><a>
+							{{-- <i class="ti-twitter-alt"></i> --}}
+							<i class="bi bi-twitter-x"></i>
+						</a></li>
+						<li><a><i class="ti-instagram"></i></a></li>
+						<li><a><i class="ti-linkedin"></i></a></li>
 					</ul>
 				</div>
 
@@ -263,7 +358,7 @@
 <script src="{{asset('js/jquery.validate.min.js')}}"></script>
 <script src="{{asset('js/toastr.min.js')}}"></script>
 <script src="{{asset('js/student.js')}}"></script>
-<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+{{-- <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script> --}}
 
 <!-- ============================================================== -->
 <!-- This page plugins -->

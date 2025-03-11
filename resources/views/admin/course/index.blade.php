@@ -213,9 +213,14 @@
                                             <tbody>
 
                                                 @if (count($courses) > 0)
-                                                    @php $i=1; @endphp
+                                                    @php $i=1; 
+                                                    
+                                                    @endphp
 
                                                     @foreach ($courses as $data)
+                                                    @php
+                                                        $data->id = $data->CourseID
+                                                    @endphp
                                                         <tr>
 
                                                             <td><input type="checkbox" class="sub_chk"
@@ -223,7 +228,7 @@
 
                                                             <td>{{ $loop->iteration }}</td>
 
-                                                            <td>{{ $data->course_name }}</td>
+                                                            <td>{{ $data->CourseName }}</td>
 
                                                             <td>{{ $data->subheading }}</td>
 
@@ -234,7 +239,7 @@
                                                             <td>{{ $data->coursecategory->course_category }}</td>
 
                                                             <td><i class="ri-user-follow-line"></i><span
-                                                                    class="badge bg-primary rounded-pill"></i>{{ $data->course_status }}</span>
+                                                                    class="badge bg-primary rounded-pill"></i>{{ $data->ApprovalStatus }}</span>
                                                             </td>
 
                                                             <td>

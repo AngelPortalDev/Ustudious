@@ -23,6 +23,7 @@ class Institute extends Model
         'institute_mobile',
         'company_name',
         'created_by',
+        'country_id',
         'institute_idproof',
         'company_license',
         'website_link',

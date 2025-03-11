@@ -21,9 +21,7 @@ use App\Http\Controllers\Admin\{
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', function () {    return view('index'); });
 
 Route::view('about', 'about')->name('about');
 Route::view('student-player', 'student-player')->name('student-player');
@@ -44,7 +42,7 @@ Route::get('college-details/{id}', [App\Http\Controllers\Frontend\CourseControll
 Route::get('course-details/{id}', [App\Http\Controllers\Frontend\CourseController::class, 'course_details'])->name('course-details');
 Route::post('postcourse', [App\Http\Controllers\Frontend\CourseController::class, 'postcourse']);
 Route::post('edit_postcourse', [App\Http\Controllers\Frontend\CourseController::class, 'edit_postcourse']);
-
+Route::get('fees-details/{course_id}', [App\Http\Controllers\Frontend\CourseController::class, 'fees_details']);
 Route::post('instituteprofile', [App\Http\Controllers\Frontend\CourseController::class, 'instituteprofile']);
 Route::post('institutesignup', [App\Http\Controllers\Frontend\LoginController::class, 'institutesignup']);
 Route::post('institutelogin', [App\Http\Controllers\Frontend\LoginController::class, 'institutelogin']);
@@ -72,7 +70,8 @@ Route::match(['get', 'post'], 'course/searchdata', [App\Http\Controllers\Fronten
 
 Route::match(['get', 'post'], 'course/searchdata_filter', [App\Http\Controllers\Frontend\CourseController::class, 'searchDataFilter'])->name('course.searchdata_filter');
 
-Route::post('student/searchdatastudent', [App\Http\Controllers\Frontend\StudentController::class, 'searchDatastudent'])->name('student.searchdatastudent');
+//Route::post('student/searchdatastudent', [App\Http\Controllers\Frontend\StudentController::class, 'searchDatastudent'])->name('student.searchdatastudent');
+Route::match(['get', 'post'], 'student/searchdatastudent', [App\Http\Controllers\Frontend\StudentController::class, 'searchDatastudent'])->name('student.searchdatastudent');
 
 Route::post('student/studentprofile', [App\Http\Controllers\Frontend\StudentController::class, 'studentProfile']);
 Route::view('student-change-password', 'student/student-change-password')->name('student-change-password');
@@ -94,7 +93,7 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('admin.logi
 Route::post('login', [LoginController::class, 'login']);
 
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-
+Route::post('newLetter', [App\Http\Controllers\Frontend\LoginController::class, 'newLetter']);
 
 
 Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
@@ -109,7 +108,7 @@ Route::post('user/stucheckmobileunique', [App\Http\Controllers\Admin\UserControl
 
 Route::post('institute/store', [App\Http\Controllers\Admin\InstituteController::class, 'store']);
 Route::post('institute/search', [App\Http\Controllers\Admin\InstituteController::class, 'search'])->name('institute.search');
-Route::get('institute', [App\Http\Controllers\Admin\InstituteController::class, 'index'])->name('institute');
+Route::get('institutes', [App\Http\Controllers\Admin\InstituteController::class, 'index'])->name('institute');
 Route::get('institute/edit/{institute_id}', [App\Http\Controllers\Admin\InstituteController::class, 'edit'])->name('institute.edit');
 Route::post('institute/update', [App\Http\Controllers\Admin\InstituteController::class, 'update']);
 Route::post('institute/deleteall', [App\Http\Controllers\Admin\InstituteController::class, 'deleteall']);
@@ -158,7 +157,7 @@ Route::get('state/exportstate', [App\Http\Controllers\Admin\StateController::cla
 Route::post('state/importstate', [App\Http\Controllers\Admin\StateController::class, 'importstate']);
 
 
-Route::get('student', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student');
+Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student');
 Route::post('student/store', [App\Http\Controllers\Admin\StudentController::class, 'store']);
 Route::get('student/edit/{student_id}', [App\Http\Controllers\Admin\StudentController::class, 'edit'])->name('student.edit');
 Route::post('student/update', [App\Http\Controllers\Admin\StudentController::class, 'update']);
@@ -229,7 +228,7 @@ Route::get('course/create-new', [App\Http\Controllers\Admin\CourseController::cl
 Route::view('institute-login', 'institute/institute-login')->name('institute-login');
 
 
-//Route::get('course/edit/{course_id}', [App\Http\Controllers\Admin\CourseController::class, 'edit'])->name('course.edit');
+Route::get('course/edit/{course_id}', [App\Http\Controllers\Admin\CourseController::class, 'edit'])->name('course.edit');
 Route::post('course/update', [App\Http\Controllers\Admin\CourseController::class, 'update']);
 Route::get('course/show/{course_id}', [App\Http\Controllers\Admin\CourseController::class, 'show'])->name('course.show');
 Route::post('course/delete', [App\Http\Controllers\Admin\CourseController::class, 'delete']);
@@ -266,19 +265,22 @@ Route::get('qualificationtypes/exportqualificationtypes', [App\Http\Controllers\
 Route::post('qualificationtypes/importqualificationtypes', [App\Http\Controllers\Admin\QualificationTypesController::class, 'importqualificationtypes']);
 
 //Prince
-Route::middleware('auth')->group(function () {
 
-});
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
 
     Route::controller(CourseMasterController::class)->group(function () {
-        Route::get('course',  'index')->name('course');
-        Route::get('course/edit/{course_id}','edit')->name('course.edit');
+        // Route::get('course',  'index')->name('course');
+        Route::get('course',  'index1')->name('course');
+        // Route::get('course/edit/{course_id}','edit')->name('course.edit');
         Route::post('/add-course-main', 'courseUpdateAdd');
         Route::post('/add-course-others', 'courseUpdateOther');
         Route::post('/add-course-media-main', 'courseMediaUpdateAdd'); // Route Terminated
        
 
     });
+    Route::get('course/edit/{course_id}', [App\Http\Controllers\Admin\CourseController::class, 'edit'])->name('course.edit');
+
+});
+Route::middleware('auth')->group(function () {
 
 });

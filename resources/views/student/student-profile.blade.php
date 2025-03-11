@@ -13,7 +13,7 @@
     $StudentData = DB::table('student')
         ->select('student.*', 'student_contactinfo.*', 'country_master.CountryName')
         ->leftjoin('student_contactinfo', 'student_contactinfo.student_id', '=', 'student.StudentID')
-        ->leftjoin('country_master', 'country_master.CountryID', '=', 'student_contactinfo.contact_country')
+        ->leftjoin('country_master', 'country_master.CountryID', '=', 'student.CountryID')
         ->where(['student.StudentID' => $LoginID])
         ->first();
     $country = DB::table('country_master')->orderBy('CountryName', 'ASC')->get();
@@ -157,13 +157,14 @@
 											</div> --}}
                                             <div class="form-group col-md-6">
                                                 <label>Date of Birth</label>
+                                                
                                                 <div class="form-control boxshadow" name="dateofbirth">
                                                     {{ $StudentData->Dateofbirth }}</div>
                                             </div>
 
 
                                             <div class="form-group col-md-6">
-                                                <label> Gender</label>
+                                                <label> Gender </label>
                                                 @php $Gender = '' @endphp
                                                 @if ($StudentData->Gender == 'male')
                                                     @php $Gender = "Male" @endphp
@@ -176,9 +177,9 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Preferred Country</label>
-                                                @if ($StudentData->CountryID)
+                                                @if ($StudentData->contact_country)
                                                     <?php $countryDatas = DB::table('country_master')
-                                                        ->where('CountryID', $StudentData->CountryID)
+                                                        ->where('CountryID', $StudentData->contact_country)
                                                         ->first(); ?>
                                                     <div type="text" class="form-control boxshadow"
                                                         name="student_country"> <?= $countryDatas->CountryName ?></div>
@@ -348,9 +349,9 @@
 
                                             <div class="form-group col-md-6">
                                                 <label> Select Country</label>
-                                                @if ($StudentData->contact_country)
+                                                @if ($StudentData->CountryID)
                                                     <?php $countryContact = DB::table('country_master')
-                                                        ->where('CountryID', $StudentData->contact_country)
+                                                        ->where('CountryID', $StudentData->CountryID)
                                                         ->first(); ?>
                                                     <div type="text" class="form-control boxshadow"
                                                         name="contact_country"> <?= $countryContact->CountryName ?></div>
@@ -522,13 +523,13 @@
                                                 <div class="form-group col-md-6">
                                                     <label>Date of Birth <span style="color:red"> *</span> </label>
                                                     <input type="date" class="form-control"
-                                                        value="{{ $StudentData->Dateofbirth }}" name="dateofbirth">
+                                                        value="{{ $StudentData->Dateofbirth }}" name="dateofbirth" max="{{date('Y-m-d')}}">
                                                 </div>
 
                                                 <div class="form-group col-md-6">
-                                                    <label> Gender</label>
+                                                    <label> Gender <span style="color:red"> *</span></label>
                                                     <select class="form-control st-country-code" name="gender">
-                                                        <option value="">Please select Gender </option>
+                                                        <option value="" disabled selected>Please select Gender </option>
                                                         <option value="male"
                                                             @if ('male' == $StudentData->Gender) selected @endif>Male</option>
                                                         <option value="female"
@@ -543,10 +544,10 @@
 
                                                     <select class="form-control boxshadow" name="student_country"
                                                         id="student_country">
-                                                        <option value="">Select Country</option>
+                                                        <option value="" disabled selected>Select Country</option>
                                                         @foreach ($country as $data)
                                                             <option value="{{ $data->CountryID }}"
-                                                                @if ($data->CountryID == $StudentData->CountryID) selected @endif>
+                                                                @if ($data->CountryID == $StudentData->contact_country) selected @endif>
                                                                 {{ $data->CountryName }}</option>
                                                         @endforeach
                                                     </select>
@@ -558,7 +559,7 @@
                                                     </label>
                                                     @php $courseTypeData =DB::table('course_types')->select('course_types_id','course_types')->whereNull('deleted_at')->distinct()->get(); @endphp
                                                     <select class="form-control" name="program_type" id="program_type">
-                                                        <option value="">Select Program Type </option>
+                                                        <option value="" disabled selected>Select Program Type </option>
                                                         @foreach ($courseTypeData as $data)
                                                             <option value="{{ $data->course_types_id }}"
                                                                 @if ($data->course_types_id == $StudentData->program_type) selected @endif>
@@ -571,7 +572,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label> Mode of Study <span style="color:red"> *</span> </label>
                                                     <select class="form-control mode_of_study" name="mode_of_study">
-                                                        <option value="">Select Mode of Study</option>
+                                                        <option value="" disabled selected>Select Mode of Study</option>
                                                         <option value="part_time"
                                                             @if ($StudentData->mode_of_study == 'part_time') selected @endif>Part Time
                                                         </option>
@@ -632,7 +633,7 @@
                                                             <select class="form-control qualification"
                                                                 name="qualification_id[]"
                                                                 id="qualification_id_{{ $key }}" required>
-                                                                <option value="">Select Education</option>
+                                                                <option value="" disabled selected>Select Education</option>
                                                                 @foreach ($qualification_data as $data)
                                                                     <option value="{{ $data->QualificationID }}"
                                                                         @if ($data->QualificationID == $educData->Qualification) selected @endif>
@@ -668,7 +669,9 @@
                                                             <label>Country of Institution </label>
                                                             <select class="form-control st-country-code"
                                                                 name="college_country[]">
+                                                                <option value="" disabled selected>Select country</option>
                                                                 @foreach ($country as $data)
+                                                                
                                                                     <option value="{{ $data->CountryID }}"
                                                                         @if ($data->CountryID == $educData->Country) selected @endif>
                                                                         {{ $data->CountryName }}</option>
@@ -761,6 +764,7 @@
                                                         <label>Country of Institution </label>
                                                         <select class="form-control st-country-code"
                                                             name="college_country[]">
+                                                            <option value="" disabled selected>Select country</option>
                                                             @foreach ($country as $data)
                                                                 <option value="{{ $data->CountryID }}">
                                                                     {{ $data->CountryName }}</option>
@@ -843,7 +847,7 @@
                                                     <?php if (empty($StudentData)) {
                                                         $contact_country = 'Not Disclosed';
                                                     } else {
-                                                        $contact_country = $StudentData->contact_country;
+                                                        $contact_country = $StudentData->CountryID;
                                                     }
                                                     ?>
                                                     <input type="hidden" class="form-control" name="contact_country"
@@ -1234,8 +1238,6 @@
                                     title: " Education Deleted Successfully.",
                                     text: "",
                                     icon: "success",
-                                }).then(function() {
-                                    return window.location.href = '/student-profile';
                                 });
                             }
                         });
@@ -1252,4 +1254,4 @@
         });
     </script>
 @endsection
-<!-- Footer file include
+

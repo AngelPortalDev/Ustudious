@@ -1,6 +1,7 @@
 <!-- Header file include -->
 @extends('layouts.main')
 @section('content')
+
 <!-- ============================ Find Courses with Sidebar ================================== -->
 <section class="pt-5 saved-students-page-main">
 	<div class="container">
@@ -50,11 +51,11 @@
 								<hr>
 								<div class="filter-top-heading">
 									<h6 class="side_title">
-										Location
+										Preferred Location
 									</h6>
 									<div>
 										<a data-toggle="collapse" data-toggle="collapse" href="#content_location1" aria-expanded="false" class="collapse-header">
-											&nbsp;&nbsp;&nbsp;&nbsp;<span   class="toggle-icon"> + </span>
+											&nbsp;&nbsp;&nbsp;&nbsp;<span   class="toggle-icon m-0"> + </span>
 										</a>
 									</div>
 			
@@ -185,16 +186,16 @@
 					<hr>
 					<div class="filter-top-heading">
 						<h6 class="side_title">
-							Location
+							Preferred	Location
 						</h6>
 						<div>
 							<a data-toggle="collapse" data-toggle="collapse" href="#content_location" aria-expanded="false" class="collapse-header">
-								&nbsp;&nbsp;&nbsp;&nbsp;<span   class="toggle-icon"> + </span>
+								&nbsp;&nbsp;&nbsp;&nbsp;<span   class="toggle-icon m-0"> + </span>
 							</a>
 						</div>
 
 					</div>
-					<div class="collapse" id="content_location">
+					<div class="collapse show" id="content_location">
 						<div class="form-inline addons mb-2 course-filter-search-bar" >
 							<input class="form-control se-input searchLocationstu" type="search" placeholder="Search Location"  aria-label="Search">
 							<button><i class="ti-search"></i></button>
@@ -302,10 +303,11 @@
 <script>
     
     $(document).ready(function () {
-        loadCourseList(page=1);
-
-        function loadCourseList(page)
+        loadStudentList(page=1);
+		
+        function loadStudentList(page)
         {   
+			
             // var course_title_search = $("#course_title_search").val();
 
 
@@ -327,7 +329,7 @@
                 "X-CSRF-TOKEN": "<?php echo csrf_token() ?>",
             },
             success: function(data) {
-
+				
                 $('#StudentFilterDisplayList').empty();
                 $("#StudentFilterDisplayList").html(data.html);
             }
@@ -336,13 +338,13 @@
     });
 
     
-    $(document).on("click", ".stlogincheck", function () {
+    $(document).on("click", ".instlogincheck", function () {
         swal({
             title: "Please Login",
             text: "Click ok to Login",
             icon: "warning",
         }).then(function () {
-            $("#login").modal('show');
+            window.location.href='/institute-login'
         });
     });
 

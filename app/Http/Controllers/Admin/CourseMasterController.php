@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{CourseMaster, ProgramType};
+use App\Models\{Course, CourseMaster, ProgramType};
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\{Auth, Validator, Storage, DB};
@@ -17,9 +17,16 @@ class CourseMasterController extends Controller
         $this->libraryid = '348464';
     }
 
-    public function index()
+    // public function index()
+    // {
+    //     $courses = CourseMaster::with(['programType', 'coursecategory'])->distinct()->get();
+    //     return view('admin.course.index', compact('courses'));
+    // }
+    
+    public function index1()
     {
-        $courses = CourseMaster::with(['programType', 'coursecategory'])->distinct()->get();
+        $courses = Course::with(['programType', 'coursecategory'])->distinct()->orderBy('CourseID','DESC')->get();
+      
         return view('admin.course.index', compact('courses'));
     }
     public function courseUpdateAdd(Request $req)
@@ -302,8 +309,10 @@ class CourseMasterController extends Controller
     public function edit(string $id)
     {
         if (Auth::check()) {
-            $CourseData = CourseMaster::find(base64_decode($id));
-            return view('admin.course.edit-new', compact('CourseData'));
+            // $CourseData = CourseMaster::find(base64_decode($id));
+            $Courses = Course::find(base64_decode($id));
+            
+            return view('admin.course.edit', compact('Courses'));
         }
     }
 }

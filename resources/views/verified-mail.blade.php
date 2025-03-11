@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Angel Jobs Spain</title>
+    <title>Welcome to Ustudious</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,7 +73,7 @@
         
         <p class="message">Thank you for registering on our platform. <br> You are now part of the Ustudious  community.</p>
         <a href="https://www.ustudious.com/" class="button" target="_blank">Explore Opportunities</a>
-        <p class="footer">If you have any questions, feel free to contact our support team at <strong>info@ustudious.com</strong></p>
+        <p class="footer">If you have any questions, feel free to contact our support team at <strong><a href="mailto:info@ustudious.com">info@ustudious.com</a></strong></p>
     </div>
 </body>
 </html>

@@ -7,6 +7,7 @@
 
 ?>
 
+
     <div class="college-heading-top-section lg">
         <div class="container">
             <div class="row ">
@@ -24,10 +25,10 @@
                             <img src="{{$filePaths}}" class="img-fluid avater" alt=""  width="1200" height="200">
                         <?php } ?>
                         
-                        <div class="institute-cover-photo-edit-pencil-icon">
+                        {{-- <div class="institute-cover-photo-edit-pencil-icon">
                             <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
                             <label for="imageUpload"><i class="ti-pencil"></i></label>
-                        </div>
+                        </div> --}}
                 </div>
 
                 <!-- <div class="avatar-upload">
@@ -176,7 +177,10 @@
                                                 <label>Administrative Price <span  style="color:red"> *</span>  </label>
                                                 <input type="number" class="form-control" name="administrative_price"  value="{{$Courses->AdministrativeCost}}" placeholder="Administrative Price"> 
                                             </div>
-
+                                            <div class="form-group col-md-6">
+                                                <label>Accommodation certificate cost <span  style="color:red"> *</span>  </label>
+                                                <input type="number" class="form-control" name="accommodation_certificate_cost"  value="{{$Courses->accommodation_certificate_cost}}" placeholder="Accommodation certificate cost"> 
+                                            </div>
                                             <div class="form-group col-md-6">
                                                 <label> Currency <span  style="color:red"> *</span>  </label>
                                                 <select class="form-control" name="currency_symbols" id="currency_symbols">
@@ -267,17 +271,23 @@
                                             
                                             <div class="form-group col-md-12">
                                                 <label> Overview <span  style="color:red"> *</span>  </label>
-                                                <textarea class="form-control" name="course_description" placeholder="Overview" >{{$Courses->CourseOverview}}</textarea>
+                                                {{-- <textarea class="form-control" name="course_description" placeholder="Overview" >{{$Courses->CourseOverview}}</textarea> --}}
+                                                <div id="course_description" style="height:200px;"></div>
+                                                <input type="hidden" name="course_description" id="hidden_course_overview" value="{{ $Courses->CourseOverview }}">
                                                 <label class="course_description-error"  for="course_description" style="display:none;color:red;">Please enter Overview.</label>
 
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label> Features</label>
-                                                <textarea class="form-control" name="course_features" placeholder="Features" >{{$Courses->Features}}</textarea>
+                                                {{-- <textarea class="form-control" name="course_features" placeholder="Features" >{{$Courses->Features}}</textarea> --}}
+                                                <div id="course_features" style="height:200px;"></div>
+                                                <input type="hidden" name="course_features" id="hidden_course_features" value="{{ $Courses->Features }}">
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label>Opportunities</label>
-                                                <textarea class="form-control" name="course_opportunities" placeholder="Opportunities">{{$Courses->Opportunities}}</textarea>
+                                                {{-- <textarea class="form-control" name="course_opportunities" placeholder="Opportunities">{{$Courses->Opportunities}}</textarea> --}}
+                                                <div id="course_opportunities" style="height:200px;"></div>
+                                                <input type="hidden" name="course_opportunities" id="hidden_course_requirements" value="{{ $Courses->Opportunities }}">
                                             </div>
 
                                             <div class="form-group col-md-12">
@@ -376,7 +386,9 @@
                                         <div class="form-row">	
                                             <div class="form-group col-md-12">
                                                 <label>Curriculum <span  style="color:red"> *</span> </label>
-                                                <textarea class="form-control" name="course_curriculum" placeholder="Curriculum">{{$Courses->Curriculum}}</textarea>
+                                                {{-- <textarea class="form-control" name="course_curriculum" placeholder="Curriculum">{{$Courses->Curriculum}}</textarea> --}}
+                                                <div id="course_curriculum" style="height:200px;"></div>
+                                                <input type="hidden" name="course_curriculum" id="hidden_course_curriculum" value="{{$Courses->Curriculum}}">
                                                 <label class="course_curriculum-error" for="course_curriculum" style="display:none;color:red;">Please enter Curriculum.</label>
 
                                             </div>
@@ -408,7 +420,9 @@
                                         <div class="form-row">	
                                             <div class="form-group col-md-12">
                                                 <label>Application Procedure <span  style="color:red"> *</span> </label>
-                                                <textarea class="form-control" name="application_procedure" placeholder="Application Procedure">{{$Courses->Requirements}}</textarea>
+                                                {{-- <textarea class="form-control" name="application_procedure" placeholder="Application Procedure">{{$Courses->Requirements}}</textarea> --}}
+                                                <div id="application_procedure" style="height:200px;"></div>
+                                                <input type="hidden" name="application_procedure" id="hidden_application_procedure" value="{{$Courses->Requirements}}">
                                                 <label class="application_procedure-error"  for="application_procedure" style="display:none;color:red;">Please enter Application Procedure.</label>
 
                                             </div>
@@ -500,3 +514,93 @@
     <!-- ============================ Dashboard: My Order Start End ================================== -->
 @endsection
 
+@section('js')
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<script>
+   function setMinExpireDate() {
+    var startDate = document.getElementById('course_start_date').value; // Get the selected start date
+    var expireDate = document.getElementById('course_expire_date'); // Get the expire date input
+    
+    if (startDate) {
+        // Set the min value of the expire date input to the selected start date
+        expireDate.min = startDate;
+    } else {
+        // If no start date is selected, clear the min attribute
+        expireDate.min = "";
+    }
+}
+
+$(document).ready(function () {
+    // Check if existing data is available (Assuming it's inside hidden input fields)
+    let courseOverview = $("#hidden_course_overview").val();
+    let courseFeatures = $("#hidden_course_features").val();
+    let courseRequirements = $("#hidden_course_requirements").val();
+    let course_curriculum = $("#hidden_course_curriculum").val();
+    let application_procedure = $("#hidden_application_procedure").val();
+    // Set content in Quill editors if data exists
+    if (courseOverview) {
+        quill3.root.innerHTML = courseOverview;
+    }
+    if (courseFeatures) {
+        quill4.root.innerHTML = courseFeatures;
+    }
+    if (courseRequirements) {
+        quill5.root.innerHTML = courseRequirements;
+    }
+    if (course_curriculum) {
+        quill1.root.innerHTML = course_curriculum;
+    }
+    if (application_procedure) {
+        quill2.root.innerHTML = application_procedure;
+    }
+
+});
+$("#editpostcourse").on("submit", function() {
+    $("#hidden_course_overview").val(quill3.root.innerHTML);
+    $("#hidden_course_features").val(quill4.root.innerHTML);
+    $("#hidden_course_requirements").val(quill5.root.innerHTML);
+    $("#hidden_course_curriculum").val(quill1.root.innerHTML);
+    $("#hidden_application_procedure").val(quill2.root.innerHTML);
+});
+var quill1, editorElement1 = document.querySelector("#course_curriculum");
+  editorElement1 && (quill1 = new Quill(editorElement1, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Description..."
+  }));
+
+  // Course Features
+  var quill2, editorElement2 = document.querySelector("#application_procedure");
+  editorElement2 && (quill2 = new Quill(editorElement2, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Features..."
+  }));
+var quill3, editorElement3 = document.querySelector("#course_description");
+  editorElement3 && (quill3 = new Quill(editorElement3, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Description..."
+  }));
+
+  // Course Features
+  var quill4, editorElement4 = document.querySelector("#course_features");
+  editorElement4 && (quill4 = new Quill(editorElement4, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Features..."
+  }));
+
+  // Course Opportunities
+  var quill5, editorElement5 = document.querySelector("#course_opportunities");
+  editorElement5 && (quill5 = new Quill(editorElement5, {
+      modules: { toolbar: [[{ header: [1, 2, false] }], [{ font: [] }], ["bold", "italic", "underline", "strike"], [{ size: ["small", false, "large", "huge"] }], [{ list: "ordered" }, { list: "bullet" }], [{ color: [] }, { background: [] }, { align: [] }], ["code-block"]] },
+      theme: "snow",
+      placeholder: "Enter Course Opportunities..."
+  }));
+
+
+    </script>
+@endsection

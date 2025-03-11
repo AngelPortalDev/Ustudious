@@ -40,7 +40,7 @@
 
 
                     <div class="college-name mb-3">at&nbsp;
-                        <a class="" href="{{route('college-details',$Courses->InstituteID)}}"> <?= $Courses->company_name  ?>
+                        <a class="" href="{{route('college-details',base64_encode($Courses->InstituteID))}}"> <?= $Courses->company_name  ?>
                         </a>
                     </div>
 
@@ -574,8 +574,11 @@
 
                     <div class="ed_view_price pl-4 b-b pb-3">
                         <span>Course Price</span>
-                        <h2 class="theme-cl mb-0">{{ !empty($Courses->Currency) ? $Courses->Currency.'  '.$Courses->TotalCost : 'Not Disclosed' }}</h2>
-
+                        <h2 class="theme-cl mb-0">{{ !empty($Courses->Currency) ? $Courses->Currency.'  '.$Courses->TotalCost : 'Not Disclosed' }}
+                        @if(!empty($Courses->Currency))
+                        <a href="#" class="fees_details" data-toggle="modal" style="font-size:14px;" data-target="#fess_details" data-id="{{base64_encode($Courses->CourseID)}}">Fee Details </a>
+                        @endif
+                    </h2>
                     </div>
                     <?php
                         $modeofstudy = "Not Disclosed";

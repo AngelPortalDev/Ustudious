@@ -34,7 +34,12 @@
                                     <h4 class="header-title" >View Student</B>
                                 </div>
                                 <div class="card-body">
-                                        <div class="row">
+                                    <br>
+                                        <div class="card-header">
+                                            <h4 class="header-title"><B>Personal Details</B></h4>
+                                        </div>
+                                        <br>
+                                        <div class="row px-2">
                                             <div class="col-md-3">
                                                 <label for="first_name" class="form-label">First Name :   </label>    {{$StudentData->FirstName}}
                                             </div>
@@ -42,21 +47,66 @@
                                                 <label for="last_name" class="form-label">Last Name  :  </label>   {{$StudentData->LastName}}
                                             </div>
                                             <div class="col-md-3">
+                                                <label for="emailaddress" class="form-label">Date of Birth  :  </label>    {{$StudentData->Dateofbirth}}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="emailaddress" class="form-label">Gender  :  </label>   @php $Gender = '' @endphp
+                                                @if ($StudentData->Gender == 'male')
+                                                    @php $Gender = "Male" @endphp
+                                                @elseif($StudentData->Gender == 'male')
+                                                    @php $Gender = "Male" @endphp
+                                                @endif   {{ $StudentData->Gender }}
+                                            </div>
+                                            <div class="col-md-3">
                                                 <label for="emailaddress" class="form-label">Email Address  :  </label>    {{$StudentData->Email}}
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="country_id" class="form-label">Country  :  </label>  {{$StudentData->CountryName}}
                                             </div>
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            
+                                            <div class="col-md-3">
+                                                <label for="emailaddress" class="form-label">Preferred Country   :  </label>   
+                                                <?php $countryDatas = DB::table('country_master')
+                                                ->where('CountryID', $StudentData->contact_country)
+                                                ->first(); ?>  {{$countryDatas->CountryName}}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="country_id" class="form-label">Preferred Program Type  :  </label>
+                                                @php $ProgramDatas = DB::table('course_types')->where('course_types_id', $StudentData->program_type)->first(); @endphp
+                                                  {{$ProgramDatas->course_types}}
+                                            </div>
+                                            <div class="col-md-3">
+                                                @php $ModeofStudy = ""; @endphp
+                                                @if ($StudentData->mode_of_study == 'part_time')
+                                                    <?php $ModeofStudy = 'Part Time'; ?>
+                                                @elseif($StudentData->mode_of_study == 'full_time')
+                                                    <?php $ModeofStudy = 'Full Time'; ?>
+                                                @elseif($StudentData->mode_of_study == 'distance')
+                                                    <?php $ModeofStudy = 'Distance'; ?>
+                                                @endif
+                                                <label for="ModeofStudy" class="form-label">Mode of Study   :  </label> {{ $ModeofStudy }}
+                                            </div>
                                             <div class="col-md-3">
                                                 <label for="mobile-number" class="form-label">Mobile Number  :  </label> {{$StudentData->CountryCode}}  {{$StudentData->Mobile}}
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="current_location" class="form-label">Address  :  </label>   {{$StudentData->CurrentLocation}}
+                                                <label for="current_location" class="form-label">City  :  </label>   {{$StudentData->city}}
                                             </div>
+                                            <div class="col-md-6">
+                                                <label for="current_location" class="form-label">Address  :  </label>   {{$StudentData->address}} {{$StudentData->zip_code}}
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row px-2">
+                                            
+                                            {{-- <div class="col-md-3">
+                                                <label for="mobile-number" class="form-label">Mobile Number  :  </label> {{$StudentData->CountryCode}}  {{$StudentData->Mobile}}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="current_location" class="form-label">City  :  </label>   {{$StudentData->city}}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="current_location" class="form-label">Address  :  </label>   {{$StudentData->address}} {{$StudentData->zip_code}}
+                                            </div> --}}
                                         </div>
                                         <br>
                                         <div class="card-header">

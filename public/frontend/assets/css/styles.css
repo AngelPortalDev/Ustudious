@@ -69,7 +69,12 @@ ul{
 .modal-open {
     overflow: hidden !important;
 }
-
+.swal-button{
+    background-color:#9e1f63;
+}
+.swal-button:not([disabled]):hover{
+    background-color: #c2347f;
+}
 :root {
     --pink: #9e1f63;
     --blue: #2b3990;
@@ -3372,7 +3377,7 @@ nav a:hover {
   content: "";
   width:22px;
   height:22px;
-  left:27px;
+  left:200px;
   top:-12px;
   position: absolute;
   -webkit-transform: rotate(45deg);
@@ -11570,15 +11575,19 @@ width: 200px;
 .saved-students-page-main .dashboard_single_course_progress_2 {
 font-size: 13PX;
 }
-.form-group .error{
+/* .form-group .error{
     color:red;
-}
+} */
+ label.error{
+    color:red;
+ }
 .show-password-eye{
     margin-right: 5px;
     top: 20px;
     position: absolute;
     z-index: 2;
 }
+.left_filters_courses .filter-top-heading,
 .left_filters_course .filter-top-heading{
     display: flex;
     align-items: center;

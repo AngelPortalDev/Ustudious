@@ -30,7 +30,68 @@
                 right: 18px;
                 bottom: 18px;
 			}
+			.bi-twitter-x::before {
+            content: "𝕏";
+            font-size: 1.2em;
+            font-family: sans-serif;
+			font-style: normal;
+            }
+			.dots-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 99999;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
 
+
+        .dot {
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+            border-radius: 10px;
+            background-color: #9e1f63;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .dot:last-child {
+            margin-right: 0;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.3s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.1s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                background-color: #9e1f63;
+                box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+            }
+
+            50% {
+                transform: scale(1.2);
+                background-color: #9e1f63;
+                box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
+            }
+
+            100% {
+                transform: scale(0.8);
+                background-color: #9e1f63;
+                box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+            }
+        }
 			/* .container{
 			padding-top:50px;
 			margin: auto;
@@ -40,7 +101,15 @@
 	<?php $LoginID = Session::get('institute_id'); ?>
 
     <body class="red-skin">
-	
+		
+		<section class="bglaoder p-0">
+			<div class="dots-container" id="loader" style="display: none;">
+			  <div class="dot"></div>
+			  <div class="dot"></div>
+			  <div class="dot"></div>
+			  <div class="dot"></div>
+			  <div class="dot"></div>
+			</section>
         <!-- ============================================================== -->
         <!-- Preloader - style you can find in spinners.css -->
         <!-- ============================================================== -->
@@ -60,7 +129,7 @@
 				<div class="container">
 					<nav id="navigation" class="navigation navigation-landscape">
 						<div class="nav-header">
-							<a class="nav-brand" href="{{url('/')}}">
+							<a class="nav-brand">
 								<img src="{{$ASSET_PATH}}img/ustudious-logo.png" class="logo" alt="" />
 							</a>
 							<div class="nav-toggle"></div>

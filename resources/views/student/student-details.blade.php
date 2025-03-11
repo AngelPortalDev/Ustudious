@@ -28,8 +28,8 @@
 								<span class="viewer_location"><i class="ti-location-pin mr-1"></i>{{$Students->CountryName}}</span>
 
 								<ul class="mt-2">
-									<li><i class="ti-email mr-1"></i>{{$Students->Email}}</li>
-									<li><i class="ti-mobile mr-1"></i>{{$Students->CountryCode.' '.$Students->Mobile}}</li>
+									<li><a href="mailto:{{$Students->Email}}"><i class="ti-email mr-1"></i>{{$Students->Email}}</a></li>
+									<li><a href="tel:{{$Students->CountryCode.''.$Students->Mobile}}"><i class="ti-mobile mr-1"></i>{{$Students->CountryCode.' '.$Students->Mobile}}</a></li>
 								</ul>
 
 							</div>
@@ -102,7 +102,7 @@
 									<li><i class="ti-mobile mr-1"></i>Contact MobileNo. :<strong> {{ !empty($Students->contact_mobile_no) ? $Students->contact_country_code.' '.$Students->contact_mobile_no: 'Not Disclosed' }}</strong></li> --}}
 									<li><i class="ti-location-pin"></i>Address :<strong>{{ !empty($address) ?  $address.' , ' : '' }} {{ !empty($city) ? $city.' , ' : ''}}{{!empty($country) ? $country : '' }} {{!empty($zipcode) ? ' , '.$zipcode : '' }}</strong></li>
 									@if($Students->CountryID) 
-									<?php $PreferredCountry = DB::table('country_master')->where('CountryID',$Students->CountryID)->first(); ?>
+									<?php $PreferredCountry = DB::table('country_master')->where('CountryID',$Students->contact_country)->first(); ?>
 									<li><i class="ti-location-pin"></i>Preferred Country :<strong>{{ $PreferredCountry->CountryName }}</strong></li>
 									@else
 									<li><i class="ti-location-pin"></i>Preferred Country :<strong>Not Disclosed</strong></li>
@@ -115,37 +115,41 @@
 								</ul>
 							</div>
 
-
+							
 							@if( $Students->linkedin || $Students->instagram || $Students->facebook)
+
+							@php
+							$facebook_valid = filter_var($Students->facebook, FILTER_VALIDATE_URL) && preg_match('/facebook\.com/', $Students->facebook);							
+							$instagram_valid = filter_var($Students->instagram, FILTER_VALIDATE_URL) && preg_match('/instagram\.com/', $Students->instagram);
+							$linkedin_valid = filter_var($Students->linkedin, FILTER_VALIDATE_URL) && preg_match('/linkedin\.com/', $Students->linkedin);
+							@endphp
+							@if( $facebook_valid || $instagram_valid|| $linkedin_valid)
 							<div class="px-4 pt-4 pb-0 b-t">
 								<h5 class="mb-3">Follow Us</h5>
 							
 								<div class="inline_edu_wrap ">
 
 									<ul class="social_info">
-										@if($Students->facebook)
-										<li><a href="{{$Students->facebook}}" target="_blank"><i class="ti-facebook"></i></a></li>
+										
+
+										@if($facebook_valid)
+											<li><a href="{{ $Students->facebook }}" target="_blank"><i class="ti-facebook"></i></a></li>
 										@endif
-										{{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-											<a class="a2a_button_facebook"></a>
-											<a class="a2a_button_whatsapp"></a>
-											<a class="a2a_button_telegram"></a>
-											<a class="a2a_button_email"></a>
-										</div>
-										<script async src="https://static.addtoany.com/menu/page.js"></script> --}}
-											<!-- AddToAny END -->
-										@if($Students->instagram)
-                                        <li><a target="_blank" href="{{ $Students->instagram }}" ><i  class="ti-instagram"></i></a></li>
+
+										@if($instagram_valid)
+											<li><a href="{{ $Students->instagram }}" target="_blank"><i class="ti-instagram"></i></a></li>
 										@endif
-										@if($Students->linkedin)
-										<li><a href="{{$Students->linkedin}}" target="_blank"><i class="ti-linkedin"></i></a></li>
+
+										@if($linkedin_valid)
+											<li><a href="{{ $Students->linkedin }}" target="_blank"><i class="ti-linkedin"></i></a></li>
 										@endif
+
 										
 									</ul>
 								</div>
 							</div>
 							@endif
-
+							@endif
 
 
 						</div>

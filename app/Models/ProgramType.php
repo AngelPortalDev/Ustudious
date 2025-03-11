@@ -26,4 +26,8 @@ class ProgramType extends Model
     {
         return $this->hasMany(CourseMaster::class, 'course_types', 'course_types_id');
     }
+    public function course()
+    {
+        return $this->hasMany(Course::class, 'CourseType', 'course_types_id');
+    }
 }
