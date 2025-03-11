@@ -79,7 +79,23 @@ class LoginController extends Controller
                     $email = $request->email_address;
                     mail_send(1,['#Name#', '#Email#','#Link#'], [$request->first_name, $request->email_address,$link],$email);
                    
-
+                    $country=getData('country_master',['CountryID','CountryName'],['CountryID'=>$request->country_id]);
+                    $data = [
+                        'institute_name' => htmlspecialchars($request->institute_name),
+                        'institute_email' => htmlspecialchars($request->email_address),
+                        'institute_mobile' => htmlspecialchars($request->country_code . " " . $request->mobile),
+                        'institute_country' => htmlspecialchars($country[0]->CountryName),
+                        'registration_date' => now()->toDateString(), 
+                        'registration_time' => now()->toTimeString(), 
+                    ];              
+                  
+                    $user['to'] = env('MAIL_TO');                  
+                    Mail::send('mails.new_registration', $data, function ($message) use ($user, $request) {
+                        $message->from(env('MAIL_FROM_ADDRESS'))
+                                ->to($user['to'])
+                                ->subject('New Institute Registration: ' . $request->institute_name) 
+                                ->replyTo($request->email_address, $request->institute_name);
+                    });
                     return response()->json(['success' => "Successfully Signup"]);
                     
                 }catch (\Exception $e) {
@@ -193,7 +209,23 @@ class LoginController extends Controller
                    
                     $email = $request->email;
                     mail_send(6, ['#Name#', '#Email#','#Link'], [$request->first_name, $request->email,$link], $email);
-
+                    $country=getData('country_master',['CountryID','CountryName'],['CountryID'=>$request->student_country_id]);
+                    $data = [
+                        'student_name' => htmlspecialchars($request->first_name. " " .$request->last_name),
+                        'student_email' => htmlspecialchars($request->email),
+                        'student_mobile' => htmlspecialchars($request->student_country_code . " " . $request->mobile),
+                        'student_country' => htmlspecialchars($country[0]->CountryName),
+                        'registration_date' => now()->toDateString(), 
+                        'registration_time' => now()->toTimeString(), 
+                    ];              
+                  
+                    $user['to'] = env('MAIL_TO');                  
+                    Mail::send('mails.new_registrationstudent', $data, function ($message) use ($user, $request) {
+                        $message->from(env('MAIL_FROM_ADDRESS'))
+                                ->to($user['to'])
+                                ->subject('New Student Registration: ' . $request->first_name) 
+                                ->replyTo($request->email_address, $request->first_name);
+                    });
                     return response()->json(['success' => "Successfully Signup"]);                    
                 }catch (\Exception $e) {
                     return $e;
