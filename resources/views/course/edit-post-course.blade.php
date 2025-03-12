@@ -453,8 +453,8 @@
                                         <div class="form-row">
                                         
                                             <div class="form-group col-md-12">
-                                                <label>Brochure (Only PDFs < 3 MB allowed for upload.)</label>
-                                                <input type="file" id="brochure" name="brochure" class="form-control"></a><BR>
+                                                <label>Brochure (Only PDFs < 2 MB allowed for upload.)</label>
+                                                <input type="file" id="brochure" name="brochure" class="form-control" accept="application/pdf"></a><BR>
                                                 <a class="me-3" href="#">
                                                 <?php $filePath =  Storage::url('course/brochure/'.$Courses->Brochure); 
                                                     $extension = pathinfo($filePath, PATHINFO_EXTENSION);

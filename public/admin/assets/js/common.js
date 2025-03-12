@@ -8776,12 +8776,12 @@ $("#EditStudent").on('click', function(e) {
 
     $(".EditPostCourse").on('click', function(e) {
       $.validator.addMethod('maxFileSize', function(value, element) {
-      var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+      var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
       return true; // No file selected, so consider it valid
-      }, 'File size must be less than 3 MB.');
+      }, 'File size must be less than 2 MB.');
       $.validator.addMethod('fileExtension', function(value, element, param) {
         param = typeof param === 'string' ? param.replace(/,/g, '|') : 'pdf';
         
@@ -8789,12 +8789,12 @@ $("#EditStudent").on('click', function(e) {
       }, 'Please choose a file pdf with a valid extension.');
 
       $.validator.addMethod('maxFileSizeApp', function(valueApp, elementApp) {
-        var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+        var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
         if (elementApp.files.length > 0) {
             return elementApp.files[0].size <= maxSize;
         }
         return true; // No file selected, so consider it valid
-        }, 'File size must be less than 3 MB.');
+        }, 'File size must be less than 2 MB.');
         $.validator.addMethod('fileExtensionApp', function(valueApp, elementApp, paramApp) {
           paramApp = typeof paramApp === 'string' ? paramApp.replace(/,/g, '|') : 'png|jpe?|pdf';
           
