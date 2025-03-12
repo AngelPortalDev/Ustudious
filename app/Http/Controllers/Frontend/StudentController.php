@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Hash, Validator, Session, DB, Crypt, Storage};
+use Illuminate\Support\Facades\{Hash, Validator, Session, DB, Crypt, Storage,mail};
 use App\Models\Institute;
 use App\Models\InstituteContactInfo;
 use App\Models\User;

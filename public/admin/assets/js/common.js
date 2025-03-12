@@ -8093,6 +8093,9 @@ $("#EditStudent").on('click', function(e) {
         },
         contact_email:{
           required : true
+        },
+        contact_mobile:{
+          required : true
         }
     },
     messages: {
@@ -8144,6 +8147,9 @@ $("#EditStudent").on('click', function(e) {
         },
         contact_email:{
           required : 'Please enter Contact Email.'
+        },
+        contact_mobile:{
+          required : 'Please enter Contact Mobile no.'
         }
     },
     errorPlacement: function(error, element) {
@@ -8223,6 +8229,7 @@ $("#EditStudent").on('click', function(e) {
           remote: {
             url: baseUrl + "user/checkemailunique",
             type: 'POST',
+            dataType: "json",
             headers: {
               "X-CSRF-TOKEN": csrfToken,
             },
@@ -8230,7 +8237,8 @@ $("#EditStudent").on('click', function(e) {
                 email: function () {
                     return $('#email_address').val();
                 },
-            }
+            },
+            
           }
         },
         mobile: {
@@ -8239,6 +8247,7 @@ $("#EditStudent").on('click', function(e) {
           remote: {
             url: baseUrl + "user/checkmobileunique",
             type: 'POST',
+            dataType: "json",
             headers: {
               "X-CSRF-TOKEN": csrfToken,
             },
@@ -8776,7 +8785,7 @@ $("#EditStudent").on('click', function(e) {
 
     $(".EditPostCourse").on('click', function(e) {
       $.validator.addMethod('maxFileSize', function(value, element) {
-      var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+      var maxSize = 2 * 1024 * 1024; 
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
@@ -8789,7 +8798,7 @@ $("#EditStudent").on('click', function(e) {
       }, 'Please choose a file pdf with a valid extension.');
 
       $.validator.addMethod('maxFileSizeApp', function(valueApp, elementApp) {
-        var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+        var maxSize = 2 * 1024 * 1024; 
         if (elementApp.files.length > 0) {
             return elementApp.files[0].size <= maxSize;
         }
