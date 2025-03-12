@@ -126,12 +126,14 @@ class StudentController extends Controller
                     }
                     $courseData=getData('course',['CourseID','InstituteID','CourseName'],['CourseID' =>$course_id]);                   
                     $institutecontact=getData('institute_contactinfo',['institute_id','contact_person_name','contact_email'],['institute_id' =>$courseData[0]->InstituteID]);
-                    $instituteData=getData('institute',['institute_id','institute_email'],['institute_id' =>$courseData[0]->InstituteID]);
-                    mail_send(14,['#aplliedname#','#Emails#','#coursename#','#personname#','#date#'],[session()->get('student_name'),session()->get('student_email'), $courseData[0]->CourseName,$institutecontact[0]->contact_person_name,$this->date],$institutecontact[0]->contact_email,$instituteData[0]->institute_email);
+                    $instituteData=getData('institute',['institute_id','institute_email','company_name'],['institute_id' =>$courseData[0]->InstituteID]);
+                    mail_send(14,['#aplliedname#','#Emails#','#coursename#','#personname#','#date#'],[session()->get('student_name'),session()->get('student_email'), $courseData[0]->CourseName,$institutecontact[0]->contact_person_name,$this->date],$instituteData[0]->institute_email,$institutecontact[0]->contact_email);
+                    $link=  env('APP_URL') . "/course-details/" . $request->input('course_id');
+                    mail_send(15,['#Name#','#CourseName#','#InstituteName#','#Link#'],[session()->get('student_name'),$courseData[0]->CourseName,$instituteData[0]->company_name,$link],session()->get('student_email'));
                     echo json_encode(array('code' => 200, 'message' => 'Successfully ' . $remark, 'icon' => 'success', 'lable' => $remark, 'newAction' => $remark));
                 }
             } catch (\Exception $e) {
-                return $e;
+              return $e;
                 echo json_encode(['code' => 201, 'message' => 'Unble to ' . $remark, "icon" => "error"]);
             }
         }
