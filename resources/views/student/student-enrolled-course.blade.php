@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     
-                    @php $CourseList = DB::table('student_applied_course')->select("course.CourseName","institute.company_name","institute.company_name","institute.institute_status",
+                    @php $CourseList = DB::table('student_applied_course')->select("course.CourseName","institute.company_name","institute.company_name","institute.institute_status","institute.country_id",
                     "duration_master.Duration","intakemonth_master.Intakemonth","intakeyear_master.Intakeyear","course.TotalCost",
                     "course.Brochure","course.CourseID","course.created_by","country_master.CountryName","course.Currency","course.ApprovalStatus","course.CourseStatus",
                     "institute.institute_id","institute.institute_logo","institute_contactinfo.founded","institute_contactinfo.total_courses","student_applied_course.*")
@@ -116,7 +116,7 @@
                                 ->leftjoin('course','course.CourseID','=','student_applied_course.course_id')
                                 ->leftjoin('institute','institute.institute_id','=','course.InstituteID')
                                 ->leftjoin("institute_contactinfo","institute_contactinfo.institute_id","=","course.InstituteID")
-                                ->leftjoin("country_master","country_master.CountryID","=","institute_contactinfo.country")  
+                                ->leftjoin("country_master","country_master.CountryID","=","institute.country_id")  
                                 ->leftjoin("duration_master","duration_master.DurationID","=","course.CourseDuration")
                                 ->leftjoin("intakemonth_master","intakemonth_master.IntakemonthID","=","course.IntakeMonth")
                                 ->leftjoin("intakeyear_master","intakeyear_master.IntakeyearID","=","course.IntakeYear")

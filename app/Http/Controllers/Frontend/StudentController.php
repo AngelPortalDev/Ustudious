@@ -288,7 +288,7 @@ class StudentController extends Controller
                    
                 return response()->json(['success' => "Profile Updated."]);
             } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()]);
+                return response()->json(['error' => "Something Went Wrong."]);
             }
         } else {
             return response()->json(['error' => "Something Went Wrong."]);

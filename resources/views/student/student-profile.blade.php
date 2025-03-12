@@ -666,7 +666,7 @@
                                                         </div>
 
                                                         <div class="form-group col-md-6">
-                                                            <label>Country of Institution </label>
+                                                            <label>Country of Institution <span style="color:red"> *</span> </label>
                                                             <select class="form-control st-country-code"
                                                                 name="college_country[]">
                                                                 <option value="" disabled selected>Select country</option>

@@ -9,11 +9,11 @@ $ASSET_PATH = env('ASSET_URL').'/';
 	->leftjoin('country_master','country_master.CountryID','=','institute.country_id')
 	->where(['institute.institute_id'=> $LoginID])->first();  
 	
-	$StudentData = DB::table('student_applied_course')->select('student_applied_course.*','student.updated_at','student.StudentID','student.Photo','student.Email','student.Mobile','student.FirstName','student.LastName','student.Resume','country_master.CountryName','student.CountryCode','course.CourseID','course.InstituteID','course.CourseName','course.ModeofStudy')
+	$StudentData = DB::table('student_applied_course')->select('student_applied_course.*','student.updated_at','student.StudentID','student.Photo','student.Email','student.Mobile','student.FirstName','student.LastName','student.Resume','student.CountryID','country_master.CountryName','student.CountryCode','course.CourseID','course.InstituteID','course.CourseName','course.ModeofStudy')
 	->leftjoin('student','student.StudentID','=','student_applied_course.student_id')
 	->leftjoin('course','course.CourseID','=','student_applied_course.course_id')
 	->leftjoin('student_contactinfo','student_contactinfo.student_id','=','student.StudentID')
-	->leftjoin('country_master','country_master.CountryID','=','student_contactinfo.contact_country')
+	->leftjoin('country_master','country_master.CountryID','=','student.CountryID')
 	->where('student.ApprovalStatus','Approved')          
 	->whereNull('student.deleted_at')       
 	->where(['student_applied_course.institute_id'=> $LoginID])

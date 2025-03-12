@@ -68,15 +68,15 @@
 						{{-- </div> --}}
 					
 						<br><br>
-						{{-- <select name="course_title" id="course_title" class="form-control  mb-2 select2"  style='display:none;' >
+						<select name="course_title" id="course_title" class="form-control  mb-2 select2"  style='display:none;' >
 							
-						</select> --}}
+						</select>
 						
 					</div>
-					<div class="mb-2" id="searchdiv">
+					{{-- <div class="mb-2" id="searchdiv">
 						<ul name="course_title" id="course_title">
 						</ul>
-					</div>
+					</div> --}}
 					</form>
 				
 					</div>
@@ -1041,7 +1041,7 @@
 					@php $CollegewiseCount = DB::table('institute')
 						->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")
 						->where('institute.institute_status','1')
-						->where('country','17')
+						->where('country_id','17')
 						->whereNull('institute.deleted_at')->count(); @endphp
 					<div class="articles_grid_caption">
 						<h4>Top {{$CollegewiseCount}} Colleges in France</h4>

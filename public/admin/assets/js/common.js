@@ -8133,10 +8133,10 @@ $("#EditStudent").on('click', function(e) {
         },
         "gallery_images[]": {
           required: 'Please select an image file.',
-          maxFiles: "You can only upload up to 8 images."
+          maxFiles: "You can only upload up to 6 images."
         },
         brochure: {
-            required: 'Please select an image file.'
+            required: 'Please select an pdf file.'
         },
         institute_city:{
           required : 'Please enter city'
@@ -9429,11 +9429,14 @@ $("#EditStudent").on('click', function(e) {
           $('#course_title').css('display','block'); // Clear previous content
 
           $("#course_title").empty();
-          if(data.CourseTitle){
-            $("#searchdiv").css('display','block');
-          }
+          // if(data.CourseTitle){
+          //   $("#searchdiv").css('display','block');
+          // }
+          // $.each(data.CourseTitle, function(index, item) {
+          //   $("#course_title").append('<li value="' + item.CourseID + '">' + item.CourseName + '</li>');
+          // }); 
           $.each(data.CourseTitle, function(index, item) {
-            $("#course_title").append('<li value="' + item.CourseID + '">' + item.CourseName + '</li>');
+            $("#course_title").append('<option value="' + item.CourseID + '">' + item.CourseName + '</option>');
           }); 
           
         }
