@@ -715,7 +715,7 @@ class LoginController extends Controller
                 $send = Mail::send('mails.contactmail', $data, function ($message) use ($user, $email, $name) {
                     $message->from(env('MAIL_FROM_ADDRESS'));
                     $message->to($user['to']);
-                    $message->subject('Enquiry Received from ustudious.com');
+                    $message->subject('Enquiry Received from: ' . $name);
                     $message->replyTo($email, $name);
                 });
                 if($send){
@@ -725,7 +725,8 @@ class LoginController extends Controller
                     return response()->json(['error' => $error]);
                 }
             } catch (Exception $e) {
-                $error = $e->getMessage();
+                // $error = $e->getMessage();
+                $error = 'Something Went Wrong.';
                 return response()->json(['error' => $error]);
             }
         }else{
