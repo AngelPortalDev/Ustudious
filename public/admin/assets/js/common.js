@@ -541,7 +541,7 @@ $(document).ready(function () {
   $("#EditInstitute").on('click', function (e) {
 
     $.validator.addMethod('brochureImage', function(value, element) {
-      var maxSize = 3 * 1024 * 1024; 
+      var maxSize = 2 * 1024 * 1024; 
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
