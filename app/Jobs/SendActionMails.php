@@ -17,15 +17,17 @@ class SendActionMails implements ShouldQueue
     protected $content;
     protected $recipient;
     protected $sendcc;
+    protected $replayto;
     /**
      * Create a new job instance.
      */
-    public function __construct($subject, $content, $recipient,$sendcc=[])
+    public function __construct($subject, $content, $recipient,$sendcc=[],$replayto=[])
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->recipient = $recipient ?? 'test@gmail.com';
         $this->sendcc = $sendcc;
+        $this->replayto = $replayto;
     }
 
     /**
@@ -40,6 +42,9 @@ class SendActionMails implements ShouldQueue
                 $message->subject($this->subject);
                 if ($this->sendcc) {
                     $message->cc($this->sendcc);
+                }
+                if ($this->replayto) {
+                    $message->replyTo($this->replayto);
                 }
                 
             });        

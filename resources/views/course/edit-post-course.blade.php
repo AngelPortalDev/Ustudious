@@ -123,8 +123,8 @@
                                         <div class="form-row" >
                                          
                                             <input type="hidden" class="form-control" name="operation" value="edit" id="operation">
-                                            <input type="hidden" class="form-control" name="institute_id" value="{{$LoginID}}">
-                                            <input type="hidden" class="form-control" name="course_id" value="{{$Courses->CourseID}}">
+                                            <input type="hidden" class="form-control" name="institute_id" value="{{base64_encode($LoginID)}}">
+                                            <input type="hidden" class="form-control" name="course_id" value="{{base64_encode($Courses->CourseID)}}">
 
 
                                             <div class="form-group col-md-6">

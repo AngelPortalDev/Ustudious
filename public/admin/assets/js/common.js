@@ -6456,7 +6456,7 @@ $("#EditStudent").on('click', function(e) {
       },
 
       submitHandler: function (form) {
-
+        $("#loader").fadeIn();
         var formData = new FormData($("#UpdateCourse")[0]);
 
         $.ajax({
@@ -6481,6 +6481,7 @@ $("#EditStudent").on('click', function(e) {
 
           success: function (res) {
             // console.log(res.code);
+            $("#loader").fadeOut();
             if (res.code === 200) {
               swal({
                   title: res.message,
