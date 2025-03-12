@@ -8028,12 +8028,12 @@ $("#EditStudent").on('click', function(e) {
       }, 'Please choose a file jpeg,jpg,png with a valid extension.');
 
       $.validator.addMethod('brochureImage', function(value, element) {
-            var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+            var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
             if (element.files.length > 0) {
                 return element.files[0].size <= maxSize;
             }
             return true; // No file selected, so consider it valid
-            }, 'File size must be less than 3  MB.');
+            }, 'File size must be less than 2  MB.');
 
       $.validator.addMethod('fileExtensionbro', function(value, element, param) {
               param = typeof param === 'string' ? param.replace(/,/g, '|') : 'pdf';

@@ -754,7 +754,7 @@ label.error{
 
                                          
                                             <div class="form-group col-md-6">
-                                                <label>Brochure (Only PDFs < 3 MB allowed for upload.)</label>
+                                                <label>Brochure (Only PDFs < 2 MB allowed for upload.)</label>
                                               
                                       
                                                 <br>
