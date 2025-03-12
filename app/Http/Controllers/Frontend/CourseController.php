@@ -318,7 +318,7 @@ class CourseController extends Controller
                 return response()->json(['success' => "Course Posted Successfully."]);
             } catch (\Exception $e) {
 
-                return response()->json(['error' => $e->getMessage()]);
+                return response()->json(['error' => 'Something went wrong.']);
             }
         } else {
 
@@ -414,8 +414,8 @@ class CourseController extends Controller
                     'Currency' => $request->currency_symbols,
                     'Opportunities' => $request->course_opportunities,
                     'updated_by' => $request->institute_id,
-                    'EduSpecialization' => $request->qualification_specialization
-
+                    'EduSpecialization' => $request->qualification_specialization,
+                    'ApprovalStatus'=>'Pending'
                 ]);
                 $total_courses = Course::where('InstituteID', $request->institute_id)->where('ApprovalStatus', 'Approved')->where('CourseStatus', 'Active')->whereNull('deleted_at')->count();
                 InstituteContactInfo::where('institute_id', $request->institute_id)->update(['total_courses' => $total_courses]);
