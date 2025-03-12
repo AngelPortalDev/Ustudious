@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Models\InstituteContactInfo;
 use App\Models\Country;
 use App\Models\Duration;
-use Illuminate\Support\Facades\{Hash, Validator, Session, DB, Crypt, Storage, Mail};
+use Illuminate\Support\Facades\{Hash, Validator, Session, DB, Crypt, Log, Storage, Mail};
 use Carbon\Carbon;
 
 class CourseController extends Controller
@@ -537,6 +537,7 @@ class CourseController extends Controller
                 // echo json_encode(['code' => 200, 'message' => 'Institute Updated Successfully.', 'icon' => 'success']);
                 return response()->json(['code' => 200, 'message' => 'Institute Updated Successfully.', 'icon' => 'success']);
             } catch (\Exception $e) {
+                Log::error('Error occurred: ' . $e->getMessage());
                 echo json_encode(['code' => 201, 'message' => 'Something Went Wrong.', "icon" => "error"]);
             }
         } else {
