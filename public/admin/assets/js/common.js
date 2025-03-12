@@ -750,7 +750,7 @@ $(document).ready(function () {
 
           type: "POST",
 
-          url: baseUrl + "institute/update",
+          url: baseUrl + "institute/update" ,
 
           data: formData,
 

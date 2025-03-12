@@ -86,7 +86,7 @@ $(document).ready(function () {
               required:'Please select program type.',
             },
             mode_of_study:{
-              required:'Please select mode of study type.',
+              required:'Please select mode of study type.' ,
             },
             'qualification_id[]':{
               required:  'Please select education.',
