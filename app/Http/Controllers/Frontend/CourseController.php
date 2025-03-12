@@ -1019,7 +1019,16 @@ class CourseController extends Controller
 
         $CourseTitle = '';
         if ($searchCoursetitle) {
-            $CourseTitle = DB::table('course')->where('CourseName', 'like', '%' . $searchCoursetitle . '%')->select('CourseID', 'CourseName')->where('course.ApprovalStatus', 'Approved')->whereNull('deleted_at')->distinct()->get();
+            $CourseTitle = DB::table('course')
+            ->select('course.CourseID','course.CourseName','institute.institute_id','institute.institute_status','institute.deleted_at')
+            ->leftjoin("institute", "institute.institute_id", "=", "course.InstituteID")
+            ->where('CourseName', 'like', '%' . $searchCoursetitle . '%')->select('CourseID', 'CourseName')->where('course.ApprovalStatus', 'Approved')
+            ->where('institute.institute_status', '1')
+            ->where('CourseStatus', 'Active')
+            ->whereNull('course.deleted_at')
+            ->whereNull('institute.deleted_at')
+            ->orderBy('course.CourseID', 'DESC')     
+            ->distinct()->get();           
         }
 
         $data = [
