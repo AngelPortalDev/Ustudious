@@ -8237,7 +8237,7 @@ $("#EditStudent").on('click', function(e) {
                 email: function () {
                     return $('#email_address').val();
                 },
-            },
+            }
             
           }
         },
@@ -8255,8 +8255,7 @@ $("#EditStudent").on('click', function(e) {
                 mobile: function () {
                     return $('#mobile').val();
                 },
-            },
-            dataType: 'json',
+            }            
 
           }
         },
