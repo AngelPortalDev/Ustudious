@@ -123,8 +123,8 @@
                                         <div class="form-row" >
                                          
                                             <input type="hidden" class="form-control" name="operation" value="edit" id="operation">
-                                            <input type="hidden" class="form-control" name="institute_id" value="{{$LoginID}}">
-                                            <input type="hidden" class="form-control" name="course_id" value="{{$Courses->CourseID}}">
+                                            <input type="hidden" class="form-control" name="institute_id" value="{{base64_encode($LoginID)}}">
+                                            <input type="hidden" class="form-control" name="course_id" value="{{base64_encode($Courses->CourseID)}}">
 
 
                                             <div class="form-group col-md-6">
@@ -453,8 +453,8 @@
                                         <div class="form-row">
                                         
                                             <div class="form-group col-md-12">
-                                                <label>Brochure (Only PDFs < 3 MB allowed for upload.)</label>
-                                                <input type="file" id="brochure" name="brochure" class="form-control"></a><BR>
+                                                <label>Brochure (Only PDFs < 2 MB allowed for upload.)</label>
+                                                <input type="file" id="brochure" name="brochure" class="form-control" accept="application/pdf"></a><BR>
                                                 <a class="me-3" href="#">
                                                 <?php $filePath =  Storage::url('course/brochure/'.$Courses->Brochure); 
                                                     $extension = pathinfo($filePath, PATHINFO_EXTENSION);

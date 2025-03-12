@@ -754,11 +754,11 @@ label.error{
 
                                          
                                             <div class="form-group col-md-6">
-                                                <label>Brochure (Only PDFs < 3 MB allowed for upload.)</label>
+                                                <label>Brochure (Only PDFs < 2 MB allowed for upload.)</label>
                                               
                                       
                                                 <br>
-                                                <input type="file" class="form-control" name="brochure" >
+                                                <input type="file" class="form-control" name="brochure" accept="application/pdf">
                                                 <br>
                                                
                                             </div>
@@ -786,7 +786,7 @@ label.error{
                                                 $currentImageCount = count($Images);
                                                 @endphp 
                                                 @if(count($Images)  < 6)
-                                                  <input type="file" id="gallery_images" name="gallery_images[]" class="form-control" data-max-files="{{ 6 - $currentImageCount }}" multiple >
+                                                  <input type="file" id="gallery_images" name="gallery_images[]" class="form-control" data-max-files="{{ 6 - $currentImageCount }}" multiple accept="image/jpeg, image/jpg, image/png">
                                                 @else
                                                    <input type="file" id="gallery_images" name="gallery_images[]" class="form-control" multiple disabled>
                                                 @endif

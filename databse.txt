@@ -1,3 +1,5 @@
 ALTER TABLE `institute` ADD  `country_id` int(11) NOT NULL AFTER `institute_mobile`;
 
 ALTER TABLE `course` ADD  `accommodation_certificate_cost` varchar(255) DEFAULT NULL AFTER `AdministrativeCost`;
+
+ALTER TABLE `contact_form` ADD `country_code` VARCHAR(255) NULL AFTER `email`, ADD `mob_no` VARCHAR(255) NULL AFTER `country_code`;

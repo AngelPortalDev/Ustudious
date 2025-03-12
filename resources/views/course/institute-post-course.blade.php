@@ -451,8 +451,8 @@
                                         <div class="form-row">
                                         
                                             <div class="form-group col-md-12">
-                                                <label>Brochure (Only PDFs < 3 MB allowed for upload.)</label>
-                                                <input type="file" id="brochure" name="brochure" class="form-control" placeholder="Maximum 3 mb image size"></a>
+                                                <label>Brochure (Only PDFs < 2 MB allowed for upload.)</label>
+                                                <input type="file" id="brochure" name="brochure" class="form-control" placeholder="Maximum 2 mb image size" accept="application/pdf"></a>
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label>Application Form (PDF/JPG/PNG < 2 MB allowed for upload.)</label>

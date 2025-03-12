@@ -119,7 +119,7 @@
                                     </div>
                                     <div class="cn-info-content">
                                         <h4 class="cn-info-title">Drop a Mail</h4>
-                                        <p>info@ustudious.com</p>
+                                        <p><a href="mailto:info@ustudious.com">info@ustudious.com</a></p>
                                     </div>
                                 </div>
 
@@ -129,7 +129,7 @@
                                     </div>
                                     <div class="cn-info-content">
                                         <h4 class="cn-info-title">Call Us</h4>
-                                        <p>+123 4567 890</p>
+                                        <p><a href="tel:+123 4567 890">+123 4567 890</a></p>
                                     </div>
                                 </div>
 

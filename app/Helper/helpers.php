@@ -102,7 +102,7 @@ if (!function_exists('UploadFiles')) {
     }
 }
 if (!function_exists('mail_send')) {
-    function mail_send($tmpl_id, $repl_contain, $repl_value, $sendto,$sendcc=[])
+    function mail_send($tmpl_id, $repl_contain, $repl_value, $sendto,$sendcc=[],$replayto=[])
     {
        
         
@@ -118,18 +118,18 @@ if (!function_exists('mail_send')) {
             $data['newContain'],
             $sendto,
             $sendcc,
-         
+            $replayto,         
         );
        
 
     }
 }
 if (!function_exists('send')) {
-    function send($subject, $sendingData, $sendto,$sendcc = [],)
+    function send($subject, $sendingData, $sendto,$sendcc = [],$replayto=[])
     {
         
         try {
-            Queue::push(new SendActionMails($subject, $sendingData, $sendto,$sendcc));
+            Queue::push(new SendActionMails($subject, $sendingData, $sendto,$sendcc,$replayto));
             return TRUE;
         } catch (\Exception $error) {
             return FALSE;

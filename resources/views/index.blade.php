@@ -1,7 +1,25 @@
 @extends('layouts.main')
 @section('content')
 <?php $ASSET_PATH = env('ASSET_URL').'/' ?>
-
+<style>
+	#searchdiv{    position: absolute;
+    border: 1px solid #4d6e87;
+    border-top-width: 0px;
+    display: none;
+    max-height: 200px;
+    overflow: visible;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    text-transform: capitalize;
+    border-radius: 10px;
+    top: 247px;
+    width: 40%;
+    height: auto;
+    left: 25px;
+    z-index: 999;
+    background: white;
+	}
+	</style>
 <div class="clearfix"></div>
 <!-- ============================================================== -->
 <!-- Top header  -->
@@ -53,7 +71,12 @@
 						<select name="course_title" id="course_title" class="form-control  mb-2 select2"  style='display:none;' >
 							
 						</select>
+						
 					</div>
+					{{-- <div class="mb-2" id="searchdiv">
+						<ul name="course_title" id="course_title">
+						</ul>
+					</div> --}}
 					</form>
 				
 					</div>
@@ -1018,7 +1041,7 @@
 					@php $CollegewiseCount = DB::table('institute')
 						->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")
 						->where('institute.institute_status','1')
-						->where('country','17')
+						->where('country_id','17')
 						->whereNull('institute.deleted_at')->count(); @endphp
 					<div class="articles_grid_caption">
 						<h4>Top {{$CollegewiseCount}} Colleges in France</h4>

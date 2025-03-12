@@ -39,12 +39,18 @@ $(document).ready(function () {
             program_type:{
               required:true,
             },
+            mode_of_study:{
+              required:true,
+            },
             'qualification_id[]':{
               required:true,
             },
-            // 'qualification_types_id[]':{
-            //   required:true,
-            // },
+            'college_country[]':{
+              required:true,
+            },
+            'grade[]':{
+              required:true,
+            },
             'medium[]':{
               required : true
             },
@@ -79,12 +85,18 @@ $(document).ready(function () {
             program_type:{
               required:'Please select program type.',
             },
+            mode_of_study:{
+              required:'Please select mode of study type.',
+            },
             'qualification_id[]':{
               required:  'Please select education.',
             },
-            // 'qualification_types_id[]':{
-            //   required: 'Please enter Specialization.',
-            // },
+            'college_country[]':{
+              required: 'Please enter country.',
+            },
+            'grade[]':{
+              required:'Please enter grade.',
+            },
             'medium[]':{
               required: 'Please enter study medium.',
             },

@@ -541,7 +541,7 @@ $(document).ready(function () {
   $("#EditInstitute").on('click', function (e) {
 
     $.validator.addMethod('brochureImage', function(value, element) {
-      var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+      var maxSize = 2 * 1024 * 1024; 
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
@@ -6456,7 +6456,7 @@ $("#EditStudent").on('click', function(e) {
       },
 
       submitHandler: function (form) {
-
+        $("#loader").fadeIn();
         var formData = new FormData($("#UpdateCourse")[0]);
 
         $.ajax({
@@ -6481,6 +6481,7 @@ $("#EditStudent").on('click', function(e) {
 
           success: function (res) {
             // console.log(res.code);
+            $("#loader").fadeOut();
             if (res.code === 200) {
               swal({
                   title: res.message,
@@ -8028,12 +8029,12 @@ $("#EditStudent").on('click', function(e) {
       }, 'Please choose a file jpeg,jpg,png with a valid extension.');
 
       $.validator.addMethod('brochureImage', function(value, element) {
-            var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+            var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
             if (element.files.length > 0) {
                 return element.files[0].size <= maxSize;
             }
             return true; // No file selected, so consider it valid
-            }, 'File size must be less than 3  MB.');
+            }, 'File size must be less than 2  MB.');
 
       $.validator.addMethod('fileExtensionbro', function(value, element, param) {
               param = typeof param === 'string' ? param.replace(/,/g, '|') : 'pdf';
@@ -8133,10 +8134,10 @@ $("#EditStudent").on('click', function(e) {
         },
         "gallery_images[]": {
           required: 'Please select an image file.',
-          maxFiles: "You can only upload up to 8 images."
+          maxFiles: "You can only upload up to 6 images."
         },
         brochure: {
-            required: 'Please select an image file.'
+            required: 'Please select an pdf file.'
         },
         institute_city:{
           required : 'Please enter city'
@@ -8175,11 +8176,11 @@ $("#EditStudent").on('click', function(e) {
               });
             } else {
                 swal({
-                    title: 'aosihd',
+                    title: 'Something went wrong',
                     text: "Please Try Again",
                     icon: "error",
                 }).then(function () {
-                  return  window.location.href = '/institute-profile';
+                  window.location.reload();
                 });
             }
           }
@@ -8191,6 +8192,7 @@ $("#EditStudent").on('click', function(e) {
 
 
   $("#InstituteRegister").on('click', function(e) {
+    
     $("#passwordError").text("");
     $.validator.addMethod('mypassword', function(value, element) {
         return this.optional(element) || (value.match(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/));
@@ -8244,7 +8246,9 @@ $("#EditStudent").on('click', function(e) {
                 mobile: function () {
                     return $('#mobile').val();
                 },
-            }
+            },
+            dataType: 'json',
+
           }
         },
         password: {
@@ -8772,12 +8776,12 @@ $("#EditStudent").on('click', function(e) {
 
     $(".EditPostCourse").on('click', function(e) {
       $.validator.addMethod('maxFileSize', function(value, element) {
-      var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+      var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
       return true; // No file selected, so consider it valid
-      }, 'File size must be less than 3 MB.');
+      }, 'File size must be less than 2 MB.');
       $.validator.addMethod('fileExtension', function(value, element, param) {
         param = typeof param === 'string' ? param.replace(/,/g, '|') : 'pdf';
         
@@ -8785,12 +8789,12 @@ $("#EditStudent").on('click', function(e) {
       }, 'Please choose a file pdf with a valid extension.');
 
       $.validator.addMethod('maxFileSizeApp', function(valueApp, elementApp) {
-        var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+        var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
         if (elementApp.files.length > 0) {
             return elementApp.files[0].size <= maxSize;
         }
         return true; // No file selected, so consider it valid
-        }, 'File size must be less than 3 MB.');
+        }, 'File size must be less than 2 MB.');
         $.validator.addMethod('fileExtensionApp', function(valueApp, elementApp, paramApp) {
           paramApp = typeof paramApp === 'string' ? paramApp.replace(/,/g, '|') : 'png|jpe?|pdf';
           
@@ -9426,6 +9430,12 @@ $("#EditStudent").on('click', function(e) {
           $('#course_title').css('display','block'); // Clear previous content
 
           $("#course_title").empty();
+          // if(data.CourseTitle){
+          //   $("#searchdiv").css('display','block');
+          // }
+          // $.each(data.CourseTitle, function(index, item) {
+          //   $("#course_title").append('<li value="' + item.CourseID + '">' + item.CourseName + '</li>');
+          // }); 
           $.each(data.CourseTitle, function(index, item) {
             $("#course_title").append('<option value="' + item.CourseID + '">' + item.CourseName + '</option>');
           }); 
