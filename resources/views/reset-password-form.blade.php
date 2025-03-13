@@ -2,7 +2,7 @@
 @section('content')
 <style>
 	footer.dark-footer.skin-dark-footer{
-	position: absolute;
+	/* position: absolute; */
     bottom: 0;
     width: 100%;
    
