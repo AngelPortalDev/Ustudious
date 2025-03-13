@@ -60,13 +60,24 @@ class UserController extends Controller
        }
  
        
-       public function checkmobileunique(Request $request)
-       {            
-              $mobile = $request->input('mobile');
+       // public function checkmobileunique(Request $request)
+       // {            
+       //        $mobile = $request->input('mobile');
               
-              $isUnique = !Institute::where('institute_mobile', $mobile)->whereNull('deleted_at')->exists();
+       //        $isUnique = !Institute::where('institute_mobile', $mobile)->whereNull('deleted_at')->exists();
             
-              return response()->json($isUnique);
+       //        return response()->json($isUnique);
+       // }
+       public function checkmobileunique(Request $request)
+       {
+           if ($request->isMethod('POST') && $request->ajax()) {              
+               $mobile = $request->input('mobile');                     
+               $count = Institute::where('institute_mobile', $mobile)->count();      
+            
+               return response()->json(['count' => $count]);
+           }
+       
+           return response()->json(['count' => 0]);
        }
        public function stucheckmobileunique(Request $request)
        {            
