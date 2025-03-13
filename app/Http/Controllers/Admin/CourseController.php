@@ -272,34 +272,39 @@ class CourseController extends Controller
     }
     public function approvedcourse(Request $request)  
     {  
-       $course_id = base64_decode($request->course_id) ;
-       $data = Course::whereIN('CourseID',explode(",",$course_id))->update(['ApprovalStatus'=>'Approved']);  
-       $CoursesList =  DB::table('course')->select("course.InstituteID","ApprovalStatus","CourseName","Specialization","CourseID")->whereIn('course.CourseID',explode(",",$course_id))->get();
+        $encodedCourseIds = $request->course_id;       
+        $encodedCourseIdsArray = explode(',', $encodedCourseIds);     
+        $courseIds = [];
+        foreach ($encodedCourseIdsArray as $encodedCourseId) {           
+            $courseIds[] = base64_decode($encodedCourseId);
+        }       
+       $data = Course::whereIN('CourseID',$courseIds)->update(['ApprovalStatus'=>'Approved']);  
+       $CoursesList =  DB::table('course')->select("course.InstituteID","ApprovalStatus","CourseName","Specialization","CourseID")->whereIn('course.CourseID',$courseIds)->get();
        foreach($CoursesList as $course){
         $total_courses = Course::where('InstituteID',$course->InstituteID)->where('ApprovalStatus','Approved')->where('CourseStatus','Active')->whereNull('deleted_at')->count();
         InstituteContactInfo::where('institute_id',$course->InstituteID)->update(['total_courses'=>$total_courses]);
-        if ($course->ApprovalStatus == 'Approved') {
-           $instituteData=Institute::select('institute_id','company_name')->where('institute_id',$course->InstituteID)->first();
-           $studentEmail = DB::table('student_applied_course')
-           ->select('student.StudentID','student.FirstName','student.Email',DB::raw('MAX(student_applied_course.id) as id'), DB::raw('MAX(student_applied_course.course_id) as course_id'))
-           ->leftJoin('student', 'student.StudentID', '=', 'student_applied_course.student_id')
-           ->where('student_applied_course.institute_id', $course->InstituteID)
-           ->groupBy('student.StudentID', 'student.FirstName', 'student.Email')
-           ->get();
+        // if ($course->ApprovalStatus == 'Approved') {
+        //    $instituteData=Institute::select('institute_id','company_name')->where('institute_id',$course->InstituteID)->first();
+        //    $studentEmail = DB::table('student_applied_course')
+        //    ->select('student.StudentID','student.FirstName','student.Email',DB::raw('MAX(student_applied_course.id) as id'), DB::raw('MAX(student_applied_course.course_id) as course_id'))
+        //    ->leftJoin('student', 'student.StudentID', '=', 'student_applied_course.student_id')
+        //    ->where('student_applied_course.institute_id', $course->InstituteID)
+        //    ->groupBy('student.StudentID', 'student.FirstName', 'student.Email')
+        //    ->get();
             
-           //print_r($studentEmail);
-            if (isset($studentEmail) && !empty($studentEmail)) {
-                foreach ($studentEmail as $studentData) {                   
-                    $sendTo = $studentData->Email;
-                    $name = $studentData->FirstName;       
-                    $id=base64_encode($course->CourseID);
+        //    //print_r($studentEmail);
+        //     if (isset($studentEmail) && !empty($studentEmail)) {
+        //         foreach ($studentEmail as $studentData) {                   
+        //             $sendTo = $studentData->Email;
+        //             $name = $studentData->FirstName;       
+        //             $id=base64_encode($course->CourseID);
                      
-                    $link =  env('APP_URL') . "/course-details/" .  $id;
-                    // Log::info("url",['url'=>$link]);   
-                    SendbulkEmails::dispatch($sendTo, $name,$course->CourseName,$course->Specialization, $instituteData->company_name, $link);
-                }
-            }
-        }
+        //             $link =  env('APP_URL') . "/course-details/" .  $id;
+        //             // Log::info("url",['url'=>$link]);   
+        //             SendbulkEmails::dispatch($sendTo, $name,$course->CourseName,$course->Specialization, $instituteData->company_name, $link);
+        //         }
+        //     }
+        // }
     }
        
     }  

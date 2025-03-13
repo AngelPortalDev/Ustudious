@@ -8195,6 +8195,34 @@ $("#EditStudent").on('click', function(e) {
     });
   });
 
+  $("#instituteregister #mobile").on("focusout", function (e) {
+    e.preventDefault();
+    $("#mob_exists_error").hide(); 
+    var mobile = $(this).val();     
+    if (mobile != "") {
+        $("#loader").show();
+        $.ajax({
+            url: baseUrl + "user/checkmobileunique",
+            type: "POST",
+            data: { mobile: mobile }, 
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (response) {
+                $("#loader").hide();
+                if (response.count > 0) {
+                    $("#mob_exists_error").show();
+                    $("#InstituteRegister").attr("disabled", "true");
+                    $("#mobile").css("border-color", "red");                 
+                } else {                    
+                    $("#InstituteRegister").removeAttr("disabled");
+                    $("#mobile").css("border-color", "green");
+                }
+            },
+        });
+    }
+});
 
 
   $("#InstituteRegister").on('click', function(e) {
@@ -8237,6 +8265,12 @@ $("#EditStudent").on('click', function(e) {
                 email: function () {
                     return $('#email_address').val();
                 },
+            }, 
+            beforeSend: function() {
+              $("#loader").fadeIn();
+            },
+            complete: function() {
+              $("#loader").fadeOut();
             }
             
           }
@@ -8244,20 +8278,24 @@ $("#EditStudent").on('click', function(e) {
         mobile: {
           required: true,
           number: true,
-          remote: {
-            url: baseUrl + "user/checkmobileunique",
-            type: 'POST',
-            dataType: "json",
-            headers: {
-              "X-CSRF-TOKEN": csrfToken,
-            },
-            data: {
-                mobile: function () {
-                    return $('#mobile').val();
-                },
-            }            
-
-          }
+          // remote: {
+          //   url: baseUrl + "user/checkmobileunique",
+          //   type: 'POST',
+          //   dataType: "json",
+          //   headers: {
+          //     "X-CSRF-TOKEN": csrfToken,
+          //   },
+          //   data: {
+          //       mobile: function () {
+          //           return $('#mobile').val();
+          //       },
+          //   }, beforeSend: function() {
+          //     $("#loader").fadeIn();
+          //   },
+          //   complete: function() {
+          //     $("#loader").fadeOut();
+          //   }
+          // }
         },
         password: {
           required: true,
@@ -8287,8 +8325,7 @@ $("#EditStudent").on('click', function(e) {
           required:'Please enter Email',
           email: 'Please enter a valid email address.',
         },
-        mobile: {
-          remote: 'Mobile No. is already taken.',
+        mobile: {        
           required: 'Please enter Mobile No.',
         },
         password: {
@@ -8569,12 +8606,12 @@ $("#EditStudent").on('click', function(e) {
     $("#PostCourse").on('click', function(e) {
      
       $.validator.addMethod('maxFileSize', function(value, element) {
-      var maxSize = 3 * 1024 * 1024; // 2 MB in bytes
+      var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
       if (element.files.length > 0) {
           return element.files[0].size <= maxSize;
       }
       return true; // No file selected, so consider it valid
-      }, 'File size must be less than 3 MB.');
+      }, 'File size must be less than 2 MB.');
       $.validator.addMethod('fileExtension', function(value, element, param) {
         param = typeof param === 'string' ? param.replace(/,/g, '|') : 'pdf';
         return this.optional(element) || value.match(new RegExp('.(' + param + ')$', 'i'));    
@@ -8598,19 +8635,19 @@ $("#EditStudent").on('click', function(e) {
         course_overview: {
           required: function() {
             var quillContent = quill3.root.innerHTML.trim();
-            return quillContent === "<p><br></p>" || quillContent === "";
+            return quillContent === "" || quillContent === "";
         }
         },
         course_curriculum: {
           required: function() {
             var quillContent = quill4.root.innerHTML.trim();
-            return quillContent === "<p><br></p>" || quillContent === "";
+            return quillContent === "" || quillContent === "";
         }
         },
         course_requirements: {
           required: function() {
             var quillContent = quill5.root.innerHTML.trim();
-            return quillContent === "<p><br></p>" || quillContent === "";
+            return quillContent === "" || quillContent === "";
         }
 
       },
@@ -8661,8 +8698,8 @@ $("#EditStudent").on('click', function(e) {
             required : true
           },
           brochure: {
-            maxFileSize: true, // Custom rule for max file size
-            fileExtension: 'pdf' // Custom rule for allowed extensions
+            maxFileSize: true, 
+            fileExtension: 'pdf' 
           },
           // },
           qualification :{
@@ -8670,7 +8707,7 @@ $("#EditStudent").on('click', function(e) {
           },
           application_form:{
             maxFileSizeApp : true,
-            fileExtensionApp: 'jpg,png,jpeg,pdf' // Custom rule for allowed extensions
+            fileExtensionApp: 'jpg,png,jpeg,pdf'
           },
           age_limit :{
             required : true

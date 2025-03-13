@@ -55,7 +55,10 @@
 										    </div>
 											
 											<div style="width: 100%; margin-left: 7px;">
-												<input type="text" class="form-control" placeholder="Mobile Number  (*) " name="mobile" id="mobile" required>
+												<input type="number" class="form-control" placeholder="Mobile Number  (*) " name="mobile" id="mobile" required>
+												<span id="mob_exists_error" style="color:red;display:none;">
+													<small><i>Mobile no is already exist</i></small>
+												</span>
 											</div>
 										</div>
 				
