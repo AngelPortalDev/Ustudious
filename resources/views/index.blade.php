@@ -1059,7 +1059,7 @@
 					@php $CollegewiseCount = DB::table('institute')
 						->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")
 						->where('institute.institute_status','1')
-						->where('country','10')
+						->where('country_id','10')
 						->whereNull('institute.deleted_at')->count(); @endphp
 					<div class="articles_grid_caption">
 						<h4>Top {{$CollegewiseCount}} Colleges in Spain</h4>
@@ -1076,7 +1076,7 @@
 					@php $CollegewiseCount = DB::table('institute')
 					->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")
 					->where('institute.institute_status','1')
-					->where('country','58')
+					->where('country_id','58')
 					->whereNull('institute.deleted_at')->count(); @endphp
 					<div class="articles_grid_caption">
 						<h4>Top {{$CollegewiseCount}} Colleges in Malta</h4>
@@ -1093,7 +1093,7 @@
 					@php $CollegewiseCount = DB::table('institute')
 					->leftjoin("institute_contactinfo","institute.institute_id","=","institute_contactinfo.institute_id")
 					->where('institute.institute_status','1')
-					->where('country','59')
+					->where('country_id','59')
 					->whereNull('institute.deleted_at')->count(); @endphp
 					<div class="articles_grid_caption">
 						<h4>Top {{$CollegewiseCount}} Colleges in Belgium</h4>
@@ -1350,10 +1350,11 @@
 						<input type="email" class="form-control sigmup-me newsemail" name="email" placeholder="Your Email Address"
 							required="required">
 						<input type="button" class="btn btn-theme" value="Get Started" id="newsletterSend">
-						<small class="newmail_error" style="color:white;display:none;">
-							<i>Please provide valid email </i>
-						</small>
+						
 					</form>
+					<small class="newmail_error" style="color:white;display:none;">
+						<i>Please provide valid email </i>
+					</small>
 				</div>
 			</div>
 		</div>

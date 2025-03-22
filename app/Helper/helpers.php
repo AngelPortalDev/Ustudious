@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\SendNotification;
 use Smalot\PdfParser\Parser;
 
+
 if (!function_exists('getData')) {
     function getData($table, $select, $where = '', $limit = '', $order_col = '', $order_dirc = 'DESC')
     {
