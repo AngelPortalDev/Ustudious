@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Student;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Exception;
 
 class LoginController extends Controller
@@ -249,7 +250,7 @@ class LoginController extends Controller
 
     public function studentlogin(Request $request)
     {
-        
+
         // return "gfhgf";
         if ($request->isMethod('POST')) {
             $email = isset($request->email) ? htmlspecialchars($request->input('email')) : '';
@@ -265,7 +266,7 @@ class LoginController extends Controller
                     $auth = Student::where(['Email' => $email])->whereNull('deleted_at')->where('ApprovalStatus', 'Approved')->count();
                     $authCheck = Student::where(['Email' => $email])->whereNull('deleted_at')->first();
 
-                 
+
                     if ($auth ===  1) {
                         if ($authCheck['email_verified'] != 'Yes') {
                             return response()->json(['error' => 'Please verify your email before logging in.']);
@@ -681,53 +682,71 @@ class LoginController extends Controller
 
     public function mailEnquiry(Request $request)
     {
+
         if ($request->isMethod('POST')) {
 
-            try {
-
-                $name = isset($request->name) ? $request->input('name') : '';
-                $email = isset($request->email) ? $request->input('email') : '';
-                $subject = isset($request->subject) ? $request->input('subject') : '';
-                $meg  = isset($request->message) ? $request->input('message') : '';
-                $country_code  = isset($request->country_code) ? $request->input('country_code') : '';
-                $contact_mobile  = isset($request->contact_mobile) ? $request->input('contact_mobile') : '';
-
-                $ContactForm = DB::table('contact_form')->insert([
-                    'name' => $name,
-                    'email' => $email,
-                    'message' => $meg,
-                    'country_code' => $country_code,
-                    'mob_no' => $contact_mobile,
-                    'subject' => $subject,
-                    'created_at' => $this->time
+            if ((request()->getHost() === 'https://www.ustudious.com/')) {
+                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => env('GOOGLE_SECRET_KEY'),
+                    'response' => $request->input('g-recaptcha-response'),
                 ]);
+                $responseBody = json_decode($response->getBody());
+                if (!$responseBody->success) {
+                    echo json_encode(array('code' => 201, 'remark' => 'ReCAPTCHA verification failed. Please try again.'));
+                }
+            } else {
+                $responseBody = (object)['success' => true];
+            }
+            if ($responseBody->success) {
+                try {
 
-                $Monbile_no = $country_code . ' ' . $contact_mobile;
-                $data = [
-                    'name' => htmlspecialchars($name),
-                    'email' => htmlspecialchars($email),
-                    'subject' => htmlspecialchars($subject),
-                    'meg' => htmlspecialchars($meg),
-                    'contactmob' => htmlspecialchars($Monbile_no)
-                ];
+                    $name = isset($request->name) ? $request->input('name') : '';
+                    $email = isset($request->email) ? $request->input('email') : '';
+                    $subject = isset($request->subject) ? $request->input('subject') : '';
+                    $meg  = isset($request->message) ? $request->input('message') : '';
+                    $country_code  = isset($request->country_code) ? $request->input('country_code') : '';
+                    $contact_mobile  = isset($request->contact_mobile) ? $request->input('contact_mobile') : '';
 
-                $user['to'] = env('MAIL_TO');
-                $send = Mail::send('mails.contactmail', $data, function ($message) use ($user, $email, $name) {
-                    $message->from(env('MAIL_FROM_ADDRESS'));
-                    $message->to($user['to']);
-                    $message->subject('Enquiry Received from: ' . $name);
-                    $message->replyTo($email, $name);
-                });
-                if ($send) {
-                    return response()->json(['success' => "Successfully Submitted."]);
-                } else {
+                    $ContactForm = DB::table('contact_form')->insert([
+                        'name' => $name,
+                        'email' => $email,
+                        'message' => $meg,
+                        'country_code' => $country_code,
+                        'mob_no' => $contact_mobile,
+                        'subject' => $subject,
+                        'created_at' => $this->time
+                    ]);
+
+                    $Monbile_no = $country_code . ' ' . $contact_mobile;
+                    $data = [
+                        'name' => htmlspecialchars($name),
+                        'email' => htmlspecialchars($email),
+                        'subject' => htmlspecialchars($subject),
+                        'meg' => htmlspecialchars($meg),
+                        'contactmob' => htmlspecialchars($Monbile_no)
+                    ];
+
+                    $user['to'] = env('MAIL_TO');
+                    $send = Mail::send('mails.contactmail', $data, function ($message) use ($user, $email, $name) {
+                        $message->from(env('MAIL_FROM_ADDRESS'));
+                        $message->to($user['to']);
+                        $message->subject('Enquiry Received from: ' . $name);
+                        $message->replyTo($email, $name);
+                    });
+                    if ($send) {
+                        return response()->json(['success' => "Successfully Submitted."]);
+                    } else {
+                        $error = 'Something Went Wrong.';
+                        return response()->json(['error' => $error]);
+                    }
+                } catch (Exception $e) {
+                    // $error = $e->getMessage();
                     $error = 'Something Went Wrong.';
                     return response()->json(['error' => $error]);
                 }
-            } catch (Exception $e) {
-                // $error = $e->getMessage();
-                $error = 'Something Went Wrong.';
-                return response()->json(['error' => $error]);
+            } else {
+              
+                echo json_encode(array('code' => 201, 'remark' => 'ReCAPTCHA verification failed. Please try again.'));
             }
         } else {
             $error = 'Something Went Wrong.';
