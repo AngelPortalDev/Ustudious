@@ -8427,6 +8427,12 @@ $("#EditStudent").on('click', function(e) {
               }else{
                 swal({
                   title: data.error,
+                  content: {
+                    element: "div",
+                    attributes: {
+                      innerHTML: data.errorwhy || "" 
+                    }
+                  },
                   icon: "error",
                 }).then(function () {
                   return  window.location.href = '/institute-login';

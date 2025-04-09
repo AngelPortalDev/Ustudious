@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('content')
+<script async src="https://www.google.com/recaptcha/api.js"></script>
     <!-- ============================ Agency List Start ================================== -->
     <section class="bg-light">
 
@@ -75,6 +76,8 @@
                                     <textarea class="form-control simple" name="message"></textarea>
                                 </div>
 
+                                <div class="g-recaptcha mt-4" data-sitekey={{env('GOOGLE_SITE_KEY')}}></div>
+
                                 <div class="form-group">
                                     {{-- <input type="submit" class="btn btn-primary" class="ContactSubmit" value="Submit">
                                 <button class="btn btn-theme"  class="ContactSubmit" type="submit">Submit Request</button> --}}
@@ -133,6 +136,7 @@
                                     </div>
                                 </div>
 
+
                             </div>
                         </div>
                     </div>
@@ -148,6 +152,7 @@
     <!-- ============================ Agency List End ================================== -->
 @endsection
 @section('js')
+
 <script>
      $('#institute_country').on('change', function () {
         var idCountry = this.value;

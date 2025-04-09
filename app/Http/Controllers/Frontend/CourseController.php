@@ -256,7 +256,7 @@ class CourseController extends Controller
         if ($request->isMethod('POST') && $request->ajax() && session()->get('institute_id')) {
             try {
 
-
+              
                 $application_form_name = '';
                 $brochure_name = '';
                 if ($request->hasFile('application_form')) {
@@ -307,20 +307,24 @@ class CourseController extends Controller
                 ]);
                 $lastCourseID = $data->CourseID;
                 $courseName =$data->CourseName;
-                $InstituteName = Institute::select(['full_name', 'institute_email','company_name'])->where('institute_id', $request->institute_id)->first();
-
+                $InstituteName = Institute::select(
+                    ['institute.full_name', 'institute.institute_email', 'institute.company_name', 'institute_contactinfo.contact_email','institute_contactinfo.contact_person_name']
+                )
+                ->leftjoin('institute_contactinfo', 'institute.institute_id', '=', 'institute_contactinfo.institute_id')
+                ->where('institute.institute_id', $request->institute_id)
+                ->first();
                
                 $dyc_id = base64_encode($lastCourseID);
                 $link =  env('APP_URL') . "/course-details/" . $dyc_id;
 
                 $sendto = array_unique([trim(strtolower(session()->get('email')))]);
-                $sendcc = array_unique([trim(strtolower($InstituteName->institute_email))]);
+                $sendcc = array_unique([trim(strtolower($InstituteName->contact_email))]);
                 mail_send(19, ['#Name#', '#Link','#CourseName#'], [$InstituteName->full_name, $link,$courseName], $sendto, $sendcc);
                 mail_send(26,['#InstituteName#','#Link','#CourseName#'],[$InstituteName->company_name,$link,$courseName],env('MAIL_TO'),'',$InstituteName->institute_email);
                 return response()->json(['success' => "Course Posted Successfully."]);
             } catch (\Exception $e) {
 
-                return response()->json(['error' => 'Something went wrong.']);
+                return response()->json(['error' => $e->getMessage()]);
             }
         } else {
 
@@ -424,9 +428,17 @@ class CourseController extends Controller
                 $total_courses = Course::where('InstituteID', $instituteid)->where('ApprovalStatus', 'Approved')->where('CourseStatus', 'Active')->whereNull('deleted_at')->count();
                 InstituteContactInfo::where('institute_id', $instituteid)->update(['total_courses' => $total_courses]);
 
-                $InstituteName = Institute::select(['full_name', 'institute_email','company_name'])->where('institute_id', $instituteid)->first();
+                $InstituteName = Institute::select(
+                    ['institute.full_name', 'institute.institute_email', 'institute.company_name', 'institute_contactinfo.contact_email','institute_contactinfo.contact_person_name']
+                )
+                ->leftjoin('institute_contactinfo', 'institute.institute_id', '=', 'institute_contactinfo.institute_id')
+                ->where('institute.institute_id', $instituteid)
+                ->first();
               
                 $link =  env('APP_URL') . "/course-details/" . $request->course_id;
+                $sendto = array_unique([trim(strtolower(session()->get('email')))]);
+                $sendcc = array_unique([trim(strtolower($InstituteName->contact_email))]);
+                mail_send(19, ['#Name#', '#Link','#CourseName#'], [$InstituteName->full_name, $link,$request->course_title], $sendto, $sendcc);
                 mail_send(27,['#InstituteName#','#Link','#CourseName#'],[$InstituteName->company_name,$link,$request->course_title],env('MAIL_TO'),'',$InstituteName->institute_email);
                 return response()->json(['success' => "Course Updated Successfully"]);
             } catch (\Exception $e) {

@@ -32,6 +32,7 @@ class Student extends Model
         'updated_by',
         'created_by',
         'Dateofbirth',
-        'Gender'
+        'Gender',
+        'last_login'
     ];
 }

@@ -158,9 +158,7 @@ class StudentController extends Controller
                 $student_resume_name = '';
                 $student_photo_name = '';
 
-
                 $directoryMain = 'student/student_' . $request->student_id;
-
 
                 if ($StudentImage['Photo'] != '') {
                     $student_photo_name = $StudentImage['Photo'];
@@ -357,7 +355,8 @@ class StudentController extends Controller
             $StudentList = $StudentList->where('student.ApprovalStatus', 'Approved')
                 ->whereNull('student.deleted_at')
                 ->orderBy('updated_at', 'DESC')
-                ->distinct('student.studentID');
+                ->distinct('student.studentID')
+                ->orderBy('last_login', 'desc');
 
             $StudentList = $StudentList->paginate(5);
             // return $StudentList;
