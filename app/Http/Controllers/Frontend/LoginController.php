@@ -685,7 +685,7 @@ class LoginController extends Controller
 
         if ($request->isMethod('POST')) {
 
-            if ((request()->getHost() === 'https://www.ustudious.com/')) {
+            if ((request()->getHost() === 'https://www.ustudious.com')) {
                 $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
                     'secret' => env('GOOGLE_SECRET_KEY'),
                     'response' => $request->input('g-recaptcha-response'),
