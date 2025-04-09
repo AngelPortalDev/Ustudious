@@ -692,7 +692,9 @@ class LoginController extends Controller
                 ]);
                 $responseBody = json_decode($response->getBody());
                 if (!$responseBody->success) {
-                    echo json_encode(array('code' => 201, 'remark' => 'ReCAPTCHA verification failed. Please try again.'));
+                return response()->json(['error' => "ReCAPTCHA verification failed. Please try again."]);
+                    
+                    // echo json_encode(array('code' => 201, 'remark' => 'ReCAPTCHA verification failed. Please try again.'));
                 }
             } else {
                 $responseBody = (object)['success' => true];
@@ -745,8 +747,8 @@ class LoginController extends Controller
                     return response()->json(['error' => $error]);
                 }
             } else {
-              
-                echo json_encode(array('code' => 201, 'remark' => 'ReCAPTCHA verification failed. Please try again.'));
+                return response()->json(['error' => "ReCAPTCHA verification failed. Please try again."]);
+                #echo json_encode(array('code' => 201, 'remark' => 'ReCAPTCHA verification failed. Please try again.'));
             }
         } else {
             $error = 'Something Went Wrong.';
