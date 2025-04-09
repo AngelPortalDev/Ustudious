@@ -76,7 +76,7 @@
                                     <textarea class="form-control simple" name="message"></textarea>
                                 </div>
 
-                                <div class="g-recaptcha mt-4" data-sitekey={{env('GOOGLE_SITE_KEY')}}></div>
+                                <div class="g-recaptcha mt-4 mb-3" data-sitekey={{env('GOOGLE_SITE_KEY')}}></div>
 
                                 <div class="form-group">
                                     {{-- <input type="submit" class="btn btn-primary" class="ContactSubmit" value="Submit">
