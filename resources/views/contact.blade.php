@@ -52,14 +52,14 @@
                                             @foreach ($countryData as $data)
                                                 <option value="{{ $data->CountryID }}">{{ $data->CountryName }}</option>
                                             @endforeach
-                                        </select>  
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <div>
                                             <label>Mobile Number</label>
                                         </div>
                                         <div style="display:flex;">
-                                           
+
                                             <input type="text" class="form-control country_code" id="country_code" placeholder="Country Code" name="country_code" style="width: 23%;margin-right: 6PX;" value="" readonly>
                                            <input type="number" class="form-control" name="contact_mobile" value="" placeholder="Contact Mobile">
                                         </div>
@@ -105,7 +105,7 @@
                             <div class="contact-info">
 
 
-                                <div class="cn-info-detail">
+                                {{-- <div class="cn-info-detail">
                                     <div class="cn-info-icon">
                                         <i class="ti-home"></i>
                                     </div>
@@ -114,7 +114,7 @@
                                         <p>503, 5th Floor, Chandak Chambers, Near Western Express Highway, Andheri East,
                                             Mumbai - 400069</p>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="cn-info-detail">
                                     <div class="cn-info-icon">
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
 
-                                <div class="cn-info-detail">
+                                {{-- <div class="cn-info-detail">
                                     <div class="cn-info-icon">
                                         <i class="ti-mobile"></i>
                                     </div>
@@ -134,7 +134,7 @@
                                         <h4 class="cn-info-title">Call Us</h4>
                                         <p><a href="tel:+123 4567 890">+123 4567 890</a></p>
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                             </div>
@@ -167,7 +167,7 @@
             success: function (result) {
                 $("#country_code").val('+'+result.countrycode[0]['CountryCode']);
                 $(".country_codes").val('+'+result.countrycode[0]['CountryCode']);
-              
+
             }
 
 
